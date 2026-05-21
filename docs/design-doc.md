@@ -43,17 +43,17 @@ Restock Recommendations
 
 # 3. Recommended Technology Stack
 
-| Component | Technology |
-|---|---|
-| Frontend | React |
-| Backend | Spring Boot Microservices |
-| Database | PostgreSQL |
-| ML Service | FastAPI + Prophet |
-| Charts | Recharts |
-| Version Control | GitHub |
-| Containerization | Docker |
-| Deployment | Railway / Render |
-| CI/CD | GitHub Actions |
+| Component        | Technology                |
+| ---------------- | ------------------------- |
+| Frontend         | React                     |
+| Backend          | Spring Boot Microservices |
+| Database         | PostgreSQL                |
+| ML Service       | FastAPI + Prophet         |
+| Charts           | Recharts                  |
+| Version Control  | GitHub                    |
+| Containerization | Docker                    |
+| Deployment       | Railway / Render          |
+| CI/CD            | GitHub Actions            |
 
 ---
 
@@ -62,6 +62,7 @@ Restock Recommendations
 The project uses two separate ecosystems:
 
 ## Spring Boot
+
 Handles:
 
 - POS operations
@@ -73,6 +74,7 @@ Handles:
 ---
 
 ## FastAPI
+
 Handles:
 
 - Machine learning
@@ -112,13 +114,13 @@ For HND level:
 
 # 6. Recommended Services
 
-| Service | Responsibility |
-|---|---|
-| Auth Service | Authentication and JWT |
-| Product Service | Product management |
-| Sales Service | Sales transactions |
-| Inventory Service | Inventory and restock logic |
-| Forecasting Service | ML predictions |
+| Service             | Responsibility              |
+| ------------------- | --------------------------- |
+| Auth Service        | Authentication and JWT      |
+| Product Service     | Product management          |
+| Sales Service       | Sales transactions          |
+| Inventory Service   | Inventory and restock logic |
+| Forecasting Service | ML predictions              |
 
 ---
 
@@ -126,27 +128,24 @@ For HND level:
 
 ```mermaid
 flowchart LR
+    A[React Dashboard] --> B[API Gateway]
 
-    A[POS Web Dashboard React] --> B[API Gateway]
+    B --> C[Auth Service]
+    B --> D[Sales Service]
+    B --> E[Product Service]
+    B --> F[Inventory Service]
 
-    B --> C[Inventory Service Spring Boot]
-    B --> D[Sales Service Spring Boot]
-    B --> E[Product Service Spring Boot]
-    B --> F[Auth Service Spring Boot]
-
-    D --> G[(PostgreSQL)]
-
-    C --> G
+    C --> G[(PostgreSQL)]
+    D --> G
     E --> G
     F --> G
 
-    D --> H[Forecasting Service FastAPI + Prophet]
+    D -->|batch nightly| H[Forecasting Service\nFastAPI + Prophet]
+    H -->|predictions| F
 
-    H --> I[(ML Model Files)]
+    F --> I[Restock Alerts]
 
-    H --> D
-
-    D --> J[Forecast & Restock Alerts]
+    H --> J[(ML Model Files)]
 ```
 
 ---
@@ -155,24 +154,24 @@ flowchart LR
 
 ```mermaid
 sequenceDiagram
-
-    participant Cashier
-    participant POS
+    participant Scheduler
     participant SalesService
     participant Database
     participant MLService
+    participant InventoryService
 
-    Cashier->>POS: Record Sale
-    POS->>SalesService: Save Transaction
-    SalesService->>Database: Store Sales Data
+    Scheduler->>SalesService: Trigger nightly batch
+    SalesService->>Database: Fetch last 90 days of sales
+    Database-->>SalesService: Sales data per product
 
-    SalesService->>MLService: Send Historical Sales
+    SalesService->>MLService: Send historical data
 
-    MLService->>MLService: Train/Predict Forecast
+    MLService->>MLService: Run Prophet per product
+    MLService-->>Database: Store forecast results
 
-    MLService-->>SalesService: Return Predictions
-
-    SalesService-->>POS: Restock Recommendation
+    InventoryService->>Database: Read forecasts
+    InventoryService->>InventoryService: Compare vs reorder level
+    InventoryService-->>Database: Write restock alerts
 ```
 
 ---
@@ -181,34 +180,49 @@ sequenceDiagram
 
 ```mermaid
 flowchart TB
-
-    Owner((Shop Owner))
     Cashier((Cashier))
+    Owner((Owner))
     Admin((Admin))
 
     UC1[Login]
-    UC2[Record Sale]
-    UC3[Manage Products]
-    UC4[View Inventory]
-    UC5[Generate Forecast]
-    UC6[View Restock Alerts]
-    UC7[Upload CSV Data]
-    UC8[View Forecast Graphs]
-    UC9[Manage Users]
+    UC2[Record sale]
+    UC3[Search product / barcode]
+    UC4[Process return or refund]
+    UC5[View or print receipt]
+    UC6[View inventory levels]
+
+    UC7[View sales dashboard]
+    UC8[View forecast graphs]
+    UC9[View restock alerts]
+    UC10[Upload CSV sales data]
+    UC11[Approve restock orders]
+    UC12[Set reorder thresholds]
+
+    UC13[Manage users]
+    UC14[Manage products]
+    UC15[View audit logs]
+    UC16[Generate reports]
 
     Cashier --> UC1
     Cashier --> UC2
+    Cashier --> UC3
     Cashier --> UC4
+    Cashier --> UC5
+    Cashier --> UC6
 
     Owner --> UC1
-    Owner --> UC5
-    Owner --> UC6
-    Owner --> UC8
     Owner --> UC7
+    Owner --> UC8
+    Owner --> UC9
+    Owner --> UC10
+    Owner --> UC11
+    Owner --> UC12
 
     Admin --> UC1
-    Admin --> UC9
-    Admin --> UC3
+    Admin --> UC13
+    Admin --> UC14
+    Admin --> UC15
+    Admin --> UC16
 ```
 
 ---
@@ -217,18 +231,14 @@ flowchart TB
 
 ```mermaid
 flowchart LR
-
-    A[Sales Data] --> B[Data Cleaning]
-
-    B --> C[Feature Engineering]
-
-    C --> D[Holiday Injection Aurudu / Vesak]
-
-    D --> E[Prophet Model]
-
-    E --> F[30-Day Forecast]
-
-    F --> G[Restock Recommendation]
+    A[Raw sales data] --> B[Data cleaning]
+    B --> C[Aggregate by product]
+    C --> D[Feature engineering]
+    D --> E[Holiday injection\nAurudu / Vesak / Poya]
+    E --> F[Train Prophet\nper product]
+    F --> G[30-day forecast]
+    G --> H[Compare vs reorder level]
+    H --> I[Restock recommendation]
 ```
 
 ---
@@ -237,10 +247,10 @@ flowchart LR
 
 The ML model requires:
 
-| ds | y |
-|---|---|
-| 2025-01-01 | 12 |
-| 2025-01-02 | 15 |
+| ds         | y   |
+| ---------- | --- |
+| 2025-01-01 | 12  |
+| 2025-01-02 | 15  |
 
 Where:
 
@@ -253,13 +263,13 @@ Where:
 
 The forecasting model should learn:
 
-| Feature | Purpose |
-|---|---|
-| Weekends | Detect weekend spikes |
+| Feature       | Purpose                         |
+| ------------- | ------------------------------- |
+| Weekends      | Detect weekend spikes           |
 | Payday cycles | Detect monthly demand increases |
-| Aurudu | Detect festive demand |
-| Vesak | Seasonal behavior |
-| Weather | Rain impact |
+| Aurudu        | Detect festive demand           |
+| Vesak         | Seasonal behavior               |
+| Weather       | Rain impact                     |
 
 ---
 
@@ -287,38 +297,52 @@ Evaluate Accuracy
 
 ```mermaid
 erDiagram
-
     USERS {
-        int id
+        int id PK
         string username
         string password
         string role
     }
-
     PRODUCTS {
-        int id
+        int id PK
         string name
         string category
         int stock_quantity
+        int reorder_level
     }
-
     SALES {
-        int id
-        int product_id
-        int quantity_sold
+        int id PK
+        int user_id FK
         date sale_date
+        decimal total_amount
     }
-
+    SALE_ITEMS {
+        int id PK
+        int sale_id FK
+        int product_id FK
+        int quantity_sold
+        decimal unit_price
+    }
     FORECASTS {
-        int id
-        int product_id
-        int predicted_sales
+        int id PK
+        int product_id FK
+        int predicted_quantity
         date forecast_date
+        date generated_on
+    }
+    RESTOCK_ALERTS {
+        int id PK
+        int product_id FK
+        int suggested_quantity
+        string status
+        date created_at
     }
 
     USERS ||--o{ SALES : records
-    PRODUCTS ||--o{ SALES : contains
-    PRODUCTS ||--o{ FORECASTS : predicts
+    SALES ||--|{ SALE_ITEMS : contains
+    PRODUCTS ||--o{ SALE_ITEMS : included_in
+    PRODUCTS ||--o{ FORECASTS : has
+    PRODUCTS ||--o{ RESTOCK_ALERTS : triggers
 ```
 
 ---
@@ -369,20 +393,18 @@ erDiagram
 
 ```mermaid
 flowchart TB
-
-    A[Frontend React + Vercel]
-
-    B[Spring Boot Services Railway]
-
-    C[FastAPI ML Service Railway]
-
-    D[(PostgreSQL)]
+    A[React Frontend\nVercel]
+    B[API Gateway\nRailway]
+    C[Spring Boot Services\nRailway]
+    D[FastAPI ML Service\nRailway]
+    E[(PostgreSQL\nRailway)]
+    F[(ML Model Files\nVolume / S3)]
 
     A --> B
-
-    B --> D
-
     B --> C
+    C --> E
+    C --> D
+    D --> F
 ```
 
 ---
