@@ -48,6 +48,8 @@ flowchart TD
     E --> N[End]
 ```
 
+## Linear Regression Baseline Model
+
 The baseline model is created for the **global localized engine** using multiple linear regression model.
 At **base level** the model shows a,
 
@@ -56,3 +58,37 @@ $\text{MAE} = 183.25608590060762$
 
 - $R^2 = 0.182$ — the model explains only **18\%** of the demand variations.
 - $\text{MAE} = 183.256$ — the model's average predictions are off by **183.256** units.
+
+[Read More](../forecasting-service/notebook/module-1/base-model-1.ipynb)
+
+## Random Forest Regression Baseline Model
+
+Another baseline model is created for the **global localized engine** using random forest regression model.
+At **base level** the model shows a,
+
+$R^2 = 0.7342853956356417$  
+$\text{MAE} = 99.13837483405366$
+
+- $R^2 = 0.734$ — the model explains **73.4\%** of the demand variations.
+- $\text{MAE} = 99.138$ — the model's average predictions are off by **99.138** units.
+
+In the training, a logarithm transformation has been applied to the `demand score`. Because, some products have larger demand score and some have a smaller demand score. If they were kept as it is during training the larger values will **dominate the training**. Therefore, a logarithm transform has been used to compress large values,
+
+```py
+y = np.log1p(df["demand_score"])
+```
+
+and revers the final output to the original scale.
+
+```py
+predicts = np.expm1(rf.predict(X_test))
+```
+
+[Read More](../forecasting-service/notebook/module-1/base-model-2.ipynb)
+
+## Conclusion
+
+The reason behind the huge difference between `$R^2$` values between the **random forest regression model** and **multiple linear regression model** might be due to the facts that,
+
+- Random forest handles feature interaction better
+- Linear regression not great with non-linear patterns
