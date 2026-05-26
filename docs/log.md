@@ -50,8 +50,9 @@ flowchart TD
 
 The baseline model is created for the **global localized engine** using multiple linear regression model.
 At **base level** the model shows a,
-$$ \text{r}^{2} = 0.18244099437092332 $$
-$$ \text{mean absolute error} = 183.25608590060762 $$
 
-- The $\text{r}^{2}$ value of **0.182** define that the model only explain **18%** on the demand variations.
-- The $\text{mean absolute error}$ value of **183.256** define that the model's average predictions are off by 183.256.
+$ R^2 = 0.18244099437092332 $  
+$ \text{MAE} = 183.25608590060762 $
+
+- $ R^2 = 0.182 $ — the model explains only **18\%** of the demand variations.
+- $ \text{MAE} = 183.256 $ — the model's average predictions are off by **183.256** units.
