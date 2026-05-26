@@ -1,20 +1,22 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const navLinks = [
-  { label: 'Features', href: '#features' },
-  { label: 'How It Works', href: '#how-it-works' },
-  { label: 'Roadmap', href: '#roadmap' },
-  { label: 'FAQ', href: '#faq' },
+  { label: 'Features', href: '/#features' },
+  { label: 'How It Works', href: '/#how-it-works' },
+  { label: 'Roadmap', href: '/#roadmap' },
+  { label: 'FAQ', href: '/#faq' },
+  { label: 'Team', href: '/team' }, // Direct link to your new route
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [activeLink, setActiveLink] = useState('');
   const [hovered, setHovered] = useState<string | null>(null);
-  const indicatorRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
@@ -46,13 +48,11 @@ export default function Navbar() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          background: scrolled ? 'rgba(255,255,255,0.82)' : 'rgba(255,255,255,0.6)',
+          background: scrolled ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.6)',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
           borderRadius: scrolled ? '0' : '20px',
-          border: scrolled
-            ? '0 none'
-            : '1px solid rgba(30,144,255,0.12)',
+          border: scrolled ? '0 none' : '1px solid rgba(30,144,255,0.12)',
           boxShadow: scrolled
             ? '0 1px 0 rgba(30,144,255,0.08), 0 4px 24px rgba(13,27,42,0.06)'
             : '0 4px 32px rgba(30,144,255,0.1)',
@@ -60,13 +60,13 @@ export default function Navbar() {
         }}
       >
         {/* Logo */}
-        <a
+        <Link
           href="/"
           style={{
             fontFamily: 'var(--font-display)',
             fontWeight: 800,
             fontSize: '1.4rem',
-            color: 'var(--dark)',
+            color: '#1e293b',
             textDecoration: 'none',
             letterSpacing: '-0.03em',
             display: 'flex',
@@ -80,7 +80,7 @@ export default function Navbar() {
               width: '28px',
               height: '28px',
               borderRadius: '8px',
-              background: 'linear-gradient(135deg, var(--blue-primary), var(--blue-accent))',
+              background: 'linear-gradient(135deg, #1e90ff, #00bfff)',
               alignItems: 'center',
               justifyContent: 'center',
               fontSize: '0.75rem',
@@ -90,99 +90,94 @@ export default function Navbar() {
           >
             L
           </span>
-          Lokal<span style={{ color: 'var(--blue-primary)' }}>ens</span>
-        </a>
+          Lokal<span style={{ color: '#1e90ff' }}>ens</span>
+        </Link>
 
         {/* Nav links with hover pill */}
-        <div
-          style={{
-            display: 'flex',
-            gap: '0.25rem',
-            alignItems: 'center',
-            position: 'relative',
-          }}
-        >
-          {navLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              onMouseEnter={() => setHovered(link.label)}
-              onMouseLeave={() => setHovered(null)}
-              style={{
-                position: 'relative',
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.88rem',
-                fontWeight: 500,
-                color: hovered === link.label ? 'var(--blue-primary)' : 'var(--gray-600)',
-                textDecoration: 'none',
-                padding: '0.45rem 0.9rem',
-                borderRadius: '100px',
-                transition: 'color 0.2s',
-                zIndex: 1,
-              }}
-            >
-              {/* Hover pill background */}
-              <AnimatePresence>
-                {hovered === link.label && (
-                  <motion.span
-                    layoutId="nav-pill"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    style={{
-                      position: 'absolute',
-                      inset: 0,
-                      borderRadius: '100px',
-                      background: 'var(--blue-mist)',
-                      zIndex: -1,
-                    }}
-                  />
-                )}
-              </AnimatePresence>
-              {link.label}
-            </a>
-          ))}
+        <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center', position: 'relative' }}>
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.label}
+                href={link.href}
+                onMouseEnter={() => setHovered(link.label)}
+                onMouseLeave={() => setHovered(null)}
+                style={{
+                  position: 'relative',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '0.88rem',
+                  fontWeight: 500,
+                  color: isActive || hovered === link.label ? '#1e90ff' : '#475569',
+                  textDecoration: 'none',
+                  padding: '0.45rem 0.9rem',
+                  borderRadius: '100px',
+                  transition: 'color 0.2s',
+                  zIndex: 1,
+                }}
+              >
+                <AnimatePresence>
+                  {hovered === link.label && (
+                    <motion.span
+                      layoutId="nav-pill"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
+                        borderRadius: '100px',
+                        background: 'rgba(30,144,255,0.08)',
+                        zIndex: -1,
+                      }}
+                    />
+                  )}
+                </AnimatePresence>
+                {link.label}
+              </Link>
+            );
+          })}
         </div>
 
         {/* Right CTA group */}
         <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-          <a
+          <Link
             href="#"
             style={{
               fontSize: '0.85rem',
               fontWeight: 500,
-              color: 'var(--gray-600)',
+              color: '#475569',
               textDecoration: 'none',
               padding: '0.45rem 0.8rem',
               borderRadius: '100px',
-              transition: 'color 0.2s, background 0.2s',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = 'var(--blue-primary)';
-              e.currentTarget.style.background = 'var(--blue-mist)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = 'var(--gray-600)';
-              e.currentTarget.style.background = 'transparent';
+              transition: 'color 0.2s',
             }}
           >
             Sign In
-          </a>
+          </Link>
 
           <motion.a
             href="#"
             whileHover={{ scale: 1.04, y: -1 }}
             whileTap={{ scale: 0.96 }}
-            className="btn-primary"
-            style={{ padding: '0.55rem 1.3rem', fontSize: '0.84rem' }}
+            style={{
+              padding: '0.55rem 1.3rem',
+              fontSize: '0.84rem',
+              background: '#1e90ff',
+              color: '#fff',
+              borderRadius: '100px',
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.25rem',
+              fontWeight: 500,
+            }}
           >
             Get Early Access
-            <span className="btn-arrow">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </span>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
           </motion.a>
         </div>
       </motion.nav>
