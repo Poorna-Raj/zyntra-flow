@@ -23,7 +23,7 @@ So, the project idea is still unclear for me.
 Now I decide to make these 2 sections into a single system. So when a customer doesn't have a sales history they will still be able get analytic information via [first system](#1-global-localized-forecasting-engine) and when they have sales history, they will get a more balanced analytic with both systems including the [second system](#2-business-specific-forecasting-engine).
 
 ```mermaid
-flowchart LR
+flowchart TD
     A[Start: Customer Request] --> B{Check Sales History}
 
     B -->|No History| C[First System Only<br>Global-Localized<br>Forecasting Engine]
@@ -47,3 +47,11 @@ flowchart LR
 
     E --> N[End]
 ```
+
+The baseline model is created for the **global localized engine** using multiple linear regression model.
+At **base level** the model shows a,
+$$ \text{r}^{2} = 0.18244099437092332 $$
+$$ \text{mean absolute error} = 183.25608590060762 $$
+
+- The $\text{r}^{2}$ value of **0.182** define that the model only explain **18%** on the demand variations.
+- The $\text{mean absolute error}$ value of **183.256** define that the model's average predictions are off by 183.256.
