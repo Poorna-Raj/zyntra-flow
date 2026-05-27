@@ -176,25 +176,50 @@ export default function Navbar() {
             })}
           </div>
 
-          {/* CTA */}
-          <div className="lk-nav-cta">
-            <motion.a
-              href="#"
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
-              style={{
-                padding: '0.55rem 1.3rem',
-                background: '#1e90ff',
-                color: '#fff',
-                borderRadius: '100px',
-                fontSize: '0.84rem',
-                textDecoration: 'none',
-                fontWeight: 600,
-              }}
-            >
-              Get Early Access
-            </motion.a>
-          </div>
+         {/* CTA */}
+<div
+  className="lk-nav-cta"
+  style={{
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.8rem',
+  }}
+>
+  <Link
+    href="/admin"
+    style={{
+      padding: '0.55rem 1.2rem',
+      background: 'rgba(255,255,255,0.72)',
+      color: '#1e293b',
+      borderRadius: '100px',
+      fontSize: '0.84rem',
+      textDecoration: 'none',
+      fontWeight: 600,
+      border: '1px solid rgba(30,144,255,0.15)',
+      backdropFilter: 'blur(10px)',
+      transition: '0.25s ease',
+    }}
+  >
+    Admin
+  </Link>
+
+  <motion.a
+    href="#"
+    whileHover={{ scale: 1.04 }}
+    whileTap={{ scale: 0.96 }}
+    style={{
+      padding: '0.55rem 1.3rem',
+      background: '#1e90ff',
+      color: '#fff',
+      borderRadius: '100px',
+      fontSize: '0.84rem',
+      textDecoration: 'none',
+      fontWeight: 600,
+    }}
+  >
+    Get Early Access
+  </motion.a>
+</div>
 
           {/* HAMBURGER */}
           <button
