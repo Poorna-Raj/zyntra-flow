@@ -3,15 +3,19 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { motion } from 'framer-motion';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const phases = [
   {
     phase: 'MVP',
-    label: 'Now',
+    label: 'NOW',
     status: 'active',
-    color: '#0EA5E9', // Hyper Blue
+    year: '2026',
+    icon: '🚀',
+    color: '#0EA5E9',
+    glow: 'rgba(14,165,233,0.28)',
     items: [
       'Province-level product forecasting',
       'Contextual behavioral signals',
@@ -24,7 +28,10 @@ const phases = [
     phase: 'V2',
     label: 'Q3 2026',
     status: 'upcoming',
-    color: '#8B5CF6', // Vibrant Purple
+    year: '2026',
+    icon: '⚡',
+    color: '#8B5CF6',
+    glow: 'rgba(139,92,246,0.28)',
     items: [
       'POS & CSV data integration',
       'Personalized store forecasting',
@@ -37,7 +44,10 @@ const phases = [
     phase: 'V3',
     label: 'Q1 2027',
     status: 'future',
-    color: '#0EA5E9', // Hyper Blue fallback or unified theme accent
+    year: '2027',
+    icon: '🌍',
+    color: '#38BDF8',
+    glow: 'rgba(56,189,248,0.28)',
     items: [
       'Mobile app for field managers',
       'Real-time inventory alerts',
@@ -50,51 +60,60 @@ const phases = [
 
 export default function ConnectedRoadmap() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const lineRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
-  const lineRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // 1. Reveal Header items
-      gsap.from('.roadmap-header', {
-        y: 30,
+      gsap.from('.roadmap-reveal', {
         opacity: 0,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: 'power3.out'
+        y: 35,
+        duration: 1,
+        stagger: 0.12,
+        ease: 'power3.out',
       });
 
-      // 2. Animate the connecting line tree path matching scroll position
-      gsap.fromTo('.tree-path', 
-        { strokeDashoffset: 1000, strokeDasharray: 1000 },
-        {
-          strokeDashoffset: 0,
-          duration: 1.5,
-          ease: 'power2.inOut',
-          scrollTrigger: {
-            trigger: lineRef.current,
-            start: 'top 75%',
-            end: 'bottom 60%',
-            scrub: 1,
+      if (lineRef.current) {
+        gsap.fromTo(
+          lineRef.current,
+          {
+            scaleX: 0,
+            transformOrigin: 'left center',
+          },
+          {
+            scaleX: 1,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top 60%',
+              end: 'bottom bottom',
+              scrub: 1,
+            },
           }
-        }
-      );
+        );
+      }
 
-      // 3. Stagger slide-in for Phase cards as tree links resolve
       cardsRef.current.forEach((card, i) => {
         if (!card) return;
-        gsap.fromTo(card,
-          { y: 40, opacity: 0 },
+
+        gsap.fromTo(
+          card,
           {
-            y: 0,
+            opacity: 0,
+            y: 60,
+            scale: 0.95,
+          },
+          {
             opacity: 1,
-            duration: 0.8,
-            delay: i * 0.2,
+            y: 0,
+            scale: 1,
+            duration: 1,
+            delay: i * 0.12,
             ease: 'power3.out',
             scrollTrigger: {
               trigger: card,
               start: 'top 85%',
-            }
+            },
           }
         );
       });
@@ -107,175 +126,556 @@ export default function ConnectedRoadmap() {
     <section
       ref={sectionRef}
       style={{
-        padding: '8rem 2rem',
-        background: '#030712', // Rich Dark Theme background environment
         position: 'relative',
         overflow: 'hidden',
-        fontFamily: 'system-ui, -apple-system, sans-serif'
+        background:
+          'linear-gradient(180deg, #020617 0%, #030712 50%, #000000 100%)',
+        padding: 'clamp(5rem, 10vw, 9rem) 1.25rem',
       }}
     >
-      {/* Premium Angular/Radial Gradient Accent Mesh in upper-right corner */}
-      <div 
+      {/* BACKGROUND GLOW */}
+      <div
         style={{
           position: 'absolute',
-          top: '-10%',
-          right: '-10%',
-          width: '600px',
-          height: '600px',
-          background: 'radial-gradient(circle, rgba(139,92,246,0.15) 0%, rgba(14,165,233,0.05) 50%, transparent 100%)',
-          filter: 'blur(80px)',
+          inset: 0,
+          overflow: 'hidden',
           pointerEvents: 'none',
-          zIndex: 1
-        }} 
-      />
-
-      {/* ── HEADER FRAME ── */}
-      <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center', marginBottom: '3rem', position: 'relative', zIndex: 2 }}>
-        <span 
-          className="roadmap-header"
-          style={{ 
-            background: 'rgba(197, 243, 123, 0.1)', 
-            color: '#A3E635', 
-            border: '1px solid rgba(163, 230, 53, 0.2)',
-            padding: '0.4rem 1rem', 
-            borderRadius: '100px', 
-            fontSize: '0.75rem', 
-            fontWeight: 600,
-            display: 'inline-block',
-            marginBottom: '1rem',
-            letterSpacing: '0.05em',
-            textTransform: 'uppercase'
+        }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            top: '-10%',
+            left: '-10%',
+            width: '520px',
+            height: '520px',
+            borderRadius: '999px',
+            background: 'rgba(14,165,233,0.12)',
+            filter: 'blur(140px)',
           }}
-        >
-          Roadmap
-        </span>
-        <h2 
-          className="roadmap-header"
-          style={{ fontSize: 'clamp(2.25rem, 4vw, 3.25rem)', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.02em', margin: '0 0 0.5rem' }}
-        >
-          Our future path with <span style={{ background: 'linear-gradient(135deg, #38BDF8 0%, #8B5CF6 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Lokalens</span>
-        </h2>
-        <p className="roadmap-header" style={{ color: '#9CA3AF', fontSize: '1rem', fontWeight: 400 }}>
-          From idea to impact.
-        </p>
+        />
+
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '-10%',
+            right: '-10%',
+            width: '540px',
+            height: '540px',
+            borderRadius: '999px',
+            background: 'rgba(139,92,246,0.12)',
+            filter: 'blur(160px)',
+          }}
+        />
+
+        {/* GRID */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundImage:
+              'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
+            backgroundSize: '42px 42px',
+            maskImage:
+              'radial-gradient(circle at center, black 30%, transparent 100%)',
+          }}
+        />
       </div>
 
-      <div style={{ maxWidth: '1140px', margin: '0 auto', position: 'relative' }}>
-        
-        {/* ── JUNCTION NODE: JOURNEY START ── */}
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '4rem', position: 'relative', zIndex: 3 }}>
-          <div 
-            className="roadmap-header"
+      <div
+        style={{
+          position: 'relative',
+          zIndex: 2,
+          maxWidth: '1350px',
+          margin: '0 auto',
+        }}
+      >
+        {/* HEADER */}
+        <div
+          style={{
+            textAlign: 'center',
+            marginBottom: 'clamp(4rem, 7vw, 7rem)',
+          }}
+        >
+          <div
+            className="roadmap-reveal"
             style={{
-              background: 'linear-gradient(135deg, #C9F278 0%, #A3E635 100%)', // Multi-tone custom gradient fill
-              color: '#1A2E05',
-              padding: '1.1rem 2.5rem',
-              borderRadius: '100px',
-              fontSize: '1.15rem',
-              fontWeight: 600,
-              boxShadow: '0 10px 40px rgba(163, 230, 53, 0.25)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              textAlign: 'center'
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.55rem',
+              padding: '0.55rem 1rem',
+              borderRadius: '999px',
+              background: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              marginBottom: '1.4rem',
+              backdropFilter: 'blur(12px)',
             }}
           >
-            Our journey begins in 2026 June
+            <span
+              style={{
+                width: '8px',
+                height: '8px',
+                borderRadius: '999px',
+                background: '#38BDF8',
+                boxShadow: '0 0 12px #38BDF8',
+              }}
+            />
+
+            <span
+              style={{
+                fontSize: '0.72rem',
+                color: '#7DD3FC',
+                fontWeight: 800,
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+              }}
+            >
+              Product Roadmap
+            </span>
           </div>
+
+          <h2
+            className="roadmap-reveal"
+            style={{
+              fontSize: 'clamp(2.7rem, 7vw, 5.5rem)',
+              lineHeight: 0.95,
+              fontWeight: 900,
+              letterSpacing: '-0.06em',
+              color: '#fff',
+              marginBottom: '1.4rem',
+            }}
+          >
+            Building The Future
+            <br />
+
+            <span
+              style={{
+                background:
+                  'linear-gradient(135deg, #38BDF8 0%, #8B5CF6 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              Of Lokalens
+            </span>
+          </h2>
+
+          <p
+            className="roadmap-reveal"
+            style={{
+              maxWidth: '760px',
+              margin: '0 auto',
+              color: 'rgba(255,255,255,0.58)',
+              lineHeight: 1.8,
+              fontSize: 'clamp(0.95rem, 2vw, 1.08rem)',
+            }}
+          >
+            A clear visual journey showing how Lokalens evolves from an AI
+            forecasting prototype into a complete intelligent retail ecosystem
+            for Sri Lankan businesses.
+          </p>
         </div>
 
-        {/* ── VECTOR PATH TREE LINK LAYER ── */}
-        <div style={{ position: 'absolute', top: '2.5rem', left: 0, width: '100%', height: '120px', pointerEvents: 'none', zIndex: 1 }}>
-          <svg ref={lineRef} width="100%" height="100%" viewBox="0 0 1000 100" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
-            {/* Base Underlay Track Line */}
-            <path d="M 500,0 L 500,45 M 166,45 L 834,45 M 166,45 L 166,100 M 500,45 L 500,100 M 834,45 L 834,100" fill="none" stroke="#1F2937" strokeWidth="2" />
-            {/* Animated Active Foreground Core Trace */}
-            <path className="tree-path" d="M 500,0 L 500,45 M 166,45 L 834,45 M 166,45 L 166,100 M 500,45 L 500,100 M 834,45 L 834,100" fill="none" stroke="#4B5563" strokeWidth="2" />
-          </svg>
-        </div>
-
-        {/* ── 3-COLUMN LAYOUT MATRIX ── */}
-        <div 
-          style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
-            gap: '2rem', 
-            position: 'relative', 
-            zIndex: 2,
-            paddingTop: '4.5rem' 
+        {/* JOURNEY START */}
+        <div
+          className="roadmap-reveal"
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginBottom: '4rem',
           }}
         >
-          {phases.map((phase, i) => {
-            const isActive = phase.status === 'active';
-            return (
+          <motion.div
+            whileHover={{
+              scale: 1.03,
+            }}
+            style={{
+              position: 'relative',
+              overflow: 'hidden',
+              padding: '1.15rem 2.5rem',
+              borderRadius: '999px',
+              background:
+                'linear-gradient(135deg, rgba(14,165,233,0.18), rgba(139,92,246,0.18))',
+              border: '1px solid rgba(255,255,255,0.08)',
+              backdropFilter: 'blur(18px)',
+              boxShadow:
+                '0 25px 60px rgba(14,165,233,0.15), 0 8px 20px rgba(0,0,0,0.35)',
+            }}
+          >
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background:
+                  'linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)',
+                transform: 'translateX(-100%)',
+                animation: 'shine 5s linear infinite',
+              }}
+            />
+
+            <div
+              style={{
+                position: 'relative',
+                zIndex: 2,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.9rem',
+              }}
+            >
               <div
-                key={i}
-                ref={(el: HTMLDivElement | null) => void (cardsRef.current[i] = el)}
                 style={{
-                  background: isActive ? '#0B0F19' : '#0B0F19',
-                  border: `1px solid ${isActive ? 'rgba(14, 165, 233, 0.3)' : 'rgba(255, 255, 255, 0.05)'}`,
-                  borderRadius: '24px',
-                  padding: '2.5rem 2.2rem',
-                  boxShadow: isActive 
-                    ? '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(14, 165, 233, 0.05)' 
-                    : '0 4px 20px rgba(0, 0, 0, 0.3)',
-                  position: 'relative',
+                  width: '46px',
+                  height: '46px',
+                  borderRadius: '14px',
+                  background:
+                    'linear-gradient(135deg, #38BDF8 0%, #8B5CF6 100%)',
                   display: 'flex',
-                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '1.2rem',
+                  color: '#fff',
+                  boxShadow: '0 10px 30px rgba(56,189,248,0.25)',
                 }}
               >
-                {/* Micro Border Accent Strip for Active Highlight */}
-                {isActive && (
-                  <div style={{ position: 'absolute', top: 0, left: '2.5rem', right: '2.5rem', height: '3px', background: 'linear-gradient(90deg, #0EA5E9, #8B5CF6)', borderRadius: '0 0 4px 4px' }} />
-                )}
-
-                {/* Card Title Header Node */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.8rem' }}>
-                  <h3 style={{ fontSize: '1.85rem', fontWeight: 800, color: phase.color, margin: 0, letterSpacing: '-0.03em' }}>
-                    {phase.phase}
-                  </h3>
-                  <span
-                    style={{
-                      background: isActive ? 'rgba(14, 165, 233, 0.15)' : 'rgba(255, 255, 255, 0.03)',
-                      color: isActive ? '#38BDF8' : '#9CA3AF',
-                      border: `1px solid ${isActive ? 'rgba(14, 165, 233, 0.2)' : 'rgba(255, 255, 255, 0.05)'}`,
-                      borderRadius: '100px',
-                      padding: '0.25rem 0.75rem',
-                      fontSize: '0.72rem',
-                      fontWeight: 700,
-                      letterSpacing: '0.02em',
-                    }}
-                  >
-                    {phase.label}
-                  </span>
-                </div>
-
-                {/* Items Unordered Feature Tree List */}
-                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-                  {phase.items.map((item, j) => (
-                    <li
-                      key={j}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'flex-start',
-                        gap: '0.7rem',
-                        fontSize: '0.92rem',
-                        color: isActive ? '#E5E7EB' : '#9CA3AF',
-                        lineHeight: 1.45,
-                        fontWeight: isActive ? 450 : 400
-                      }}
-                    >
-                      <span style={{ color: phase.color, flexShrink: 0, marginTop: '0.15rem', fontSize: '0.85rem' }}>
-                        ✦
-                      </span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
+                ✦
               </div>
-            );
-          })}
+
+              <div>
+                <p
+                  style={{
+                    color: '#fff',
+                    fontWeight: 700,
+                    fontSize: '1rem',
+                    marginBottom: '0.2rem',
+                  }}
+                >
+                  Journey Begins
+                </p>
+
+                <p
+                  style={{
+                    color: 'rgba(255,255,255,0.6)',
+                    fontSize: '0.85rem',
+                  }}
+                >
+                  Launching June 2026
+                </p>
+              </div>
+            </div>
+          </motion.div>
         </div>
 
+        {/* ROADMAP LINE */}
+        <div
+          style={{
+            position: 'relative',
+            marginBottom: '4rem',
+          }}
+        >
+          {/* Static Line */}
+          <div
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: 0,
+              right: 0,
+              height: '2px',
+              transform: 'translateY(-50%)',
+              background: 'rgba(255,255,255,0.08)',
+            }}
+          />
+
+          {/* Active Animated Line */}
+          <div
+            ref={lineRef}
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: 0,
+              width: '100%',
+              height: '3px',
+              transform: 'translateY(-50%)',
+              background:
+                'linear-gradient(90deg, #0EA5E9 0%, #8B5CF6 50%, #38BDF8 100%)',
+              boxShadow: '0 0 20px rgba(14,165,233,0.35)',
+              borderRadius: '999px',
+            }}
+          />
+
+          {/* TIMELINE NODES */}
+          <div
+            className="roadmap-grid"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: '2rem',
+              position: 'relative',
+              zIndex: 3,
+            }}
+          >
+            {phases.map((phase, i) => {
+              const isActive = phase.status === 'active';
+
+              return (
+                <motion.div
+                  whileHover={{
+                    y: -10,
+                  }}
+                  key={i}
+                  ref={(el) => void (cardsRef.current[i] = el)}
+                  style={{
+                    position: 'relative',
+                  }}
+                >
+                  {/* NODE */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      marginBottom: '2rem',
+                    }}
+                  >
+                    <motion.div
+                      animate={{
+                        scale: [1, 1.06, 1],
+                      }}
+                      transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                      }}
+                      style={{
+                        position: 'relative',
+                      }}
+                    >
+                      <div
+                        style={{
+                          position: 'absolute',
+                          inset: '-12px',
+                          borderRadius: '999px',
+                          background: phase.glow,
+                          filter: 'blur(20px)',
+                        }}
+                      />
+
+                      <div
+                        style={{
+                          width: '86px',
+                          height: '86px',
+                          borderRadius: '28px',
+                          background:
+                            'linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))',
+                          border: `1px solid ${phase.color}55`,
+                          backdropFilter: 'blur(18px)',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          boxShadow: `0 20px 50px ${phase.glow}`,
+                        }}
+                      >
+                        <span style={{ fontSize: '1.6rem' }}>
+                          {phase.icon}
+                        </span>
+
+                        <span
+                          style={{
+                            marginTop: '0.3rem',
+                            fontSize: '0.72rem',
+                            fontWeight: 800,
+                            color: '#fff',
+                            letterSpacing: '0.08em',
+                          }}
+                        >
+                          {phase.phase}
+                        </span>
+                      </div>
+                    </motion.div>
+                  </div>
+
+                  {/* CARD */}
+                  <div
+                    style={{
+                      position: 'relative',
+                      overflow: 'hidden',
+                      borderRadius: '30px',
+                      padding: '2rem',
+                      background:
+                        'linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03))',
+                      border: isActive
+                        ? `1px solid ${phase.color}55`
+                        : '1px solid rgba(255,255,255,0.06)',
+                      backdropFilter: 'blur(24px)',
+                      minHeight: '420px',
+                      boxShadow: isActive
+                        ? `0 30px 80px ${phase.glow}`
+                        : '0 20px 60px rgba(0,0,0,0.35)',
+                    }}
+                  >
+                    {/* Glow */}
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '-40px',
+                        right: '-40px',
+                        width: '160px',
+                        height: '160px',
+                        borderRadius: '999px',
+                        background: phase.glow,
+                        filter: 'blur(60px)',
+                      }}
+                    />
+
+                    {/* TOP */}
+                    <div
+                      style={{
+                        position: 'relative',
+                        zIndex: 2,
+                        marginBottom: '2rem',
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          gap: '1rem',
+                          marginBottom: '1rem',
+                          flexWrap: 'wrap',
+                        }}
+                      >
+                        <span
+                          style={{
+                            padding: '0.45rem 0.8rem',
+                            borderRadius: '999px',
+                            background: `${phase.color}18`,
+                            color: phase.color,
+                            fontSize: '0.72rem',
+                            fontWeight: 800,
+                            letterSpacing: '0.12em',
+                          }}
+                        >
+                          {phase.label}
+                        </span>
+
+                        <span
+                          style={{
+                            color: 'rgba(255,255,255,0.35)',
+                            fontWeight: 700,
+                            fontSize: '0.8rem',
+                          }}
+                        >
+                          {phase.year}
+                        </span>
+                      </div>
+
+                      <h3
+                        style={{
+                          fontSize: '2rem',
+                          fontWeight: 900,
+                          letterSpacing: '-0.04em',
+                          color: '#fff',
+                          marginBottom: '0.8rem',
+                        }}
+                      >
+                        {phase.phase}
+                      </h3>
+
+                      <p
+                        style={{
+                          color: 'rgba(255,255,255,0.58)',
+                          lineHeight: 1.7,
+                          fontSize: '0.95rem',
+                        }}
+                      >
+                        {phase.status === 'active'
+                          ? 'Current active development phase focused on validating forecasting accuracy and core intelligence.'
+                          : phase.status === 'upcoming'
+                          ? 'Expanding intelligence capabilities with real business data and operational integrations.'
+                          : 'Scaling Lokalens into a complete AI-driven retail ecosystem platform.'}
+                      </p>
+                    </div>
+
+                    {/* FEATURES */}
+                    <div
+                      style={{
+                        position: 'relative',
+                        zIndex: 2,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '0.9rem',
+                      }}
+                    >
+                      {phase.items.map((item, j) => (
+                        <div
+                          key={j}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'flex-start',
+                            gap: '0.9rem',
+                            padding: '0.9rem 1rem',
+                            borderRadius: '18px',
+                            background: 'rgba(255,255,255,0.03)',
+                            border: '1px solid rgba(255,255,255,0.04)',
+                          }}
+                        >
+                          <div
+                            style={{
+                              width: '24px',
+                              height: '24px',
+                              borderRadius: '999px',
+                              background: `${phase.color}18`,
+                              color: phase.color,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              flexShrink: 0,
+                              fontSize: '0.72rem',
+                              fontWeight: 800,
+                              marginTop: '0.15rem',
+                            }}
+                          >
+                            ✓
+                          </div>
+
+                          <p
+                            style={{
+                              color: 'rgba(255,255,255,0.8)',
+                              fontSize: '0.9rem',
+                              lineHeight: 1.6,
+                            }}
+                          >
+                            {item}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
       </div>
+
+      {/* RESPONSIVE */}
+      <style jsx>{`
+        .roadmap-grid {
+          align-items: start;
+        }
+
+        @media (max-width: 1100px) {
+          .roadmap-grid {
+            grid-template-columns: 1fr !important;
+            gap: 4rem !important;
+          }
+        }
+
+        @keyframes shine {
+          100% {
+            transform: translateX(200%);
+          }
+        }
+      `}</style>
     </section>
   );
 }
