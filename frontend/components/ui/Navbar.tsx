@@ -6,12 +6,13 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const navLinks = [
-  { label: 'Features', href: '/#features' },
-  { label: 'How It Works', href: '/#how-it-works' },
-  { label: 'Roadmap', href: '/#roadmap' },
-  { label: 'FAQ', href: '/#faq' },
+  { label: 'Home', href: '/' },
+  { label: 'Features', href: '/feature' },
+  { label: 'Predictive AI', href: '/#predictive-ai' },
   { label: 'About Us', href: '/aboutus' },
   { label: 'Team', href: '/team' },
+  { label: 'Contact', href: '/contact' },
+  { label: 'Legal', href: '/legal' },
 ];
 
 export default function Navbar() {
@@ -209,9 +210,39 @@ export default function Navbar() {
               gap: '5px',
             }}
           >
-            <span />
-            <span />
-            <span />
+            <span
+              style={{
+                display: 'block',
+                width: '22px',
+                height: '2px',
+                background: '#334155',
+                borderRadius: '2px',
+                transition: 'all 0.3s ease',
+                transform: menuOpen ? 'translateY(7px) rotate(45deg)' : 'none',
+              }}
+            />
+            <span
+              style={{
+                display: 'block',
+                width: '22px',
+                height: '2px',
+                background: '#334155',
+                borderRadius: '2px',
+                transition: 'all 0.3s ease',
+                opacity: menuOpen ? 0 : 1,
+              }}
+            />
+            <span
+              style={{
+                display: 'block',
+                width: '22px',
+                height: '2px',
+                background: '#334155',
+                borderRadius: '2px',
+                transition: 'all 0.3s ease',
+                transform: menuOpen ? 'translateY(-7px) rotate(-45deg)' : 'none',
+              }}
+            />
           </button>
         </motion.nav>
       </div>
@@ -237,6 +268,7 @@ export default function Navbar() {
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
+              transition={{ ease: [0.16, 1, 0.3, 1], duration: 0.4 }}
               style={{
                 position: 'fixed',
                 top: 0,
@@ -245,25 +277,83 @@ export default function Navbar() {
                 height: '100%',
                 background: '#fff',
                 zIndex: 999,
-                padding: '1.5rem',
+                padding: '2rem 1.5rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.25rem',
               }}
             >
-              {navLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  onClick={() => setMenuOpen(false)}
+              {/* Mobile Logo */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  marginBottom: '1.5rem',
+                  fontWeight: 800,
+                  fontSize: '1.2rem',
+                  color: '#1e293b',
+                }}
+              >
+                <span
                   style={{
-                    display: 'block',
-                    padding: '0.8rem 0',
-                    textDecoration: 'none',
-                    color: '#334155',
-                    fontSize: '1rem',
+                    width: '24px',
+                    height: '24px',
+                    borderRadius: '6px',
+                    background: 'linear-gradient(135deg, #1e90ff, #00bfff)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#fff',
+                    fontWeight: 800,
+                    fontSize: '0.7rem',
                   }}
                 >
-                  {link.label}
-                </Link>
-              ))}
+                  L
+                </span>
+                Loka<span style={{ color: '#1e90ff' }}>lens</span>
+              </div>
+
+              {navLinks.map((link) => {
+                const isActive = pathname === link.href;
+                return (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    onClick={() => setMenuOpen(false)}
+                    style={{
+                      display: 'block',
+                      padding: '0.75rem 1rem',
+                      borderRadius: '10px',
+                      textDecoration: 'none',
+                      color: isActive ? '#1e90ff' : '#334155',
+                      fontSize: '0.95rem',
+                      fontWeight: isActive ? 600 : 500,
+                      background: isActive ? 'rgba(30,144,255,0.07)' : 'transparent',
+                    }}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+
+              <motion.a
+                href="#"
+                whileTap={{ scale: 0.96 }}
+                style={{
+                  marginTop: 'auto',
+                  padding: '0.75rem 1.3rem',
+                  background: '#1e90ff',
+                  color: '#fff',
+                  borderRadius: '100px',
+                  fontSize: '0.9rem',
+                  textDecoration: 'none',
+                  fontWeight: 600,
+                  textAlign: 'center',
+                }}
+              >
+                Get Early Access
+              </motion.a>
             </motion.div>
           </>
         )}

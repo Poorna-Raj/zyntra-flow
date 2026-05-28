@@ -21,7 +21,7 @@ const teamMembers = [
   },
   {
     name: 'Arosha Bandara',
-    role: 'DevOps Engineer',
+    role: 'DevOps Engineer / Frontend Developer',
     bio: 'Transforming research insights and stakeholder requirements into smart product decisions and business direction.',
     image: '/team/arosha.png',
     tagId: 'NIRA-02',
@@ -33,7 +33,7 @@ const teamMembers = [
   },
   {
     name: 'Sachintha Perera',
-    role: 'Frontend Developer',
+    role: 'UI/UX Designer / Frontend Developer',
     bio: 'Building reliable backend systems, cloud integrations, and optimized data-driven application workflows.',
     image: '/team/sachintha.jpeg',
     tagId: 'NIRA-03',
