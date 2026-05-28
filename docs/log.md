@@ -92,3 +92,199 @@ The reason behind the huge difference between `$R^2$` values between the **rando
 
 - Random forest handles feature interaction better
 - Linear regression not great with non-linear patterns
+
+# 28-May-2026
+
+Today I implement the api service for the exported model using `FastAPI` and test the results.
+
+### Test 1
+
+Request:
+
+```json
+{
+  "province": "Sabaragamuwa",
+  "week_number": 31,
+  "avg_temperature_level": "Medium",
+  "rainfall_level": "High",
+  "tourism_level": "Low",
+  "payday_week": "Yes",
+  "holiday_type": "None",
+  "festival_season": "No",
+  "school_season": "Yes",
+  "urbanization_level": "Medium",
+  "avg_income_level": "Medium",
+  "top_n": 10
+}
+```
+
+Response:
+
+```json
+{
+  "province": "Sabaragamuwa",
+  "week_number": 31,
+  "month": "July",
+  "top_products": [
+    {
+      "product_name": "Coca-Cola",
+      "category": "Beverages",
+      "demand_score": 771.97
+    },
+    {
+      "product_name": "Pepsi",
+      "category": "Beverages",
+      "demand_score": 771.97
+    },
+    {
+      "product_name": "Elephant Ginger Beer",
+      "category": "Beverages",
+      "demand_score": 771.97
+    },
+    {
+      "product_name": "Necto",
+      "category": "Beverages",
+      "demand_score": 771.97
+    },
+    {
+      "product_name": "Tea Leaves",
+      "category": "Beverages",
+      "demand_score": 771.97
+    },
+    {
+      "product_name": "Anchor Milk Powder",
+      "category": "Dairy",
+      "demand_score": 771.97
+    },
+    {
+      "product_name": "Milo",
+      "category": "Dairy",
+      "demand_score": 771.97
+    },
+    {
+      "product_name": "Kotmale Yoghurt",
+      "category": "Dairy",
+      "demand_score": 771.97
+    },
+    {
+      "product_name": "Munchee Biscuits",
+      "category": "Snacks",
+      "demand_score": 771.97
+    },
+    {
+      "product_name": "MD Crackers",
+      "category": "Snacks",
+      "demand_score": 771.97
+    }
+  ]
+}
+```
+
+### Test 2
+
+Request:
+
+```json
+{
+  "province": "Central",
+  "week_number": 31,
+  "avg_temperature_level": "High",
+  "rainfall_level": "Low",
+  "tourism_level": "High",
+  "payday_week": "Yes",
+  "holiday_type": "None",
+  "festival_season": "No",
+  "school_season": "Yes",
+  "urbanization_level": "Medium",
+  "avg_income_level": "Medium",
+  "top_n": 10
+}
+```
+
+Response:
+
+```json
+{
+  "province": "Central",
+  "week_number": 31,
+  "month": "July",
+  "top_products": [
+    {
+      "product_name": "Coca-Cola",
+      "category": "Beverages",
+      "demand_score": 771.97
+    },
+    {
+      "product_name": "Pepsi",
+      "category": "Beverages",
+      "demand_score": 771.97
+    },
+    {
+      "product_name": "Elephant Ginger Beer",
+      "category": "Beverages",
+      "demand_score": 771.97
+    },
+    {
+      "product_name": "Necto",
+      "category": "Beverages",
+      "demand_score": 771.97
+    },
+    {
+      "product_name": "Tea Leaves",
+      "category": "Beverages",
+      "demand_score": 771.97
+    },
+    {
+      "product_name": "Anchor Milk Powder",
+      "category": "Dairy",
+      "demand_score": 771.97
+    },
+    {
+      "product_name": "Milo",
+      "category": "Dairy",
+      "demand_score": 771.97
+    },
+    {
+      "product_name": "Kotmale Yoghurt",
+      "category": "Dairy",
+      "demand_score": 771.97
+    },
+    {
+      "product_name": "Munchee Biscuits",
+      "category": "Snacks",
+      "demand_score": 771.97
+    },
+    {
+      "product_name": "MD Crackers",
+      "category": "Snacks",
+      "demand_score": 771.97
+    }
+  ]
+}
+```
+
+So at the moment, same result will be given under different conditions.
+
+Right now, every product get row being sent to the model was practically identical. Because only the `product_name` and `category` get changed. These difference are very small. Since the model was trained mostly on features such as,
+
+- urbanization_level 0.170132
+- avg_income_level 0.146315
+- income_urban_index 0.129970
+- category 0.111631
+- province 0.077016
+
+those small differences become invisible to the model. Which result in every product getting nearly the same score.
+
+To address this issue, we add **feature interactions**. Previously model sees `category` and `province` as two separate independent numbers. So it can learn, `Western province has high demand` and `Beverages have high demand`. But with **feature interactions** we multiply both those columns so the model will be able to capture that combination and can learn that `Beverages in Western province have very high demand`.
+
+| Feature                  | Captures                                                                 |
+| ------------------------ | ------------------------------------------------------------------------ |
+| `income_urban_index`     | Wealthy urban areas behave differently from poor rural ones              |
+| `heat_beverage_signal`   | Hot weather specifically boosts cold drinks, not all products            |
+| `festival_holiday_combo` | Festival + specific holiday type creates unique demand (Vesak + candles) |
+| `payday_snack_signal`    | Payday boosts snacks specifically, not staples                           |
+| `province_category`      | Each province has different category preferences                         |
+| `province_product`       | Each province has different product preferences within categories        |
+| `week_holiday`           | Which week a holiday falls on affects demand differently                 |
+
+Now the model offers significantly different results, but still failed to capture major trends such as vesak festival and others. Now the dataset needs more improvements.
