@@ -1,591 +1,465 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { motion, Variants } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/sections/Footer";
 
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 32 },
-  show: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
-      delay: i * 0.1,
-    },
-  }),
-};
-
-interface Feature {
-  id: string;
-  tag: string;
-  tagColor: string;
-  title: string;
-  subtitle: string;
-  description: string;
-  details: string[];
-  stats: { label: string; value: string }[];
-  accent: string;
-  posterSlot: string; // label for the upload zone
-}
-
-const features: Feature[] = [
+const features = [
   {
     id: "province",
-    tag: "PROVINCE",
-    tagColor: "#e879f9",
-    title: "Province Intelligence",
-    subtitle: "Demand models built for every corner of Sri Lanka.",
-    description:
-      "Lokalens doesn't treat Sri Lanka as a single market. Every province has its own climate patterns, economic rhythms, and purchasing behaviors — and our forecasting engine captures all of it. From the coastal humidity of the Southern Province to the tea-country economy of Uva, demand signals are modelled with province-level precision.",
-    details: [
-      "All 9 provinces covered — Western, Central, Southern, Northern, Eastern, North Western, North Central, Uva, Sabaragamuwa",
-      "Climate-adjusted demand curves per region including temperature and rainfall signals",
-      "Urbanization and average income level factored into every prediction",
-      "Tourism activity encoded as a seasonal demand multiplier for coastal and heritage regions",
-      "Province-specific payday cycles and economic behavior patterns",
-    ],
+    index: "01",
+    tag: "Province Intelligence",
+    headline: "Every corner of Sri Lanka,\nprecisely forecast.",
+    caption:
+      "From coastal humidity in the Southern Province to the tea-country economy of Uva — demand signals modelled with province-level precision across all 9 provinces.",
     stats: [
-      { label: "Provinces", value: "9" },
-      { label: "Signals per Week", value: "40+" },
-      { label: "Accuracy Uplift", value: "+34%" },
+      { value: "9", label: "Provinces" },
+      { value: "40+", label: "Signals/week" },
+      { value: "+34%", label: "Accuracy uplift" },
     ],
-    accent: "#e879f9",
-    posterSlot: "Province Intelligence Poster",
+    accent: "#2563EB",
+    accentLight: "rgba(37,99,235,0.12)",
+    photo: "/images/features/province.jpg",
+    photoAlt: "Sri Lanka coastal market scene",
+    photoBg: "#1a2744",
   },
   {
     id: "cultural",
-    tag: "CULTURAL",
-    tagColor: "#facc15",
-    title: "Cultural Signals",
-    subtitle: "Every festival and payday cycle shapes the forecast.",
-    description:
-      "Sri Lanka's retail demand is deeply tied to its cultural calendar. Vesak drives coconut oil. Sinhala & Tamil New Year spikes rice flour and sweets. Ramadan reshapes evening consumption. Payday weeks create predictable premium-product surges. Lokalens encodes all of this into its forecasting engine so your stocking decisions are culturally aware, not just statistically average.",
-    details: [
-      "Full Sri Lankan public holiday calendar integrated including Poya days, Vesak, Avurudu, Ramadan, Christmas, and Deepavali",
-      "Payday week detection with province-level timing differences",
-      "Festival-season demand spikes per product category",
-      "School season signals affecting stationery, snacks, and beverages",
-      "Religious event encoding for food-category demand shifts",
-    ],
+    index: "02",
+    tag: "Cultural Signals",
+    headline: "Every festival shapes\nthe forecast.",
+    caption:
+      "Vesak drives coconut oil. Avurudu spikes rice flour and sweets. Ramadan reshapes evening consumption. Sri Lanka's full cultural calendar — encoded.",
     stats: [
-      { label: "Cultural Events", value: "25+" },
-      { label: "Payday Cycles", value: "12/yr" },
-      { label: "Categories Affected", value: "18" },
+      { value: "25+", label: "Cultural events" },
+      { value: "12/yr", label: "Payday cycles" },
+      { value: "18", label: "Categories" },
     ],
-    accent: "#facc15",
-    posterSlot: "Cultural Signals Poster",
+    accent: "#D97706",
+    accentLight: "rgba(217,119,6,0.12)",
+    photo: "https://www.pettitts.co.uk/img/containers/assets/destinations/1-indian-subcontinent/2-sri-lanka/main-pages/sri-lanka-guides/11-festivals-not-to-miss-in-sri-lanka/vesak-poya.webp/66aeeda884306e5c851f3b76b7a2e11b/vesak-poya.webp",
+    photoAlt: "Sri Lanka festival celebration",
+    photoBg: "#2a1a0a",
   },
   {
     id: "sku",
-    tag: "SKU",
-    tagColor: "#38bdf8",
-    title: "SKU Forecasting",
-    subtitle: "Per-product demand scores. Know exactly which SKU moves faster in your region.",
-    description:
-      "Generic category-level forecasts are not enough for SMEs making real stocking decisions. Lokalens generates demand scores at the individual product level — so you know whether Anchor 400g or Nestomalt 500g is the higher priority restock in your province this week. Every SKU is scored, ranked, and contextualized against regional behavior.",
-    details: [
-      "Individual product-level demand score generation (0–1000 scale)",
-      "Weekly demand ranking across all tracked SKUs in your province",
-      "Category-level breakdowns — Beverages, Cooking Essentials, Dairy, Snacks, Personal Care, and more",
-      "Comparative ranking showing which products are trending up vs cooling down",
-      "Estimated units sold projection alongside demand score for quantity planning",
-    ],
+    index: "03",
+    tag: "SKU Forecasting",
+    headline: "Know exactly which\nproduct moves faster.",
+    caption:
+      "Individual demand scores per product — so you know whether Anchor 400g or Nestomalt 500g is the higher-priority restock in your province this week.",
     stats: [
-      { label: "SKUs Tracked", value: "200+" },
-      { label: "Categories", value: "12" },
-      { label: "Update Frequency", value: "Weekly" },
+      { value: "200+", label: "SKUs tracked" },
+      { value: "12", label: "Categories" },
+      { value: "Weekly", label: "Updates" },
     ],
-    accent: "#38bdf8",
-    posterSlot: "SKU Forecasting Poster",
+    accent: "#0891B2",
+    accentLight: "rgba(8,145,178,0.12)",
+    photo: "/images/features/sku.jpg",
+    photoAlt: "Grocery store shelves stocked with products",
+    photoBg: "#0a1f24",
   },
   {
-    id: "ai-assistant",
-    tag: "AI BOT",
-    tagColor: "#4ade80",
-    title: "AI Assistant",
-    subtitle: "Budget-aware stocking recommendations with full reasoning — ready in seconds.",
-    description:
-      "The Lokalens AI Assistant turns forecast data into conversational business guidance. Tell it your budget and province, and it builds a prioritized restock plan explaining exactly why each product is recommended. It understands cultural context, seasonal pressure, and province-level demand simultaneously — giving SME owners the kind of advice that used to require a data analyst.",
-    details: [
-      "Natural language interface — ask in plain English or Sinhala-transliterated queries",
-      "Budget-aware optimization: input Rs. 50,000 and receive a ranked restock plan",
-      "Full reasoning transparency — every recommendation is explained, not just listed",
-      "Contextual awareness of upcoming festivals, payday proximity, and climate signals",
-      "Phase 3 feature: personalized memory that improves with your sales history",
-    ],
+    id: "ai",
+    index: "04",
+    tag: "AI Assistant",
+    headline: "Budget-aware advice,\nready in seconds.",
+    caption:
+      "Tell it your budget and province. It builds a prioritized restock plan — with full reasoning for every recommendation.",
     stats: [
-      { label: "Response Time", value: "<3s" },
-      { label: "Reasoning Steps", value: "5–8" },
-      { label: "Languages", value: "EN / SL" },
+      { value: "<3s", label: "Response time" },
+      { value: "5–8", label: "Reasoning steps" },
+      { value: "EN/SL", label: "Languages" },
     ],
-    accent: "#4ade80",
-    posterSlot: "AI Assistant Poster",
+    accent: "#059669",
+    accentLight: "rgba(5,150,105,0.12)",
+    photo: "/images/features/ai.jpg",
+    photoAlt: "Shop owner using phone for business decisions",
+    photoBg: "#0a1f16",
   },
   {
     id: "dashboard",
-    tag: "DASHBOARD",
-    tagColor: "#f97316",
-    title: "Visual Dashboard",
-    subtitle: "Heat maps, trend charts, confidence bands, and regional comparisons in one view.",
-    description:
-      "The Lokalens dashboard gives SME owners a clear visual picture of demand across their province and product range. No spreadsheet skills needed. Demand heat maps show which regions are heating up, trend charts reveal week-on-week momentum, and confidence bands communicate forecast certainty — so you know when to act decisively and when to wait.",
-    details: [
-      "Province-level demand heat map across Sri Lanka's 9 provinces",
-      "Weekly trend charts with momentum indicators per product",
-      "Confidence band overlays showing high, medium, and low certainty zones",
-      "Top-10 recommended products panel updated every forecasting cycle",
-      "Category filter and province switcher for rapid cross-segment comparison",
-    ],
+    index: "05",
+    tag: "Visual Dashboard",
+    headline: "Your entire market\nin one glance.",
+    caption:
+      "Heat maps, trend charts, confidence bands, and regional comparisons — no spreadsheet skills needed.",
     stats: [
-      { label: "Chart Types", value: "6" },
-      { label: "Data Points", value: "Real-time" },
-      { label: "Export", value: "CSV / PDF" },
+      { value: "6", label: "Chart types" },
+      { value: "Live", label: "Data updates" },
+      { value: "CSV+PDF", label: "Export" },
     ],
-    accent: "#f97316",
-    posterSlot: "Visual Dashboard Poster",
+    accent: "#DC2626",
+    accentLight: "rgba(220,38,38,0.12)",
+    photo: "/images/features/dashboard.jpg",
+    photoAlt: "Business analytics dashboard overview",
+    photoBg: "#1f0a0a",
   },
 ];
 
-function PosterUpload({ label, accent }: { label: string; accent: string }) {
-  const [preview, setPreview] = useState<string | null>(null);
-  const [dragging, setDragging] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const handleFile = (file: File) => {
-    if (!file.type.startsWith("image/")) return;
-    const url = URL.createObjectURL(file);
-    setPreview(url);
-  };
-
-  const onDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setDragging(false);
-    const file = e.dataTransfer.files[0];
-    if (file) handleFile(file);
-  };
-
-  return (
-    <div
-      onClick={() => !preview && inputRef.current?.click()}
-      onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
-      onDragLeave={() => setDragging(false)}
-      onDrop={onDrop}
-      style={{
-        width: "100%",
-        aspectRatio: "16/9",
-        borderRadius: 16,
-        border: `2px dashed ${dragging ? accent : "rgba(255,255,255,0.12)"}`,
-        background: dragging
-          ? `rgba(${hexToRgb(accent)}, 0.06)`
-          : "rgba(255,255,255,0.03)",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        cursor: preview ? "default" : "pointer",
-        transition: "all 0.25s ease",
-        overflow: "hidden",
-        position: "relative",
-      }}
-    >
-      {preview ? (
-        <>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={preview}
-            alt="Uploaded poster"
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          />
-          <button
-            onClick={(e) => { e.stopPropagation(); setPreview(null); }}
-            style={{
-              position: "absolute",
-              top: 12,
-              right: 12,
-              background: "rgba(0,0,0,0.6)",
-              border: "none",
-              borderRadius: "50%",
-              width: 32,
-              height: 32,
-              color: "#fff",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: 16,
-              backdropFilter: "blur(8px)",
-            }}
-          >
-            ×
-          </button>
-        </>
-      ) : (
-        <div style={{ textAlign: "center", padding: "24px 20px" }}>
-          <div
-            style={{
-              width: 48, height: 48,
-              borderRadius: 12,
-              background: `rgba(${hexToRgb(accent)}, 0.1)`,
-              border: `1px solid rgba(${hexToRgb(accent)}, 0.2)`,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              margin: "0 auto 14px",
-              color: accent,
-            }}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
-              <polyline points="21 15 16 10 5 21"/>
-            </svg>
-          </div>
-          <p style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.6)", marginBottom: 4 }}>
-            {label}
-          </p>
-          <p style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>
-            Drop an image or click to upload
-          </p>
-        </div>
-      )}
-      <input
-        ref={inputRef}
-        type="file"
-        accept="image/*"
-        style={{ display: "none" }}
-        onChange={(e) => {
-          const file = e.target.files?.[0];
-          if (file) handleFile(file);
-        }}
-      />
-    </div>
-  );
-}
-
-function hexToRgb(hex: string): string {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  return `${r}, ${g}, ${b}`;
-}
-
 export default function FeaturesPage() {
-  const [activeFeature, setActiveFeature] = useState("province");
-  const active = features.find((f) => f.id === activeFeature)!;
+  const [active, setActive] = useState(0);
+  const feat = features[active];
 
   return (
-    <div
-      style={{
-        fontFamily: "'Plus Jakarta Sans', sans-serif",
-        background: "#0A0F1E",
-        minHeight: "100vh",
-        color: "#fff",
-      }}
-    >
+    <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", background: "#08090F", minHeight: "100vh", color: "#fff" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .feat-tab {
+        .feat-page { display: grid; grid-template-columns: 340px 1fr; min-height: 100vh; }
+        @media (max-width: 900px) { .feat-page { grid-template-columns: 1fr; } }
+
+        .sidebar {
+          position: sticky;
+          top: 0;
+          height: 100vh;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          padding: 48px 32px;
+          border-right: 1px solid rgba(255,255,255,0.06);
+          background: #08090F;
+          z-index: 10;
+        }
+
+        .sidebar-label {
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.14em;
+          color: rgba(255,255,255,0.25);
+          text-transform: uppercase;
+          margin-bottom: 28px;
+        }
+
+        .nav-item {
           display: flex;
           align-items: center;
-          gap: 10px;
-          padding: 14px 18px;
-          border-radius: 12px;
-          border: 1px solid transparent;
-          background: transparent;
+          gap: 14px;
+          padding: 14px 0;
           cursor: pointer;
-          text-align: left;
-          transition: all 0.2s ease;
+          border: none;
+          background: none;
           width: 100%;
+          text-align: left;
+          border-bottom: 1px solid rgba(255,255,255,0.05);
+          transition: all 0.2s;
+          font-family: 'Plus Jakarta Sans', sans-serif;
         }
-        .feat-tab:hover {
-          background: rgba(255,255,255,0.05);
-          border-color: rgba(255,255,255,0.08);
+        .nav-item:first-of-type { border-top: 1px solid rgba(255,255,255,0.05); }
+        .nav-item:hover .nav-title { color: #fff; }
+
+        .nav-num {
+          font-size: 11px;
+          font-weight: 700;
+          font-variant-numeric: tabular-nums;
+          color: rgba(255,255,255,0.2);
+          width: 24px;
+          flex-shrink: 0;
+          transition: color 0.2s;
         }
-        .feat-tab.active {
-          background: rgba(255,255,255,0.06);
-          border-color: rgba(255,255,255,0.12);
+        .nav-item.active .nav-num { color: var(--accent); }
+
+        .nav-title {
+          font-size: 14px;
+          font-weight: 600;
+          color: rgba(255,255,255,0.4);
+          transition: color 0.2s;
+          flex: 1;
+        }
+        .nav-item.active .nav-title { color: #fff; }
+
+        .nav-bar {
+          width: 3px;
+          height: 0;
+          border-radius: 2px;
+          background: var(--accent);
+          flex-shrink: 0;
+          transition: height 0.3s ease;
+        }
+        .nav-item.active .nav-bar { height: 28px; }
+
+        .main-area {
+          display: flex;
+          flex-direction: column;
+          min-height: 100vh;
         }
 
-        .stat-card {
+        .photo-zone {
+          position: relative;
+          height: 70vh;
+          overflow: hidden;
+          background: #111;
+        }
+
+        .photo-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+          transition: transform 0.8s cubic-bezier(0.16,1,0.3,1);
+        }
+        .photo-img:hover { transform: scale(1.03); }
+
+        .photo-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(to top, rgba(8,9,15,0.92) 0%, rgba(8,9,15,0.3) 50%, rgba(8,9,15,0.1) 100%);
+        }
+
+        .photo-placeholder {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          background: var(--photo-bg);
+          transition: background 0.5s;
+        }
+
+        .photo-index {
+          position: absolute;
+          top: 32px;
+          right: 32px;
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.1em;
+          color: rgba(255,255,255,0.4);
+        }
+
+        .content-zone {
           flex: 1;
-          padding: 20px;
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 14px;
+          padding: 48px 56px 64px;
+          background: #08090F;
+          display: flex;
+          flex-direction: column;
+          gap: 32px;
+        }
+
+        .feature-tag {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          padding: 5px 12px;
+          border-radius: 100px;
+          background: var(--accent-light);
+          color: var(--accent);
+        }
+        .feature-tag-dot {
+          width: 5px; height: 5px; border-radius: 50%; background: currentColor;
+        }
+
+        .headline {
+          font-size: clamp(32px, 3.5vw, 48px);
+          font-weight: 800;
+          letter-spacing: -0.03em;
+          line-height: 1.1;
+          color: #fff;
+          white-space: pre-line;
+        }
+
+        .caption {
+          font-size: 16px;
+          color: rgba(255,255,255,0.45);
+          line-height: 1.75;
+          font-weight: 400;
+          max-width: 560px;
+        }
+
+        .stats-row {
+          display: flex;
+          gap: 0;
+          border: 1px solid rgba(255,255,255,0.07);
+          border-radius: 16px;
+          overflow: hidden;
+          width: fit-content;
+        }
+        .stat {
+          padding: 20px 32px;
+          border-right: 1px solid rgba(255,255,255,0.07);
           text-align: center;
         }
+        .stat:last-child { border-right: none; }
+        .stat-val {
+          font-size: 26px;
+          font-weight: 800;
+          letter-spacing: -0.02em;
+          color: var(--accent);
+          display: block;
+          line-height: 1;
+          margin-bottom: 4px;
+        }
+        .stat-lbl {
+          font-size: 11px;
+          font-weight: 600;
+          color: rgba(255,255,255,0.3);
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+        }
 
-        .detail-item {
+        .progress-bar {
           display: flex;
-          gap: 12px;
-          align-items: flex-start;
-          padding: 14px 0;
-          border-bottom: 1px solid rgba(255,255,255,0.05);
+          gap: 4px;
+          margin-top: auto;
+          padding-top: 16px;
         }
-        .detail-item:last-child { border-bottom: none; }
-
-        .features-grid {
-          display: grid;
-          grid-template-columns: 260px 1fr;
-          gap: 32px;
-          align-items: start;
+        .progress-seg {
+          height: 2px;
+          flex: 1;
+          border-radius: 2px;
+          background: rgba(255,255,255,0.1);
+          cursor: pointer;
+          transition: background 0.3s;
+          border: none;
         }
+        .progress-seg.done { background: rgba(255,255,255,0.35); }
+        .progress-seg.active { background: var(--accent); }
 
-        .content-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 24px;
+        .placeholder-icon {
+          width: 64px; height: 64px;
+          border-radius: 20px;
+          background: rgba(255,255,255,0.06);
+          display: flex; align-items: center; justify-content: center;
         }
-
-        @media (max-width: 900px) {
-          .features-grid { grid-template-columns: 1fr; }
-          .content-grid { grid-template-columns: 1fr; }
+        .placeholder-text {
+          font-size: 13px;
+          font-weight: 600;
+          color: rgba(255,255,255,0.2);
+          text-align: center;
+          max-width: 200px;
+          line-height: 1.5;
+        }
+        .placeholder-path {
+          font-size: 11px;
+          font-weight: 500;
+          color: rgba(255,255,255,0.12);
+          font-family: monospace;
+          margin-top: 4px;
         }
       `}</style>
 
       <Navbar />
 
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "120px 24px 96px" }}>
-
-        {/* Hero Header */}
-        <motion.div
-          variants={fadeUp} custom={0} initial="hidden" animate="show"
-          style={{ marginBottom: 64, maxWidth: 640 }}
+      <div style={{ paddingTop: 72 }}>
+        <div
+          className="feat-page"
+          style={{ "--accent": feat.accent, "--accent-light": feat.accentLight, "--photo-bg": feat.photoBg } as React.CSSProperties}
         >
-          <div
-            style={{
-              display: "inline-flex", alignItems: "center", gap: 6,
-              fontSize: 12, fontWeight: 600,
-              padding: "5px 12px", borderRadius: 100,
-              background: "rgba(10,132,255,0.12)",
-              color: "#0A84FF", marginBottom: 20,
-            }}
-          >
-            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#0A84FF" }} />
-            Platform Features
-          </div>
 
-          <h1
-            style={{
-              fontSize: "clamp(36px, 5vw, 58px)",
-              fontWeight: 800,
-              letterSpacing: "-0.03em",
-              lineHeight: 1.1,
-              color: "#fff",
-              marginBottom: 16,
-            }}
-          >
-            Built for Sri Lankan{" "}
-            <span style={{ color: "#0A84FF" }}>retail reality.</span>
-          </h1>
-          <p style={{ fontSize: 16, color: "rgba(255,255,255,0.5)", lineHeight: 1.65 }}>
-            Five intelligence layers working together — from province-level climate signals to per-SKU demand scores and AI-driven budget recommendations.
-          </p>
-        </motion.div>
+          {/* Sidebar */}
+          <aside className="sidebar">
+            <p className="sidebar-label">Platform Features</p>
 
-        {/* Main Layout */}
-        <div className="features-grid">
-
-          {/* Sidebar Tabs */}
-          <motion.div
-            variants={fadeUp} custom={1} initial="hidden" animate="show"
-            style={{
-              background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: 18,
-              padding: 10,
-              position: "sticky",
-              top: 96,
-              display: "flex",
-              flexDirection: "column",
-              gap: 4,
-            }}
-          >
-            {features.map((f) => (
+            {features.map((f, i) => (
               <button
                 key={f.id}
-                className={`feat-tab${activeFeature === f.id ? " active" : ""}`}
-                onClick={() => setActiveFeature(f.id)}
+                className={`nav-item${active === i ? " active" : ""}`}
+                style={{ "--accent": f.accent } as React.CSSProperties}
+                onClick={() => setActive(i)}
               >
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 2 }}>
-                    <span style={{ fontSize: 14, fontWeight: 700, color: activeFeature === f.id ? "#fff" : "rgba(255,255,255,0.7)" }}>
-                      {f.title}
-                    </span>
-                    <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.08em", color: activeFeature === f.id ? f.tagColor : "rgba(255,255,255,0.25)" }}>
-                      {f.tag}
-                    </span>
-                  </div>
-                  <span style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", fontWeight: 400 }}>
-                    {f.subtitle.split(".")[0]}
-                  </span>
-                </div>
-                {activeFeature === f.id && (
-                  <div style={{ width: 3, height: 28, borderRadius: 2, background: f.tagColor, flexShrink: 0 }} />
-                )}
+                <span className="nav-num">{f.index}</span>
+                <span className="nav-title">{f.tag}</span>
+                <span className="nav-bar" />
               </button>
             ))}
-          </motion.div>
 
-          {/* Feature Detail Panel */}
-          <motion.div
-            key={active.id}
-            initial={{ opacity: 0, x: 16 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-          >
-            {/* Feature Header */}
-            <div
-              style={{
-                background: "rgba(255,255,255,0.03)",
-                border: `1px solid rgba(${hexToRgb(active.accent)}, 0.2)`,
-                borderRadius: 18,
-                padding: "32px 32px 28px",
-                marginBottom: 20,
-              }}
-            >
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12, marginBottom: 16 }}>
-                <span
-                  style={{
-                    fontSize: 10, fontWeight: 800, letterSpacing: "0.12em",
-                    color: active.tagColor,
-                    background: `rgba(${hexToRgb(active.accent)}, 0.1)`,
-                    padding: "4px 10px", borderRadius: 100,
-                  }}
-                >
-                  {active.tag}
-                </span>
-              </div>
-
-              <h2
-                style={{
-                  fontSize: "clamp(24px, 3.5vw, 36px)",
-                  fontWeight: 800,
-                  letterSpacing: "-0.025em",
-                  color: "#fff",
-                  marginBottom: 8,
-                }}
-              >
-                {active.title}
-              </h2>
-              <p style={{ fontSize: 15, color: active.tagColor, fontWeight: 600, marginBottom: 16 }}>
-                {active.subtitle}
+            <div style={{ marginTop: 40, padding: "20px", background: "rgba(255,255,255,0.03)", borderRadius: 14, border: "1px solid rgba(255,255,255,0.06)" }}>
+              <p style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", lineHeight: 1.6, fontWeight: 400 }}>
+                Five intelligence layers working together — from province-level climate signals to per-SKU demand scores.
               </p>
-              <p style={{ fontSize: 15, color: "rgba(255,255,255,0.55)", lineHeight: 1.75 }}>
-                {active.description}
-              </p>
-
-              {/* Stats Row */}
-              <div style={{ display: "flex", gap: 12, marginTop: 28, flexWrap: "wrap" }}>
-                {active.stats.map((s) => (
-                  <div key={s.label} className="stat-card">
-                    <div style={{ fontSize: 26, fontWeight: 800, color: active.tagColor, letterSpacing: "-0.02em", marginBottom: 4 }}>
-                      {s.value}
-                    </div>
-                    <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase" }}>
-                      {s.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
             </div>
+          </aside>
 
-            {/* Two-col: Details + Poster */}
-            <div className="content-grid">
-
-              {/* Details List */}
-              <div
-                style={{
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.07)",
-                  borderRadius: 18,
-                  padding: "24px 24px 16px",
-                }}
+          {/* Main */}
+          <main className="main-area">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={feat.id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.35, ease: "easeInOut" }}
+                style={{ display: "flex", flexDirection: "column", flex: 1 }}
               >
-                <h3 style={{ fontSize: 13, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 16 }}>
-                  What's Included
-                </h3>
-                <div>
-                  {active.details.map((d, i) => (
-                    <div key={i} className="detail-item">
-                      <div
-                        style={{
-                          width: 20, height: 20, borderRadius: 6, flexShrink: 0, marginTop: 1,
-                          background: `rgba(${hexToRgb(active.accent)}, 0.1)`,
-                          display: "flex", alignItems: "center", justifyContent: "center",
-                        }}
-                      >
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={active.tagColor} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="20 6 9 17 4 12"/>
-                        </svg>
+                {/* Photo zone */}
+                <div className="photo-zone">
+                  {/* Try loading image; show placeholder if not found */}
+                  <ImageWithFallback
+                    src={feat.photo}
+                    alt={feat.photoAlt}
+                    bg={feat.photoBg}
+                    tag={feat.tag}
+                    accent={feat.accent}
+                  />
+                  <div className="photo-overlay" />
+                  <span className="photo-index">{feat.index} / 05</span>
+                </div>
+
+                {/* Content */}
+                <div className="content-zone">
+                  <div>
+                    <span className="feature-tag">
+                      <span className="feature-tag-dot" />
+                      {feat.tag}
+                    </span>
+                  </div>
+
+                  <motion.h2
+                    className="headline"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    {feat.headline}
+                  </motion.h2>
+
+                  <motion.p
+                    className="caption"
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.18, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    {feat.caption}
+                  </motion.p>
+
+                  <motion.div
+                    className="stats-row"
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.25, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    {feat.stats.map((s) => (
+                      <div key={s.label} className="stat">
+                        <span className="stat-val">{s.value}</span>
+                        <span className="stat-lbl">{s.label}</span>
                       </div>
-                      <p style={{ fontSize: 13.5, color: "rgba(255,255,255,0.6)", lineHeight: 1.65, fontWeight: 400 }}>
-                        {d}
-                      </p>
-                    </div>
-                  ))}
+                    ))}
+                  </motion.div>
+
+                  {/* Progress dots */}
+                  <div className="progress-bar">
+                    {features.map((_, i) => (
+                      <button
+                        key={i}
+                        className={`progress-seg${i === active ? " active" : i < active ? " done" : ""}`}
+                        style={i === active ? { "--accent": feat.accent } as React.CSSProperties : {}}
+                        onClick={() => setActive(i)}
+                        aria-label={`Go to feature ${i + 1}`}
+                      />
+                    ))}
+                  </div>
                 </div>
-              </div>
-
-              {/* Poster Upload */}
-              <div
-                style={{
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.07)",
-                  borderRadius: 18,
-                  padding: 20,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 14,
-                }}
-              >
-                <h3 style={{ fontSize: 13, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", textTransform: "uppercase" }}>
-                  Feature Poster
-                </h3>
-                <PosterUpload label={active.posterSlot} accent={active.accent} />
-                <p style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", textAlign: "center" }}>
-                  PNG, JPG, WEBP · Recommended 1280×720
-                </p>
-              </div>
-
-            </div>
-          </motion.div>
+              </motion.div>
+            </AnimatePresence>
+          </main>
         </div>
-
-        {/* Bottom — All Features Strip */}
-        <motion.div
-          variants={fadeUp} custom={3} initial="hidden" animate="show"
-          style={{ marginTop: 64 }}
-        >
-          <p style={{ fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,0.25)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 20 }}>
-            All Features at a Glance
-          </p>
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            {features.map((f) => (
-              <button
-                key={f.id}
-                onClick={() => setActiveFeature(f.id)}
-                style={{
-                  padding: "10px 18px",
-                  borderRadius: 100,
-                  border: `1px solid ${activeFeature === f.id ? f.tagColor : "rgba(255,255,255,0.1)"}`,
-                  background: activeFeature === f.id ? `rgba(${hexToRgb(f.accent)}, 0.1)` : "transparent",
-                  color: activeFeature === f.id ? f.tagColor : "rgba(255,255,255,0.45)",
-                  fontSize: 13,
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  transition: "all 0.2s ease",
-                  fontFamily: "'Plus Jakarta Sans', sans-serif",
-                }}
-              >
-                {f.title}
-              </button>
-            ))}
-          </div>
-        </motion.div>
-
       </div>
 
       <Footer />
@@ -593,4 +467,35 @@ export default function FeaturesPage() {
   );
 }
 
-//not working proposaly need fix in the nav bar
+function ImageWithFallback({
+  src, alt, bg, tag, accent,
+}: {
+  src: string; alt: string; bg: string; tag: string; accent: string;
+}) {
+  const [failed, setFailed] = useState(false);
+
+  if (failed) {
+    return (
+      <div className="photo-placeholder" style={{ background: bg }}>
+        <div className="placeholder-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <polyline points="21 15 16 10 5 21" />
+          </svg>
+        </div>
+        <p className="placeholder-text">Add your photo for<br /><strong style={{ color: "rgba(255,255,255,0.35)" }}>{tag}</strong></p>
+        <p className="placeholder-path">{src}</p>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className="photo-img"
+      onError={() => setFailed(true)}
+    />
+  );
+}
