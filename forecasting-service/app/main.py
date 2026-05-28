@@ -103,50 +103,63 @@ def forecast(req: ForecastRequest):
     month = week_to_month(req.week_number)
     rows = []
 
+    enc_province = safe_encode(encoders["province"], req.province)
+    enc_month = safe_encode(encoders["month"], month)
+    enc_temp = safe_encode(encoders["avg_temperature_level"], req.avg_temperature_level)
+    enc_rain = safe_encode(encoders["rainfall_level"], req.rainfall_level)
+    enc_tourism = safe_encode(encoders["tourism_level"], req.tourism_level)
+    enc_payday = safe_encode(encoders["payday_week"], req.payday_week)
+    enc_holiday = safe_encode(encoders["holiday_type"], req.holiday_type)
+    enc_festival = safe_encode(encoders["festival_season"], req.festival_season)
+    enc_school = safe_encode(encoders["school_season"], req.school_season)
+    enc_urban = safe_encode(encoders["urbanization_level"], req.urbanization_level)
+    enc_income = safe_encode(encoders["avg_income_level"], req.avg_income_level)
+
     for product_name, category in PRODUCTS:
+        enc_product = safe_encode(encoders["product_name"], product_name)
+        enc_category = safe_encode(encoders["category"], category)
+
         row = {
             "week_number": req.week_number,
-            "month": safe_encode(encoders["month"], month),
-            "province": safe_encode(encoders["province"], req.province),
-            "product_name": safe_encode(encoders["product_name"], product_name),
-            "category": safe_encode(encoders["category"], category),
-            "avg_temperature_level": safe_encode(
-                encoders["avg_temperature_level"], req.avg_temperature_level
-            ),
-            "rainfall_level": safe_encode(
-                encoders["rainfall_level"], req.rainfall_level
-            ),
-            "tourism_level": safe_encode(encoders["tourism_level"], req.tourism_level),
-            "payday_week": safe_encode(encoders["payday_week"], req.payday_week),
-            "holiday_type": safe_encode(encoders["holiday_type"], req.holiday_type),
-            "festival_season": safe_encode(
-                encoders["festival_season"], req.festival_season
-            ),
-            "school_season": safe_encode(encoders["school_season"], req.school_season),
-            "urbanization_level": safe_encode(
-                encoders["urbanization_level"], req.urbanization_level
-            ),
-            "avg_income_level": safe_encode(
-                encoders["avg_income_level"], req.avg_income_level
-            ),
+            "month": enc_month,
+            "province": enc_province,
+            "product_name": enc_product,
+            "category": enc_category,
+            "avg_temperature_level": enc_temp,
+            "rainfall_level": enc_rain,
+            "tourism_level": enc_tourism,
+            "payday_week": enc_payday,
+            "holiday_type": enc_holiday,
+            "festival_season": enc_festival,
+            "school_season": enc_school,
+            "urbanization_level": enc_urban,
+            "avg_income_level": enc_income,
+            # Interaction features — must match training exactly
+            "income_urban_index": enc_income * enc_urban,
+            "heat_beverage_signal": enc_temp * enc_category,
+            "festival_holiday_combo": enc_festival * enc_holiday,
+            "payday_snack_signal": enc_payday * enc_category,
+            "province_category": enc_province * enc_category,
+            "province_product": enc_province * enc_product,
+            "week_holiday": req.week_number * enc_holiday,
         }
         rows.append(row)
 
     X = pd.DataFrame(rows)
-    log_preds = model.predict(X)
-    preds = np.expm1(log_preds)
+    preds = np.expm1(model.predict(X))
 
-    results = []
-    for i, (product_name, category) in enumerate(PRODUCTS):
-        results.append(
+    results = sorted(
+        [
             {
                 "product_name": product_name,
                 "category": category,
                 "demand_score": round(float(preds[i]), 2),
             }
-        )
-
-    results.sort(key=lambda x: x["demand_score"], reverse=True)
+            for i, (product_name, category) in enumerate(PRODUCTS)
+        ],
+        key=lambda x: x["demand_score"],
+        reverse=True,
+    )
 
     return {
         "province": req.province,
