@@ -1,8 +1,16 @@
 'use client';
 
-import Link from 'next/link';
+
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
+const router = useRouter();
+
+const handleLogin = () => {
+  localStorage.setItem('adminLoggedIn', 'true');
+  router.push('/admin');
+};
+
   return (
     <div
       style={{
@@ -361,27 +369,26 @@ export default function LoginPage() {
               />
             </div>
 
-            {/* Login Button */}
-            <Link
-              href="/admin"
-              style={{
-                display: 'block',
-                width: '100%',
-                padding: '1rem',
-                borderRadius: '18px',
-                background:
-                  'linear-gradient(135deg, #38BDF8, #1E90FF)',
-                color: '#fff',
-                textAlign: 'center',
-                textDecoration: 'none',
-                fontWeight: 700,
-                fontSize: '1rem',
-                boxShadow:
-                  '0 12px 28px rgba(30,144,255,0.24)',
-              }}
-            >
-              Login to Dashboard
-            </Link>
+            <button
+  onClick={handleLogin}
+  style={{
+    width: '100%',
+    padding: '1rem',
+    borderRadius: '18px',
+    background:
+      'linear-gradient(135deg, #38BDF8, #1E90FF)',
+    color: '#fff',
+    textAlign: 'center',
+    border: 'none',
+    fontWeight: 700,
+    fontSize: '1rem',
+    cursor: 'pointer',
+    boxShadow:
+      '0 12px 28px rgba(30,144,255,0.24)',
+  }}
+>
+  Login to Dashboard
+</button>
 
             {/* Footer */}
             <p
