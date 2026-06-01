@@ -288,3 +288,15 @@ To address this issue, we add **feature interactions**. Previously model sees `c
 | `week_holiday`           | Which week a holiday falls on affects demand differently                 |
 
 Now the model offers significantly different results, but still failed to capture major trends such as vesak festival and others. Now the dataset needs more improvements.
+
+# 01-JUN-2026
+
+An updated dataset has been generated [here](../forecasting-service/dataset/v2.csv). This dataset has been developed to showcase more localize trends which leads to a,
+
+$R^2 = 0.8107948538834194$  
+$\text{MAE} = 82.07171257849777$
+
+- $R^2 = 0.810$ — the model explains **81\%** of the demand variations.
+- $\text{MAE} = 82.071$ — the model's average predictions are off by **82.071** units.
+
+The results itself showcase a improvement in the model. But an actual test is yet to be conducted.
