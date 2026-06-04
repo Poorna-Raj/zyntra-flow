@@ -1,4 +1,4 @@
-import { activityData } from "../../constants/activity.data";
+import { activityData } from "../../constants/admin.data";
 
 interface ForecastTableProps {
   darkMode: boolean;

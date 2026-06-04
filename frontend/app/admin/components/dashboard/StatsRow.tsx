@@ -1,5 +1,5 @@
 import StatCard from "./StatCard";
-import { statsData } from "../../constants/stats.data";
+import { statsData } from "../../constants/admin.data";
 
 export default function StatsRow() {
   return (

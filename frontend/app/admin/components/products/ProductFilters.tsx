@@ -3,7 +3,7 @@ import {
   provinceOptions,
   demandOptions,
   sortOptions,
-} from "../../constants/filters.data";
+} from "../../constants/admin.data";
 
 interface ProductFiltersProps {
   darkMode: boolean;

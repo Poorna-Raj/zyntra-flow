@@ -1,6 +1,6 @@
 import { usePathname, useRouter } from "next/navigation";
 import { MenuItem } from "../../types/menu.types";
-import { menuData } from "../../constants/menu.data";
+import { menuData } from "../../constants/admin.data";
 import SidebarBottomBar from "./SidebarBottomBar";
 
 
