@@ -1,4 +1,4 @@
-import { StatCardData } from "../../types/stats.types";
+import { StatCardData } from "../../types/admin.types";
 
 interface StatCardProps {
   stat: StatCardData;

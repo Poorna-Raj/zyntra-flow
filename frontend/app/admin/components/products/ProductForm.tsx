@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import {
   Product,
   ProductFormData,
-} from "../../types/product.types";
+} from "../../types/admin.types";
 
 interface ProductFormProps {
   darkMode: boolean;

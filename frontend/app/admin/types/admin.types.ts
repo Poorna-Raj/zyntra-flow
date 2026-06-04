@@ -1,3 +1,24 @@
+export interface MenuItem {
+  label: string;
+  icon: string;
+  path: string;
+}
+
+export interface StatCardData {
+  title: string;
+  value: string;
+  growth: string;
+  gradient: string;
+  icon: string;
+}
+
+export interface ActivityRow {
+  product: string;
+  province: string;
+  forecastScore: string;
+  status: "High" | "Medium" | "Stable";
+}
+
 export interface Product {
   id: string;
   name: string;

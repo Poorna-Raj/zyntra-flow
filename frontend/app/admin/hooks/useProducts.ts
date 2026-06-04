@@ -8,7 +8,7 @@ import {
 import {
   Product,
   ProductFormData,
-} from "../types/product.types";
+} from "../types/admin.types";
 
 const initialProducts: Product[] = [
   {

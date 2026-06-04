@@ -13,7 +13,7 @@ import useFilters from "../hooks/useFilters";
 import {
   Product,
   ProductFormData,
-} from "../types/product.types";
+} from "../types/admin.types";
 
 export default function ProductsPage() {
   const [darkMode] = useState(false);
