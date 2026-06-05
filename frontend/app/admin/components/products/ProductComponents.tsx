@@ -493,6 +493,7 @@ export function ProductFilters({
 
 interface ProductFormProps {
   darkMode: boolean;
+  categories: string[];
   initialData?: Product | null;
   onSubmit: (data: ProductFormData) => void;
   onCancel: () => void;
@@ -500,6 +501,7 @@ interface ProductFormProps {
 
 export function ProductForm({
   darkMode,
+  categories,
   initialData,
   onSubmit,
   onCancel,
@@ -633,18 +635,29 @@ export function ProductForm({
               Category
             </label>
 
-            <input
-              type="text"
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              placeholder="Beverages"
-              style={inputStyle(
-                inputBg,
-                borderClr,
-                mainTxt
-              )}
-            />
+            <select
+  name="category"
+  value={formData.category}
+  onChange={handleChange}
+  style={inputStyle(
+    inputBg,
+    borderClr,
+    mainTxt
+  )}
+>
+  <option value="">
+    Select Category
+  </option>
+
+  {categories.map((category) => (
+    <option
+      key={category}
+      value={category}
+    >
+      {category}
+    </option>
+  ))}
+</select>
           </div>
 
           {/* Price */}

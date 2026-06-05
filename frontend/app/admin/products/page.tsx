@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import useCategories from "../hooks/useCategories";
 
 import {
   ProductGrid,
@@ -32,6 +33,8 @@ export default function ProductsPage() {
     updateProduct,
     deleteProduct,
   } = useProducts();
+  const { categories } =
+  useCategories();
 
   const {
     filteredProducts,
@@ -187,22 +190,23 @@ export default function ProductsPage() {
           }}
         >
           <ProductForm
-            darkMode={darkMode}
-            initialData={
-              editingProduct
-            }
-            onSubmit={
-              editingProduct
-                ? handleUpdateProduct
-                : handleAddProduct
-            }
-            onCancel={() => {
-              setShowForm(false);
-              setEditingProduct(
-                null
-              );
-            }}
-          />
+  darkMode={darkMode}
+  categories={categories}
+  initialData={
+    editingProduct
+  }
+  onSubmit={
+    editingProduct
+      ? handleUpdateProduct
+      : handleAddProduct
+  }
+  onCancel={() => {
+    setShowForm(false);
+    setEditingProduct(
+      null
+    );
+  }}
+/>
         </div>
       )}
 
