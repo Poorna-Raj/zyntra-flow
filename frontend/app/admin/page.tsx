@@ -75,12 +75,12 @@ export default function AdminPage() {
           marginBottom: "2rem",
         }}
       >
-        <WeeklyForecastChart />
+        <WeeklyForecastChart darkMode={false} />
 
-        <TrafficDonutChart />
+       <TrafficDonutChart darkMode={false} />
       </div>
 
-      <ForecastTable />
+      <TrafficDonutChart darkMode={false} />
     </>
   );
 }

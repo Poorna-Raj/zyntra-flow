@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 
-import ProductForm from "../components/products/ProductForm";
-import ProductGrid from "../components/products/ProductGrid";
-import ProductFilters from "../components/products/ProductFilters";
-import CategoryManager from "../components/products/CategoryManager";
+import {
+  ProductGrid,
+  ProductFilters,
+  ProductForm,
+  CategoryManager,
+} from "../components/products/ProductComponents";
 
 import useProducts from "../hooks/useProducts";
 import useFilters from "../hooks/useFilters";
