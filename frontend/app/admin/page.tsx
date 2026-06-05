@@ -1,9 +1,11 @@
 "use client";
 
-import StatsRow from "./components/dashboard/StatsRow";
-import WeeklyForecastChart from "./components/dashboard/WeeklyForecastChart";
-import TrafficDonutChart from "./components/dashboard/TrafficDonutChart";
-import ForecastTable from "./components/dashboard/ForecastTable";
+import {
+  StatsRow,
+  WeeklyForecastChart,
+  TrafficDonutChart,
+  ForecastTable,
+} from "./components/dashboard/DashboardComponents";
 import DashboardHeader from "./components/layout/DashboardHeader";
 
 export default function AdminPage() {
