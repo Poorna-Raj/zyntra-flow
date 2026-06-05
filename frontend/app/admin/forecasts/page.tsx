@@ -2,15 +2,16 @@
 
 import { useState } from "react";
 
-import ForecastForm from "../components/forecasts/ForecastForm";
-import ForecastFilters from "../components/forecasts/ForecastFilters";
-import ForecastGrid from "../components/forecasts/ForecastGrid";
-import ForecastTable from "../components/forecasts/ForecastTable";
-import ForecastStats from "../components/forecasts/ForecastStats";
-
+import {
+  ForecastForm,
+  ForecastFilters,
+  ForecastGrid,
+  ForecastTable,
+  ForecastStats,
+} from "../components/forecasts/ForecastComponents";
 import useForecasts from "../hooks/useForecasts";
 
-import { Forecast } from "../types/forecast.types";
+import { Forecast } from "../types/admin.types";
 
 export default function ForecastsPage() {
   const [darkMode] = useState(false);

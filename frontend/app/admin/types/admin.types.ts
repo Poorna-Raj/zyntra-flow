@@ -40,3 +40,21 @@ export interface ProductFormData {
   province: string;
   demandLevel: "High" | "Medium" | "Low";
 }
+
+export interface Forecast {
+  id: string;
+  province: string;
+  product: string;
+  predictedDemand: number;
+  confidence: number;
+  trend: "Up" | "Down" | "Stable";
+  createdAt: string;
+}
+
+export interface ForecastFormData {
+  province: string;
+  product: string;
+  predictedDemand: number;
+  confidence: number;
+  trend: "Up" | "Down" | "Stable";
+}

@@ -6,7 +6,7 @@ import {
   useState,
 } from "react";
 
-import { Forecast } from "../types/forecast.types";
+import { Forecast } from "../types/admin.types";
 
 const initialForecasts: Forecast[] = [
   {
