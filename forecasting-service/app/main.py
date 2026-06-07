@@ -31,15 +31,15 @@ app.add_middleware(
 class ForecastRequest(BaseModel):
     province: str
     week_number: int
-    avg_temperature_level: str  # Low, Medium, High
-    rainfall_level: str  # Low, Medium, High
-    tourism_level: str  # Low, Medium, High
-    payday_week: str  # Yes, No
-    holiday_type: str  # None, Vesak, Poya, etc.
-    festival_season: str  # Yes, No
-    school_season: str  # Yes, No
-    urbanization_level: str  # Low, Medium, High
-    avg_income_level: str  # Low, Medium, High
+    avg_temperature_level: str
+    rainfall_level: str
+    tourism_level: str
+    payday_week: str
+    holiday_type: str
+    festival_season: str
+    school_season: str
+    urbanization_level: str
+    avg_income_level: str
     top_n: int = 10
 
 
