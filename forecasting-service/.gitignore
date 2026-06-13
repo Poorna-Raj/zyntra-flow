@@ -4,3 +4,5 @@ __pycache__
 *.pkl
 models/
 .env
+
+dataset/v3.csv
