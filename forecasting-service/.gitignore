@@ -5,4 +5,4 @@ __pycache__
 models/
 .env
 
-dataset/v3.csv
+dataset/*.csv
