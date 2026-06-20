@@ -6,8 +6,9 @@ import { useRouter } from "next/navigation";
 import storeBg from "pos\public\TSI-POS-Systems-header-1000x500.jpeg";
 
 const supabaseAdmin = createClient(
-  "https://qpkznmugehwiiewoznfy.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwa3pubXVnZWh3aWlld296bmZ5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDMyMjQxNiwiZXhwIjoyMDk1ODk4NDE2fQ.0zoKp3UnCtroxmsBlFDStqARokm9mhvWbTIh3gToPGk"
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
 const SRI_LANKA_DISTRICTS = [
