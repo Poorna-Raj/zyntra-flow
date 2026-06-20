@@ -3,11 +3,10 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  "https://aosbwlhnyaifworwzqks.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFvc2J3bGhueWFpZndvcnd6cWtzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MTE4MDU0MiwiZXhwIjoyMDk2NzU2NTQyfQ.ZLOBJWJuhdEnKkJb6c8l6Z7AFzPUyOQi5Z9eEkFYDqc"
+export const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
-
 
 // Supabase Storage bucket for product images.
 // Create it once in the dashboard: Storage → New bucket → "product-images"
@@ -611,7 +610,7 @@ export default function ProductManagement() {
             <div>
               <p style={{ fontSize: 11, color: "#9BA8BF", fontWeight: 600 }}>Avg. Price</p>
               <p style={{ fontSize: 18, fontWeight: 800, color: "#0B1120" }}>
-                ${stats.avgPrice.toFixed(2)}
+                Rs{stats.avgPrice.toFixed(2)}
               </p>
             </div>
           </div>

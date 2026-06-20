@@ -42,7 +42,7 @@ const NAV_ITEMS = [
   { label: "POS System",    href: "/pos",           icon: "🏪" },
   { label: "Dashboard",     href: "/dashboard",      icon: "📊" },
   { label: "Product",       href: "/product",        icon: "📦" },
-  { label: "Sales Reports", href: "/sales-reports",  icon: "📈" },
+  { label: "Sales Reports", href: "/salesReport",  icon: "📈" },
   { label: "Settings",      href: "/settings",       icon: "⚙️" },
 ];
 
@@ -59,7 +59,6 @@ export default function POSPage() {
   const [products,    setProducts]    = useState<Product[]>([]);
   const [categories,  setCategories]  = useState<string[]>(["All Items"]);
   const [cart,        setCart]        = useState<CartItem[]>([]);
-  // Start empty so SSR and client render the same thing (no Math.random on server)
   const [orderLabel,  setOrderLabel]  = useState("");
   const [discount,    setDiscount]    = useState(0);
   const [paying,      setPaying]      = useState(false);
@@ -72,7 +71,7 @@ export default function POSPage() {
     setTimeout(() => setToast(null), 3000);
   }
 
-  // ── Load user, shop, and products on mount ─────────
+  // ── Load user, shop, and products on mount 
   useEffect(() => {
     setOrderLabel(genOrderLabel());
 
@@ -95,7 +94,7 @@ export default function POSPage() {
         setShopName(shop.name);
       }
 
-      // products has no `category`/`stock` columns — category comes via
+  
       // the master_products join, stock doesn't exist in the schema at all
       const { data: dbProducts, error } = await supabase
         .from("products")
@@ -463,8 +462,8 @@ export default function POSPage() {
 
         <div style={{ padding: "12px 18px", borderTop: "1px solid #eef0f8", display: "flex", flexDirection: "column", gap: 7 }}>
           {[
-            { label: "Sub Total", value: `Rs${subtotal.toFixed(2)}` },
-            { label: "Discount",  value: `-Rs${discount.toFixed(2)}`, color: "#00b894" },
+            { label: "Sub Total", value: `Rs.${subtotal.toFixed(2)}` },
+            { label: "Discount",  value: `-Rs.${discount.toFixed(2)}`, color: "#00b894" },
           ].map(row => (
             <div key={row.label} style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ fontSize: 13, color: "#9BA8BF", fontWeight: 500 }}>{row.label}</span>
@@ -472,14 +471,14 @@ export default function POSPage() {
             </div>
           ))}
           <div style={{ display: "flex", justifyContent: "space-between", paddingTop: 8, borderTop: "1px solid #eef0f8" }}>
-            <span style={{ fontSize: 15, fontWeight: 800, color: "#0B1120" }}>Total</span>
-            <span style={{ fontSize: 15, fontWeight: 800, color: "#0A84FF" }}>Rs{total.toFixed(2)}</span>
+            <span style={{ fontSize: 15, fontWeight: 800, color: "#0B1120" }}>Total.</span>
+            <span style={{ fontSize: 15, fontWeight: 800, color: "#0A84FF" }}>Rs.{total.toFixed(2)}</span>
           </div>
         </div>
 
         <div style={{ padding: "12px 18px 18px" }}>
           <button className="pay-btn" onClick={handlePay} disabled={cart.length === 0 || paying}>
-            {paying ? "Processing…" : cart.length === 0 ? "Add items to order" : `Pay Now  Rs${total.toFixed(2)}`}
+            {paying ? "Processing…" : cart.length === 0 ? "Add items to order" : `Pay Now  Rs.${total.toFixed(2)}`}
           </button>
         </div>
       </div>
