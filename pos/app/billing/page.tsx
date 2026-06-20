@@ -2,69 +2,71 @@
 
 import { useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import Link from "next/link";
 
-const supabaseAdmin = createClient(
-  "https://qpkznmugehwiiewoznfy.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwa3pubXVnZWh3aWlld296bmZ5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDMyMjQxNiwiZXhwIjoyMDk1ODk4NDE2fQ.0zoKp3UnCtroxmsBlFDStqARokm9mhvWbTIh3gToPGk"
+const supabase = createClient(
+  "https://aosbwlhnyaifworwzqks.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFvc2J3bGhueWFpZndvcnd6cWtzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MTE4MDU0MiwiZXhwIjoyMDk2NzU2NTQyfQ.ZLOBJWJuhdEnKkJb6c8l6Z7AFzPUyOQi5Z9eEkFYDqc"
 );
 
-// ── Types ──────────────────────────────────────────────
 type Product = {
-  id: string;
+  product_id: string;
+  master_product_id: string;
   name: string;
   price: number;
-  category: string;
-  image_url?: string;
-  stock: number;
+  image_url: string | null;
+  is_active: boolean;
+  shop_id: string;
+  category: string; // pulled from joined master_products.category
 };
 
 type CartItem = Product & { qty: number };
 
-// ── Fallback mock products (used only if DB table not found or empty) ──
+// ── Fallback mock products (used only if DB query fails or returns empty) ──
 const MOCK_PRODUCTS: Product[] = [
-  { id: "1",  name: "Coca-Cola 1.5L",     price: 2.99, category: "Food & Beverage", stock: 50 },
-  { id: "2",  name: "Sprite 400ml",        price: 1.49, category: "Food & Beverage", stock: 30 },
-  { id: "3",  name: "Anchor Butter 200g",  price: 3.50, category: "Food & Beverage", stock: 20 },
-  { id: "4",  name: "Milo 400g",           price: 4.35, category: "Food & Beverage", stock: 15 },
-  { id: "5",  name: "Eggs (10 pack)",      price: 1.99, category: "Food & Beverage", stock: 40 },
-  { id: "6",  name: "Bread Loaf",          price: 1.25, category: "Food & Beverage", stock: 25 },
-  { id: "7",  name: "Rice 5kg",            price: 6.50, category: "Food & Beverage", stock: 60 },
-  { id: "8",  name: "Sugar 1kg",           price: 1.10, category: "Food & Beverage", stock: 45 },
-  { id: "9",  name: "Sunlight Soap",       price: 0.85, category: "Home & Garden",   stock: 80 },
-  { id: "10", name: "Toothpaste",          price: 2.20, category: "Home & Garden",   stock: 35 },
-  { id: "11", name: "Shampoo 200ml",       price: 3.75, category: "Home & Garden",   stock: 28 },
-  { id: "12", name: "Notebook A4",         price: 1.80, category: "Electronics",     stock: 55 },
+  { product_id: "1", master_product_id: "m1", name: "Coca-Cola 1.5L", price: 2.99, category: "Food & Beverage", image_url: null, is_active: true, shop_id: "" },
+  { product_id: "2", master_product_id: "m2", name: "Sprite 400ml", price: 1.49, category: "Food & Beverage", image_url: null, is_active: true, shop_id: "" },
+  { product_id: "3", master_product_id: "m3", name: "Anchor Butter 200g", price: 3.50, category: "Food & Beverage", image_url: null, is_active: true, shop_id: "" },
+  { product_id: "4", master_product_id: "m4", name: "Milo 400g", price: 4.35, category: "Food & Beverage", image_url: null, is_active: true, shop_id: "" },
+  { product_id: "9", master_product_id: "m9", name: "Sunlight Soap", price: 0.85, category: "Home & Garden", image_url: null, is_active: true, shop_id: "" },
+  { product_id: "10", master_product_id: "m10", name: "Toothpaste", price: 2.20, category: "Home & Garden", image_url: null, is_active: true, shop_id: "" },
 ];
 
-// ── Order number generator ─────────────────────────────
-function genOrderNum() {
+// ── Order label generator (display only — not stored, sales has no order_number column) ──
+function genOrderLabel() {
   return "#" + Math.floor(10000 + Math.random() * 90000);
 }
 
+const NAV_ITEMS = [
+  { label: "POS System",    href: "/pos",           icon: "🏪" },
+  { label: "Dashboard",     href: "/dashboard",      icon: "📊" },
+  { label: "Product",       href: "/product",        icon: "📦" },
+  { label: "Sales Reports", href: "/sales-reports",  icon: "📈" },
+  { label: "Settings",      href: "/settings",       icon: "⚙️" },
+];
+
 export default function POSPage() {
   const router = useRouter();
+  const pathname = usePathname();
 
   const [shopId,      setShopId]      = useState<string | null>(null);
   const [shopName,    setShopName]    = useState("Your Shop");
   const [userName,    setUserName]    = useState("User");
   const [userAvatar,  setUserAvatar]  = useState<string | null>(null);
-  const [activeNav,   setActiveNav]   = useState("POS System");
   const [activeTab,   setActiveTab]   = useState("All Items");
   const [search,      setSearch]      = useState("");
   const [products,    setProducts]    = useState<Product[]>([]);
   const [categories,  setCategories]  = useState<string[]>(["All Items"]);
   const [cart,        setCart]        = useState<CartItem[]>([]);
   // Start empty so SSR and client render the same thing (no Math.random on server)
-  const [orderNum,    setOrderNum]    = useState("");
-  const [voucher,     setVoucher]     = useState("");
+  const [orderLabel,  setOrderLabel]  = useState("");
   const [discount,    setDiscount]    = useState(0);
   const [paying,      setPaying]      = useState(false);
   const [toast,       setToast]       = useState<{ msg: string; ok: boolean } | null>(null);
 
   const TAX_RATE = 0.08;
 
-  // ── Show toast helper ──────────────────────────────
   function showToast(msg: string, ok = true) {
     setToast({ msg, ok });
     setTimeout(() => setToast(null), 3000);
@@ -72,47 +74,51 @@ export default function POSPage() {
 
   // ── Load user, shop, and products on mount ─────────
   useEffect(() => {
-    // Generate order number ONLY on the client to avoid SSR/client mismatch
-    setOrderNum(genOrderNum());
+    setOrderLabel(genOrderLabel());
 
     async function load() {
-      const { data: { user } } = await supabaseAdmin.auth.getUser();
+      const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.push("/login"); return; }
 
-      setUserName(user.user_metadata?.full_name ?? user.email ?? "User");
+      setUserName(user.user_metadata?.full_name ?? user.email ?? "users");
       setUserAvatar(user.user_metadata?.avatar_url ?? null);
 
-      // Fetch shop
-      const { data: shop } = await supabaseAdmin
+      // shops uses shop_id (not id) and created_by (not owner_id)
+      const { data: shop } = await supabase
         .from("shops")
-        .select("id, name")
-        .eq("owner_id", user.id)
+        .select("shop_id, name")
+        .eq("created_by", user.id)
         .single();
 
       if (shop) {
-        setShopId(shop.id);
+        setShopId(shop.shop_id);
         setShopName(shop.name);
       }
 
-      // Try common table name variants so a naming mismatch doesn't break the page
-      let dbProducts: Product[] | null = null;
-      for (const table of ["products", "product", "items"]) {
-        const { data, error } = await supabaseAdmin
-          .from(table)
-          .select("id, name, price, category, image_url, stock")
-          .order("name");
+      // products has no `category`/`stock` columns — category comes via
+      // the master_products join, stock doesn't exist in the schema at all
+      const { data: dbProducts, error } = await supabase
+        .from("products")
+        .select("product_id, master_product_id, name, price, image_url, is_active, shop_id, master_products(category)")
+        .eq("shop_id", shop?.shop_id ?? "")
+        .eq("is_active", true)
+        .order("name");
 
-        if (!error) {
-          dbProducts = data;
-          console.info(`Loaded products from table: "${table}"`);
-          break;
-        }
-        console.warn(`Table "${table}" not available, trying next…`);
-      }
+      if (error) console.warn("Failed to load products:", error.message);
 
-      const list: Product[] = (dbProducts && dbProducts.length > 0)
-        ? dbProducts
-        : MOCK_PRODUCTS;
+      const list: Product[] =
+        dbProducts && dbProducts.length > 0
+          ? dbProducts.map((p: any) => ({
+              product_id: p.product_id,
+              master_product_id: p.master_product_id,
+              name: p.name,
+              price: p.price,
+              image_url: p.image_url,
+              is_active: p.is_active,
+              shop_id: p.shop_id,
+              category: p.master_products?.category ?? "Uncategorized",
+            }))
+          : MOCK_PRODUCTS;
 
       setProducts(list);
 
@@ -126,8 +132,8 @@ export default function POSPage() {
   // ── Cart helpers ───────────────────────────────────
   function addToCart(product: Product) {
     setCart(prev => {
-      const exists = prev.find(i => i.id === product.id);
-      if (exists) return prev.map(i => i.id === product.id ? { ...i, qty: i.qty + 1 } : i);
+      const exists = prev.find(i => i.product_id === product.product_id);
+      if (exists) return prev.map(i => i.product_id === product.product_id ? { ...i, qty: i.qty + 1 } : i);
       return [...prev, { ...product, qty: 1 }];
     });
   }
@@ -135,16 +141,15 @@ export default function POSPage() {
   function updateQty(id: string, delta: number) {
     setCart(prev =>
       prev
-        .map(i => i.id === id ? { ...i, qty: i.qty + delta } : i)
+        .map(i => i.product_id === id ? { ...i, qty: i.qty + delta } : i)
         .filter(i => i.qty > 0)
     );
   }
 
   function clearOrder() {
     setCart([]);
-    setVoucher("");
     setDiscount(0);
-    setOrderNum(genOrderNum());
+    setOrderLabel(genOrderLabel());
   }
 
   // ── Totals ────────────────────────────────────────
@@ -152,48 +157,40 @@ export default function POSPage() {
   const tax      = (subtotal - discount) * TAX_RATE;
   const total    = subtotal - discount + tax;
 
-  // ── Pay Now → save order + order_items ────────────
+  // ── Pay Now → save sale + sale_items (matches actual schema) ──
+  // NOTE: public.sales only has sale_id, total_price, sold_at, shop_id.
+  // There's no column for order_number, subtotal, discount, or tax —
+  // if you want those tracked, add columns to `sales` first.
   async function handlePay() {
-    if (cart.length === 0 || paying) return;
+    if (cart.length === 0 || paying || !shopId) return;
     setPaying(true);
 
     try {
-      const { data: { user } } = await supabaseAdmin.auth.getUser();
-      if (!user) { router.push("/login"); return; }
-
-      const { data: order, error: orderErr } = await supabaseAdmin
-        .from("orders")
+      const { data: sale, error: saleErr } = await supabase
+        .from("sales")
         .insert({
-          order_number: orderNum,
-          shop_id:      shopId,
-          user_id:      user.id,
-          subtotal:     parseFloat(subtotal.toFixed(2)),
-          discount:     parseFloat(discount.toFixed(2)),
-          tax:          parseFloat(tax.toFixed(2)),
-          total:        parseFloat(total.toFixed(2)),
-          status:       "completed",
+          shop_id: shopId,
+          total_price: parseFloat(total.toFixed(2)),
         })
-        .select("id")
+        .select("sale_id")
         .single();
 
-      if (orderErr) throw new Error(orderErr.message);
+      if (saleErr) throw new Error(saleErr.message);
 
       const items = cart.map(item => ({
-        order_id:   order.id,
-        product_id: item.id,
-        name:       item.name,
-        price:      item.price,
-        qty:        item.qty,
-        line_total: parseFloat((item.price * item.qty).toFixed(2)),
+        sale_id: sale.sale_id,
+        product_id: item.product_id,
+        quantity: item.qty,
+        unit_price: item.price,
       }));
 
-      const { error: itemsErr } = await supabaseAdmin
-        .from("order_items")
+      const { error: itemsErr } = await supabase
+        .from("sale_items")
         .insert(items);
 
       if (itemsErr) throw new Error(itemsErr.message);
 
-      showToast(`Order ${orderNum} saved! 🎉`);
+      showToast(`Order ${orderLabel} saved! 🎉`);
       clearOrder();
     } catch (err: any) {
       showToast(err.message ?? "Something went wrong", false);
@@ -208,8 +205,6 @@ export default function POSPage() {
     const matchSearch = p.name.toLowerCase().includes(search.toLowerCase());
     return matchCat && matchSearch;
   });
-
-  const navItems = ["POS System", "Dashboard", "Product", "Sales Reports", "Settings"];
 
   return (
     <div style={{
@@ -230,6 +225,7 @@ export default function POSPage() {
           color: #6B7A99; text-align: left;
           transition: background 0.15s, color 0.15s;
           display: flex; align-items: center; gap: 10px;
+          text-decoration: none;
         }
         .nav-item:hover { background: #e8efff; color: #0A84FF; }
         .nav-item.active {
@@ -283,16 +279,6 @@ export default function POSPage() {
         }
         .search-input:focus { border-color: #0A84FF; background: #fff; }
         .search-input::placeholder { color: #b0baca; }
-        .voucher-input {
-          flex: 1; padding: 9px 14px;
-          border: 1.5px solid #e8eaf0; border-radius: 10px;
-          font-family: inherit; font-size: 13px; outline: none;
-          background: #fafbff; color: #0B1120;
-          transition: border-color 0.15s;
-        }
-        .voucher-input:focus { border-color: #0A84FF; }
-        .voucher-input::placeholder { color: #b0baca; }
-        @keyframes slideIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
       `}</style>
 
       {/* ── Toast ── */}
@@ -303,7 +289,6 @@ export default function POSPage() {
           color: "#fff", padding: "12px 22px", borderRadius: 12,
           fontSize: 13, fontWeight: 700, zIndex: 9999,
           boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
-          animation: "slideIn 0.25s ease",
         }}>
           {toast.msg}
         </div>
@@ -323,18 +308,15 @@ export default function POSPage() {
         </div>
 
         <nav style={{ display: "flex", flexDirection: "column", gap: 4, flex: 1 }}>
-          {navItems.map(item => (
-            <button key={item} className={`nav-item${activeNav === item ? " active" : ""}`}
-              onClick={() => setActiveNav(item)}>
-              <span style={{ fontSize: 16 }}>
-                {item === "POS System"     ? "🏪"
-               : item === "Dashboard"     ? "📊"
-               : item === "Product"       ? "📦"
-               : item === "Sales Reports" ? "📈"
-               : "⚙️"}
-              </span>
-              {item}
-            </button>
+          {NAV_ITEMS.map(item => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`nav-item${pathname === item.href ? " active" : ""}`}
+            >
+              <span style={{ fontSize: 16 }}>{item.icon}</span>
+              {item.label}
+            </Link>
           ))}
         </nav>
 
@@ -397,7 +379,7 @@ export default function POSPage() {
           gap: 12, alignContent: "start",
         }}>
           {filtered.map(product => (
-            <div key={product.id} className="product-card" onClick={() => addToCart(product)}>
+            <div key={product.product_id} className="product-card" onClick={() => addToCart(product)}>
               <div style={{
                 width: "100%", aspectRatio: "1", borderRadius: 10,
                 background: product.image_url ? "transparent" : "linear-gradient(135deg, #e8f0ff, #d0e4ff)",
@@ -412,7 +394,7 @@ export default function POSPage() {
               </div>
               <p style={{ fontSize: 12, fontWeight: 700, color: "#0B1120", marginBottom: 4, lineHeight: 1.3 }}>{product.name}</p>
               <p style={{ fontSize: 13, fontWeight: 800, color: "#0A84FF" }}>${product.price.toFixed(2)}</p>
-              <p style={{ fontSize: 10, color: "#9BA8BF", marginTop: 2 }}>Stock: {product.stock}</p>
+              {/* stock removed — no such column in the schema; add one if you need it */}
             </div>
           ))}
           {filtered.length === 0 && (
@@ -435,8 +417,7 @@ export default function POSPage() {
         }}>
           <div>
             <p style={{ fontSize: 11, color: "#9BA8BF", fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase" }}>Order</p>
-            {/* Render a dash until client-side order number is ready */}
-            <p style={{ fontSize: 15, fontWeight: 800, color: "#0B1120" }}>{orderNum || "—"}</p>
+            <p style={{ fontSize: 15, fontWeight: 800, color: "#0B1120" }}>{orderLabel || "—"}</p>
           </div>
           <button onClick={clearOrder} style={{
             padding: "6px 14px", borderRadius: 8, border: "none",
@@ -453,7 +434,7 @@ export default function POSPage() {
               <p style={{ fontSize: 12, marginTop: 4 }}>Click a product to add</p>
             </div>
           ) : cart.map(item => (
-            <div key={item.id} style={{
+            <div key={item.product_id} style={{
               display: "flex", alignItems: "center", gap: 10,
               background: "#f8faff", borderRadius: 12, padding: "10px 12px",
             }}>
@@ -472,34 +453,18 @@ export default function POSPage() {
                 <p style={{ fontSize: 12, fontWeight: 800, color: "#0A84FF" }}>${(item.price * item.qty).toFixed(2)}</p>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <button className="qty-btn minus" onClick={() => updateQty(item.id, -1)}>−</button>
+                <button className="qty-btn minus" onClick={() => updateQty(item.product_id, -1)}>−</button>
                 <span style={{ fontSize: 13, fontWeight: 800, color: "#0B1120", minWidth: 18, textAlign: "center" }}>{item.qty}</span>
-                <button className="qty-btn plus"  onClick={() => updateQty(item.id, +1)}>+</button>
+                <button className="qty-btn plus"  onClick={() => updateQty(item.product_id, +1)}>+</button>
               </div>
             </div>
           ))}
         </div>
 
-        <div style={{ padding: "10px 18px", borderTop: "1px solid #eef0f8" }}>
-          <p style={{ fontSize: 11, fontWeight: 700, color: "#6B7A99", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>Voucher Code</p>
-          <div style={{ display: "flex", gap: 8 }}>
-            <input className="voucher-input" placeholder="Enter code..." value={voucher} onChange={e => setVoucher(e.target.value)} />
-            <button
-              onClick={() => {
-                if (voucher === "SAVE10") { setDiscount(subtotal * 0.1); showToast("10% discount applied!"); }
-                else showToast("Invalid voucher code", false);
-              }}
-              style={{ padding: "9px 14px", borderRadius: 10, border: "none", background: "#0A84FF", color: "#fff", fontSize: 12, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" }}>
-              Apply
-            </button>
-          </div>
-        </div>
-
         <div style={{ padding: "12px 18px", borderTop: "1px solid #eef0f8", display: "flex", flexDirection: "column", gap: 7 }}>
           {[
-            { label: "Sub Total", value: `$${subtotal.toFixed(2)}` },
-            { label: "Discount",  value: `-$${discount.toFixed(2)}`, color: "#00b894" },
-            { label: "Tax (8%)",  value: `$${tax.toFixed(2)}` },
+            { label: "Sub Total", value: `Rs${subtotal.toFixed(2)}` },
+            { label: "Discount",  value: `-Rs${discount.toFixed(2)}`, color: "#00b894" },
           ].map(row => (
             <div key={row.label} style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ fontSize: 13, color: "#9BA8BF", fontWeight: 500 }}>{row.label}</span>
@@ -508,13 +473,13 @@ export default function POSPage() {
           ))}
           <div style={{ display: "flex", justifyContent: "space-between", paddingTop: 8, borderTop: "1px solid #eef0f8" }}>
             <span style={{ fontSize: 15, fontWeight: 800, color: "#0B1120" }}>Total</span>
-            <span style={{ fontSize: 15, fontWeight: 800, color: "#0A84FF" }}>${total.toFixed(2)}</span>
+            <span style={{ fontSize: 15, fontWeight: 800, color: "#0A84FF" }}>Rs{total.toFixed(2)}</span>
           </div>
         </div>
 
         <div style={{ padding: "12px 18px 18px" }}>
           <button className="pay-btn" onClick={handlePay} disabled={cart.length === 0 || paying}>
-            {paying ? "Processing…" : cart.length === 0 ? "Add items to order" : `Pay Now  $${total.toFixed(2)}`}
+            {paying ? "Processing…" : cart.length === 0 ? "Add items to order" : `Pay Now  Rs${total.toFixed(2)}`}
           </button>
         </div>
       </div>

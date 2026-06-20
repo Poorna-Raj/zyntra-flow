@@ -6,11 +6,9 @@ import { useRouter } from "next/navigation";
 import storeBg from "pos\public\TSI-POS-Systems-header-1000x500.jpeg";
 
 const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
+  "https://aosbwlhnyaifworwzqks.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFvc2J3bGhueWFpZndvcnd6cWtzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MTE4MDU0MiwiZXhwIjoyMDk2NzU2NTQyfQ.ZLOBJWJuhdEnKkJb6c8l6Z7AFzPUyOQi5Z9eEkFYDqc"
 );
-
 const SRI_LANKA_DISTRICTS = [
   "Ampara","Anuradhapura","Badulla","Batticaloa","Colombo","Galle","Gampaha",
   "Hambantota","Jaffna","Kalutara","Kandy","Kegalle","Kilinochchi","Kurunegala",
@@ -24,8 +22,7 @@ const PROVINCES = [
 ];
 
 const BUSINESS_TYPES = [
-  "Grocery / Supermarket","Pharmacy","Clothing & Apparel","Electronics",
-  "Hardware Store","Bakery / Cafe","Restaurant","Stationery","Other",
+  "Grocery / Supermarket"
 ];
 
 export default function CreateShopPage() {
@@ -47,7 +44,7 @@ export default function CreateShopPage() {
       if (!user) throw new Error("Not authenticated.");
 
       const { error: err } = await supabaseAdmin.from("shops").insert({
-        owner_id:      user.id,
+        created_by:      user.id,
         name:          shopName,
         district,
         province,

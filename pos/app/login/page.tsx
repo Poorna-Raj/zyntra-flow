@@ -1,21 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { createClient } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
-import storeBg from "pos\public\TSI-POS-Systems-header-1000x500.jpeg";
-
-const supabaseAdmin = createClient(
-  "https://qpkznmugehwiiewoznfy.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwa3pubXVnZWh3aWlld296bmZ5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDMyMjQxNiwiZXhwIjoyMDk1ODk4NDE2fQ.0zoKp3UnCtroxmsBlFDStqARokm9mhvWbTIh3gToPGk"
+import { createClient } from "@supabase/supabase-js";
+const supabase = createClient(
+  "https://aosbwlhnyaifworwzqks.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFvc2J3bGhueWFpZndvcnd6cWtzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MTE4MDU0MiwiZXhwIjoyMDk2NzU2NTQyfQ.ZLOBJWJuhdEnKkJb6c8l6Z7AFzPUyOQi5Z9eEkFYDqc"
 );
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email,    setEmail]    = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading,  setLoading]  = useState(false);
-  const [error,    setError]    = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [showPass, setShowPass] = useState(false);
 
   async function handleLogin(e: React.FormEvent) {
@@ -23,7 +21,7 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
     try {
-      const { error: err } = await supabaseAdmin.auth.signInWithPassword({ email, password });
+      const { error: err } = await supabase.auth.signInWithPassword({ email, password });
       if (err) throw err;
       router.push("/billing");
     } catch (e: any) {

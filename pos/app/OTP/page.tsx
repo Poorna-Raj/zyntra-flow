@@ -3,11 +3,11 @@
 import { useState, useRef } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
-import storeBg from "pos\public\TSI-POS-Systems-header-1000x500.jpeg";
+
 
 const supabaseAdmin = createClient(
-  "https://qpkznmugehwiiewoznfy.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwa3pubXVnZWh3aWlld296bmZ5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDMyMjQxNiwiZXhwIjoyMDk1ODk4NDE2fQ.0zoKp3UnCtroxmsBlFDStqARokm9mhvWbTIh3gToPGk"
+  "https://aosbwlhnyaifworwzqks.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFvc2J3bGhueWFpZndvcnd6cWtzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MTE4MDU0MiwiZXhwIjoyMDk2NzU2NTQyfQ.ZLOBJWJuhdEnKkJb6c8l6Z7AFzPUyOQi5Z9eEkFYDqc"
 );
 
 export default function OTPPage() {
@@ -42,7 +42,7 @@ export default function OTPPage() {
   async function handleVerify(e: React.FormEvent) {
     e.preventDefault();
     const code = otp.join("");
-    if (code.length < 6) { setError("Please enter all 6 digits."); return; }
+    if (code.length < 6) { setError("Check your Email for the verification code."); return; }
     setLoading(true);
     setError(null);
     try {
@@ -160,10 +160,10 @@ export default function OTPPage() {
           {/* Heading */}
           <div style={{ textAlign: "center", marginBottom: 28 }}>
             <h1 style={{ fontSize: 24, fontWeight: 800, color: "#0B1120", letterSpacing: "-0.03em", marginBottom: 8 }}>
-              Enter your OTP
+              Verify Your Email
             </h1>
             <p style={{ fontSize: 13, color: "#9BA8BF", fontWeight: 500, lineHeight: 1.6 }}>
-              We sent a 6-digit code to your email for<br />
+              We sent a verification link to your email.<br />
               <strong style={{ color: "#0A84FF" }}>better security</strong> with{" "}
               <strong style={{ color: "#0B1120" }}>Loka<span style={{ color: "#0A84FF" }}>POS</span> Lite</strong>
             </p>
@@ -173,25 +173,41 @@ export default function OTPPage() {
           <form onSubmit={handleVerify} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             {error && <div className="error-box">⚠️ {error}</div>}
 
-            {/* OTP boxes */}
-            <div style={{ display: "flex", justifyContent: "center", gap: 10 }} onPaste={handlePaste}>
-              {otp.map((digit, idx) => (
-                <input
-                  key={idx}
-                  ref={el => { inputs.current[idx] = el; }}
-                  className={`otp-input${digit ? " filled" : ""}`}
-                  type="text" inputMode="numeric"
-                  maxLength={1} value={digit}
-                  onChange={e => handleChange(e.target.value, idx)}
-                  onKeyDown={e => handleKeyDown(e, idx)}
-                />
-              ))}
-            </div>
+            
 
-            {/* Verify button */}
-            <button className="verify-btn" type="submit" disabled={loading}>
-              {loading ? "Verifying…" : "Verify OTP"}
-            </button>
+           {/* Open Gmail button */}
+<button
+  type="button"
+  onClick={() => window.open("https://mail.google.com", "_blank")}
+  style={{ 
+    width: "100%", 
+    padding: "12px",
+    borderRadius: "12px",
+    border: "1.5px solid #e8eaf0",
+    background: "#fff",
+    cursor: "pointer",
+    fontSize: "14px",
+    fontWeight: 600,
+    color: "#0B1120",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "8px",
+    marginTop: "8px",
+  }}
+>
+  <img 
+    src="https://www.google.com/favicon.ico" 
+    width={16} 
+    height={16} 
+  />
+  Open Gmail
+</button>
+
+{/* Verify button */}
+<button className="verify-btn" type="submit" disabled={loading}>
+  {loading ? "Verifying…" : "Verify OTP"}
+</button>
 
             {/* Resend + login link */}
             <div style={{ textAlign: "center" }}>
