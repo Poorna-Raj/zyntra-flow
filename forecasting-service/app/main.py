@@ -1,76 +1,159 @@
-import joblib as jb
-from contextlib import asynccontextmanager
+"""
+Step 3: FastAPI service exposing /predict and /retrain.
 
+Reads recent province_sale_snapshots from Supabase, builds the same
+features used in training, predicts next week's units, and writes the
+result into province_forecasts.
+
+ENV VARS required:
+  SUPABASE_URL
+  SUPABASE_SERVICE_ROLE_KEY   (server-side key, has write access)
+
+Run:
+  pip install fastapi uvicorn supabase joblib pandas scikit-learn
+  uvicorn app:app --reload
+"""
+
+import os
+import json
+import joblib
+import pandas as pd
+from datetime import timedelta
 from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from supabase import create_client
+from dotenv import load_dotenv
 
-import database
-from forecast import run_forecast
+load_dotenv()  # reads .env in the current working directory
 
+app = FastAPI(title="Province Forecast Service")
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    app.state.model = jb.load("../model/glfe/model.pkl")
-    app.state.encoders = jb.load("../model/glfe/encoders.pkl")
-    database.refresh_products()
-    print(f"Loaded {len(database.get_products())} products from DB")
-    yield
+SUPABASE_URL = os.environ["SUPABASE_URL"]
+SUPABASE_KEY = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+model = joblib.load("../model/g-model.joblib")
+with open("../model/feature_columns.json") as f:
+    meta = json.load(f)
 
-app = FastAPI(lifespan=lifespan)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+FEATURE_COLS = meta["feature_cols"]
+PROVINCE_MAP = meta["province_map"]
+PRODUCT_MAP = meta["product_map"]
 
 
-class ForecastRequest(BaseModel):
+class PredictRequest(BaseModel):
     province: str
-    week_number: int
-    avg_temperature_level: str
-    rainfall_level: str
-    tourism_level: str
-    payday_week: str
-    holiday_type: str
-    festival_season: str
-    school_season: str
-    urbanization_level: str
-    avg_income_level: str
-    top_n: int = 10
+    master_product_id: str
+    target_week: str  # ISO date string, e.g. "2025-07-07"
 
 
-@app.get("/")
-def root():
-    return {"status": "Demand Forecast API is running"}
-
-
-@app.post("/products/refresh")
-def refresh_products():
-    products = database.refresh_products()
-    return {"message": f"Product cache refreshed. {len(products)} products loaded."}
-
-
-@app.post("/forecast")
-def forecast(req: ForecastRequest):
-    products = database.get_products()
-    if not products:
-        raise HTTPException(status_code=503, detail="Product list not loaded yet.")
-
-    month, top_products = run_forecast(
-        req,
-        model=app.state.model,
-        encoders=app.state.encoders,
-        products=products,
-        top_n=req.top_n,
+def build_features(
+    province: str, master_product_id: str, target_week: str
+) -> pd.DataFrame:
+    """Pull last 4 weeks of snapshots for this (province, product) and build features."""
+    resp = (
+        supabase.table("province_sale_snapshots")
+        .select("week, total_units_sold")
+        .eq("province", province)
+        .eq("master_product_id", master_product_id)
+        .order("week", desc=True)
+        .limit(4)
+        .execute()
     )
+    rows = resp.data
+    if len(rows) < 4:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Not enough history for {province}/{master_product_id} (need 4 weeks, have {len(rows)})",
+        )
+
+    rows = sorted(rows, key=lambda r: r["week"])  # oldest -> newest
+    units = [r["total_units_sold"] for r in rows]
+
+    lag_1, lag_2, lag_3, lag_4 = units[-1], units[-2], units[-3], units[-4]
+    rolling_mean_4 = sum(units) / 4
+    rolling_std_4 = pd.Series(units).std()
+
+    target_date = pd.to_datetime(target_week)
+
+    if province not in PROVINCE_MAP:
+        raise HTTPException(status_code=400, detail=f"Unknown province: {province}")
+    if master_product_id not in PRODUCT_MAP:
+        raise HTTPException(
+            status_code=400, detail=f"Unknown master_product_id: {master_product_id}"
+        )
+
+    feat = {
+        "lag_1": lag_1,
+        "lag_2": lag_2,
+        "lag_3": lag_3,
+        "lag_4": lag_4,
+        "rolling_mean_4": rolling_mean_4,
+        "rolling_std_4": rolling_std_4,
+        "week_of_year": int(target_date.isocalendar().week),
+        "month": int(target_date.month),
+        "province_enc": PROVINCE_MAP[province],
+        "product_enc": PRODUCT_MAP[master_product_id],
+    }
+    return pd.DataFrame([feat])[FEATURE_COLS]
+
+
+@app.post("/predict")
+def predict(req: PredictRequest):
+    X = build_features(req.province, req.master_product_id, req.target_week)
+    pred = model.predict(X)[0]
+    pred_units = max(0, round(float(pred)))
+
+    # write to province_forecasts
+    supabase.table("province_forecasts").insert(
+        {
+            "master_product_id": req.master_product_id,
+            "province": req.province,
+            "week": req.target_week,
+            "demand": float(pred),
+            "units": pred_units,
+        }
+    ).execute()
 
     return {
         "province": req.province,
-        "week_number": req.week_number,
-        "month": month,
-        "top_products": top_products,
+        "master_product_id": req.master_product_id,
+        "week": req.target_week,
+        "predicted_units": pred_units,
     }
+
+
+@app.post("/predict-all")
+def predict_all(target_week: str):
+    """Generate forecasts for every (province, product) combo for the given week."""
+    results = []
+    for province in PROVINCE_MAP:
+        for product_id in PRODUCT_MAP:
+            try:
+                X = build_features(province, product_id, target_week)
+                pred = model.predict(X)[0]
+                pred_units = max(0, round(float(pred)))
+                supabase.table("province_forecasts").insert(
+                    {
+                        "master_product_id": product_id,
+                        "province": province,
+                        "week": target_week,
+                        "demand": float(pred),
+                        "units": pred_units,
+                    }
+                ).execute()
+                results.append(
+                    {
+                        "province": province,
+                        "product_id": product_id,
+                        "predicted_units": pred_units,
+                    }
+                )
+            except HTTPException:
+                continue
+    return {"count": len(results), "results": results}
+
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
