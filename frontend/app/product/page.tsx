@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/sections/Footer";
 
 /* ─────────────────────────── types ─────────────────────────── */
-type Province = "All" | "Western" | "Southern" | "Central" | "Northern" | "Eastern";
+type Province = "All" | "Western" | "Southern" | "Central" | "Northern" | "Eastern" | "North Western" | "North Central" | "Uva" | "Sabaragamuwa";
 type Category = "All" | "Beverages" | "Dairy" | "Snacks" | "Staples";
 type DemandLevel = "All Levels" | "HIGH" | "MEDIUM" | "LOW";
 type Signal = "All Signals" | "Payday" | "Season" | "Poya" | "Weekend";
@@ -24,28 +24,85 @@ interface Product {
 
 /* ─────────────────────────── data ──────────────────────────── */
 const PRODUCTS: Product[] = [
-  { id: 1,  name: "Coca-Cola 1.5L",         category: "Beverages", province: "Southern", confidence: 91, demandLevel: "HIGH",   signal: "Payday",  emoji: "🥤" },
-  { id: 2,  name: "Elephant Rice 5kg",       category: "Staples",   province: "Central",  confidence: 88, demandLevel: "HIGH",   signal: "Season",  emoji: "🌾" },
-  { id: 3,  name: "Anchor Butter 400g",      category: "Dairy",     province: "Western",  confidence: 84, demandLevel: "HIGH",   signal: "Payday",  emoji: "🧈" },
-  { id: 4,  name: "Dil Yoghurt",             category: "Dairy",     province: "Western",  confidence: 81, demandLevel: "HIGH",   signal: "Payday",  emoji: "🍶" },
-  { id: 5,  name: "Munchee Choco",           category: "Snacks",    province: "Northern", confidence: 79, demandLevel: "HIGH",   signal: "Weekend", emoji: "🍫" },
-  { id: 6,  name: "Milo 400g",               category: "Beverages", province: "Western",  confidence: 76, demandLevel: "HIGH",   signal: "Payday",  emoji: "☕" },
-  { id: 7,  name: "Maliban Cream Crackers",  category: "Snacks",    province: "Southern", confidence: 68, demandLevel: "MEDIUM", signal: "Season",  emoji: "🍪" },
-  { id: 8,  name: "Highland Full Cream",     category: "Dairy",     province: "Central",  confidence: 64, demandLevel: "MEDIUM", signal: "Poya",    emoji: "🥛" },
-  { id: 9,  name: "Keells Sausages",         category: "Staples",   province: "Western",  confidence: 59, demandLevel: "MEDIUM", signal: "Weekend", emoji: "🌭" },
-  { id: 10, name: "Nestomalt 400g",          category: "Beverages", province: "Eastern",  confidence: 54, demandLevel: "MEDIUM", signal: "Payday",  emoji: "🫙" },
-  { id: 11, name: "Lanka Soy 200g",          category: "Staples",   province: "Northern", confidence: 41, demandLevel: "LOW",    signal: "Season",  emoji: "🫘" },
-  { id: 12, name: "Rathna Fabric Wash",      category: "Staples",   province: "Eastern",  confidence: 33, demandLevel: "LOW",    signal: "Weekend", emoji: "🧴" },
+  { id: 1,  name: "Coca-Cola 1.5L",         category: "Beverages", province: "Western",       confidence: 91, demandLevel: "HIGH",   signal: "Payday",  emoji: "🥤" },
+  { id: 2,  name: "Elephant Basmati 5kg",    category: "Staples",   province: "North Central", confidence: 88, demandLevel: "HIGH",   signal: "Season",  emoji: "🌾" },
+  { id: 3,  name: "Anchor Butter 400g",      category: "Dairy",     province: "Western",       confidence: 84, demandLevel: "HIGH",   signal: "Payday",  emoji: "🧈" },
+  { id: 4,  name: "Dil Yoghurt",             category: "Dairy",     province: "Southern",      confidence: 81, demandLevel: "HIGH",   signal: "Payday",  emoji: "🍶" },
+  { id: 5,  name: "Munchee Choco Shock",     category: "Snacks",    province: "Northern",      confidence: 79, demandLevel: "HIGH",   signal: "Weekend", emoji: "🍫" },
+  { id: 6,  name: "Watawala Tea 400g",       category: "Beverages", province: "Uva",           confidence: 78, demandLevel: "HIGH",   signal: "Season",  emoji: "🍃" },
+  { id: 7,  name: "Milo Liquid Pack",        category: "Beverages", province: "Sabaragamuwa",  confidence: 76, demandLevel: "HIGH",   signal: "Weekend", emoji: "☕" },
+  { id: 8,  name: "Maliban Cream Crackers",  category: "Snacks",    province: "Western",       confidence: 68, demandLevel: "MEDIUM", signal: "Season",  emoji: "🍪" },
+  { id: 9,  name: "Highland Full Cream",     category: "Dairy",     province: "Central",       confidence: 64, demandLevel: "MEDIUM", signal: "Poya",    emoji: "🥛" },
+  { id: 10, name: "MD Tomato Sauce 400g",    category: "Staples",   province: "North Western", confidence: 62, demandLevel: "MEDIUM", signal: "Weekend", emoji: "🥫" },
+  { id: 11, name: "Keells Chicken Sausages", category: "Staples",   province: "Western",       confidence: 59, demandLevel: "MEDIUM", signal: "Weekend", emoji: "🌭" },
+  { id: 12, name: "Nestomalt 400g",          category: "Beverages", province: "Eastern",       confidence: 54, demandLevel: "MEDIUM", signal: "Payday",  emoji: "🫙" },
+  { id: 13, name: "Lanka Soy Veg 200g",      category: "Staples",   province: "Northern",      confidence: 41, demandLevel: "LOW",    signal: "Season",  emoji: "🫘" },
+  { id: 14, name: "Rathna Laundry Liquid",   category: "Staples",   province: "Southern",      confidence: 33, demandLevel: "LOW",    signal: "Weekend", emoji: "🧴" },
 ];
 
-const PROVINCES:    Province[]    = ["All", "Western", "Southern", "Central", "Northern", "Eastern"];
+const PROVINCES:    Province[]    = ["All", "Western", "Southern", "Central", "Northern", "Eastern", "North Western", "North Central", "Uva", "Sabaragamuwa"];
 const CATEGORIES:   Category[]    = ["All", "Beverages", "Dairy", "Snacks", "Staples"];
 const DEMAND_LEVELS: DemandLevel[] = ["All Levels", "HIGH", "MEDIUM", "LOW"];
 const SIGNALS:      Signal[]      = ["All Signals", "Payday", "Season", "Poya", "Weekend"];
 const SORT_OPTIONS: SortBy[]      = ["Confidence ↓", "Confidence ↑", "Name A–Z"];
 
-const demandColor: Record<string, string> = { HIGH: "#00C48C", MEDIUM: "#F5A623", LOW: "#9BA8BF" };
-const signalColor: Record<string, string> = { Payday: "#0A84FF", Season: "#9B59B6", Poya: "#E67E22", Weekend: "#00C48C" };
+const demandTextClass: Record<string, string> = { HIGH: "demand-high", MEDIUM: "demand-medium", LOW: "demand-low" };
+
+/* ────────────────────────── dropdown ───────────────────────── */
+interface DropdownProps<T extends string> {
+  value: T;
+  onChange: (val: T) => void;
+  options: T[];
+  labelPrefix?: string;
+}
+
+function CustomDropdown<T extends string>({ value, onChange, options, labelPrefix = "" }: DropdownProps<T>) {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div className="custom-dropdown" ref={dropdownRef}>
+      <button 
+        type="button" 
+        className={`dropdown-trigger ${isOpen ? "active" : ""}`} 
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <span>{labelPrefix}{value}</span>
+        <svg className="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none">
+          <path d="M1 1l4 4 4-4" stroke="#a1a1aa" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </button>
+
+      {isOpen && (
+        <div className="dropdown-menu">
+          {options.map((opt) => (
+            <button
+              key={opt}
+              type="button"
+              className={`dropdown-item ${value === opt ? "selected" : ""}`}
+              onClick={() => {
+                onChange(opt);
+                setIsOpen(false);
+              }}
+            >
+              {opt}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 /* ─────────────────────────── page ──────────────────────────── */
 export default function ProductPage() {
@@ -56,7 +113,6 @@ export default function ProductPage() {
   const [sortBy,      setSortBy]      = useState<SortBy>("Confidence ↓");
   const [minConf,     setMinConf]     = useState(0);
   const [search,      setSearch]      = useState("");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const filtered = PRODUCTS
     .filter(p =>
@@ -73,450 +129,725 @@ export default function ProductPage() {
       return a.name.localeCompare(b.name);
     });
 
-  const avgConf   = Math.round(filtered.reduce((s, p) => s + p.confidence, 0) / (filtered.length || 1));
-  const highCount = filtered.filter(p => p.demandLevel === "HIGH").length;
-
-  const SidebarContent = () => (
-    <>
-      {/* Live Feed */}
-      <div className="sidebar-section">
-        <span className="live-badge">
-          <span className="live-pulse" />
-          Live Feed
-        </span>
-      </div>
-
-      {/* Province */}
-      <div className="sidebar-section">
-        <p className="sidebar-label">Province</p>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-          {PROVINCES.map(p => (
-            <button key={p} className={`pill-btn${province === p ? " active" : ""}`}
-              onClick={() => { setProvince(p); setSidebarOpen(false); }}>{p}</button>
-          ))}
-        </div>
-      </div>
-
-      {/* Category */}
-      <div className="sidebar-section">
-        <p className="sidebar-label">Category</p>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-          {CATEGORIES.map(c => (
-            <button key={c} className={`pill-btn${category === c ? " active" : ""}`}
-              onClick={() => { setCategory(c); setSidebarOpen(false); }}>{c}</button>
-          ))}
-        </div>
-      </div>
-
-      {/* Demand Level */}
-      <div className="sidebar-section">
-        <p className="sidebar-label">Demand Level</p>
-        <select className="filter-select" value={demandLevel} onChange={e => setDemandLevel(e.target.value as DemandLevel)}>
-          {DEMAND_LEVELS.map(d => <option key={d}>{d}</option>)}
-        </select>
-      </div>
-
-      {/* Min Confidence */}
-      <div className="sidebar-section">
-        <p className="sidebar-label" style={{ display: "flex", justifyContent: "space-between" }}>
-          <span>Min Confidence</span>
-          <span style={{ color: "#0A84FF" }}>{minConf}%</span>
-        </p>
-        <input type="range" min={0} max={90} step={5} value={minConf} onChange={e => setMinConf(+e.target.value)} />
-      </div>
-
-      {/* Signal */}
-      <div className="sidebar-section">
-        <p className="sidebar-label">Signal</p>
-        <select className="filter-select" value={signal} onChange={e => setSignal(e.target.value as Signal)}>
-          {SIGNALS.map(s => <option key={s}>{s}</option>)}
-        </select>
-      </div>
-
-      {/* Sort By */}
-      <div className="sidebar-section">
-        <p className="sidebar-label">Sort By</p>
-        <select className="filter-select" value={sortBy} onChange={e => setSortBy(e.target.value as SortBy)}>
-          {SORT_OPTIONS.map(s => <option key={s}>{s}</option>)}
-        </select>
-      </div>
-    </>
-  );
+  const avgConf = Math.round(filtered.reduce((s, p) => s + p.confidence, 0) / (filtered.length || 1));
 
   return (
-    <div style={{
-      fontFamily: "'Plus Jakarta Sans', 'Manrope', sans-serif",
-      background: "linear-gradient(160deg, #f0f6ff 0%, #ffffff 60%, #eaf3ff 100%)",
-      minHeight: "100vh",
-      color: "#0B1120",
-    }}>
+    <div className="trends-page">
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        /* ── pill buttons ── */
-        .pill-btn {
-          font-family: 'Plus Jakarta Sans', sans-serif;
-          font-size: 12px; font-weight: 600;
-          border: none; background: transparent; cursor: pointer;
-          padding: 7px 14px; border-radius: 100px; color: #6B7A99;
-          transition: all 0.18s ease; white-space: nowrap;
-        }
-        .pill-btn:hover { color: #0B1120; background: #e8eeff; }
-        .pill-btn.active { background: #0A84FF; color: #fff; box-shadow: 0 4px 12px rgba(10,132,255,0.30); }
-
-        /* ── select ── */
-        .filter-select {
-          font-family: 'Plus Jakarta Sans', sans-serif;
-          font-size: 13px; font-weight: 600;
-          border: 1.5px solid rgba(10,132,255,0.14);
-          background: #fff; color: #0B1120;
-          padding: 9px 34px 9px 14px; border-radius: 12px;
-          cursor: pointer; appearance: none;
-          background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%230A84FF' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-          background-repeat: no-repeat; background-position: right 12px center;
-          transition: border-color 0.18s; width: 100%;
-        }
-        .filter-select:focus { outline: none; border-color: #0A84FF; }
-
-        /* ── search ── */
-        .search-input {
-          font-family: 'Plus Jakarta Sans', sans-serif;
-          font-size: 13px; font-weight: 500;
-          border: 1.5px solid rgba(10,132,255,0.14);
-          background: #fff; color: #0B1120;
-          padding: 10px 16px 10px 40px; border-radius: 100px;
-          width: 100%; max-width: 280px;
-          transition: border-color 0.18s, box-shadow 0.18s;
-        }
-        .search-input::placeholder { color: #9BA8BF; }
-        .search-input:focus { outline: none; border-color: #0A84FF; box-shadow: 0 0 0 3px rgba(10,132,255,0.12); }
-
-        /* ── stat cards ── */
-        .stat-card {
-          background: #fff; border-radius: 20px;
-          border: 1px solid rgba(10,132,255,0.1);
-          box-shadow: 0 4px 20px rgba(10,132,255,0.05);
-          padding: 24px 28px; flex: 1; min-width: 0;
+        .trends-page {
+          background-color: #000000;
+          color: #ffffff;
+          font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+          min-height: 100vh;
         }
 
-        /* ── product card ── */
-        .product-card {
-          background: #fff; border-radius: 18px;
-          border: 1px solid rgba(10,132,255,0.09);
-          box-shadow: 0 2px 12px rgba(10,132,255,0.04);
-          padding: 22px; display: flex; flex-direction: column; gap: 14px;
-          transition: box-shadow 0.2s, transform 0.2s; cursor: default;
-        }
-        .product-card:hover { box-shadow: 0 8px 32px rgba(10,132,255,0.13); transform: translateY(-2px); }
-
-        /* ── confidence bar ── */
-        .conf-track { width: 100%; height: 6px; border-radius: 100px; background: #f0f4ff; overflow: hidden; }
-        .conf-fill  { height: 100%; border-radius: 100px; background: #0A84FF; transition: width 0.4s ease; }
-
-        /* ── chip ── */
-        .chip {
-          display: inline-flex; align-items: center; gap: 6px;
-          font-size: 12px; font-weight: 600; padding: 5px 12px;
-          border-radius: 100px; background: rgba(10,132,255,0.08); color: #0A84FF; letter-spacing: 0.02em;
-        }
-        .chip-dot { width: 6px; height: 6px; border-radius: 50%; background: #0A84FF; }
-
-        /* ── sidebar label ── */
-        .sidebar-label {
-          font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
-          text-transform: uppercase; color: #9BA8BF; margin-bottom: 10px;
-          display: flex; justify-content: space-between;
-        }
-        .sidebar-section { display: flex; flex-direction: column; }
-
-        /* ── range ── */
-        input[type=range] {
-          -webkit-appearance: none; width: 100%; height: 4px;
-          border-radius: 100px; background: #e4eaff; outline: none; cursor: pointer;
-        }
-        input[type=range]::-webkit-slider-thumb {
-          -webkit-appearance: none; width: 16px; height: 16px;
-          border-radius: 50%; background: #0A84FF; box-shadow: 0 2px 6px rgba(10,132,255,0.4);
+        .trends-container {
+          max-width: 1100px;
+          margin: 0 auto;
+          padding: 8rem 1rem 10rem 1rem;
         }
 
-        /* ── live badge ── */
-        .live-badge {
-          display: inline-flex; align-items: center; gap: 7px;
-          font-size: 12px; font-weight: 600; color: #00C48C;
-          background: rgba(0,196,140,0.10); padding: 6px 14px; border-radius: 100px;
-          width: fit-content;
-        }
-        .live-pulse {
-          width: 7px; height: 7px; border-radius: 50%; background: #00C48C;
-          animation: pulse 1.6s ease-in-out infinite;
-        }
-        @keyframes pulse {
-          0%,100% { opacity: 1; transform: scale(1); }
-          50%      { opacity: 0.4; transform: scale(0.7); }
+        /* =========================================
+           HEADER SECTION (With Live Status indicators)
+           ========================================= */
+        .trends-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+          gap: 4rem;
+          margin-bottom: 4rem;
         }
 
-        /* ── signal banner ── */
-        .signal-banner {
-          background: linear-gradient(135deg, #fff8f0 0%, #fff3e8 100%);
-          border: 1px solid rgba(230,126,34,0.18); border-radius: 20px;
-          padding: 24px 28px; display: flex; align-items: center; gap: 16px;
-          flex: 1; min-width: 0;
+        .header-title-area {
+          flex: 1.2;
         }
 
-        /* ── desktop sidebar ── */
-        .sidebar-desktop {
-          width: 224px; flex-shrink: 0;
-          display: flex; flex-direction: column; gap: 24px;
-          background: #fff; border-radius: 20px;
-          border: 1px solid rgba(10,132,255,0.09);
-          box-shadow: 0 4px 20px rgba(10,132,255,0.04);
-          padding: 24px 20px;
-          position: sticky; top: 24px; align-self: flex-start;
+        /* Real-Time Live Pulse Badge */
+        .live-status-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.6rem;
+          font-size: 0.75rem;
+          font-weight: 600;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: #10b981;
+          background-color: rgba(16, 185, 129, 0.06);
+          border: 1px solid rgba(16, 185, 129, 0.15);
+          padding: 0.4rem 0.9rem;
+          border-radius: 100px;
+          margin-bottom: 1.5rem;
         }
 
-        /* ── mobile drawer overlay ── */
-        .drawer-overlay {
-          display: none; position: fixed; inset: 0;
-          background: rgba(11,17,32,0.45); z-index: 200;
-          backdrop-filter: blur(2px);
+        .live-dot-pulse {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background-color: #10b981;
+          box-shadow: 0 0 8px #10b981;
+          animation: status-pulse 2s infinite ease-in-out;
         }
-        .drawer-panel {
-          position: fixed; top: 0; left: 0; bottom: 0; width: 288px;
-          background: #fff; z-index: 201; overflow-y: auto;
-          padding: 24px 20px; display: flex; flex-direction: column; gap: 24px;
-          transform: translateX(-100%); transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
-          box-shadow: 4px 0 32px rgba(10,132,255,0.12);
+
+        @keyframes status-pulse {
+          0%, 100% { opacity: 0.4; transform: scale(0.9); }
+          50% { opacity: 1; transform: scale(1.15); }
         }
-        .drawer-overlay.open { display: block; }
-        .drawer-panel.open   { transform: translateX(0); }
 
-        /* ── filter toggle (mobile only) ── */
-        .filter-toggle {
-          display: none; align-items: center; gap: 8px;
-          font-family: 'Plus Jakarta Sans', sans-serif;
-          font-size: 13px; font-weight: 600; color: #0A84FF;
-          background: rgba(10,132,255,0.08); border: none; cursor: pointer;
-          padding: 9px 18px; border-radius: 100px;
-          transition: background 0.18s;
+        .section-subtitle {
+          font-family: "Georgia", serif;
+          font-style: italic;
+          color: #a1a1aa;
+          font-size: 1.1rem;
+          margin-bottom: 1rem;
+          display: block;
         }
-        .filter-toggle:hover { background: rgba(10,132,255,0.14); }
 
-        /* ─────────── responsive ─────────── */
+        .section-title {
+          font-size: clamp(2.5rem, 4vw, 3.5rem);
+          font-weight: 700;
+          letter-spacing: -0.03em;
+          line-height: 1.1;
+          color: #ffffff;
+        }
 
-        /* tablet: sidebar collapses to drawer */
+        .header-desc {
+          flex: 1;
+          color: #a1a1aa;
+          font-size: 1.05rem;
+          line-height: 1.7;
+          margin-top: 2rem;
+        }
+
+        /* =========================================
+           TOP PAGE IMAGE (Colorful Editorial Banner - Static)
+           ========================================= */
+        .trends-hero-image {
+          width: 100%;
+          height: 380px;
+          background: #121212;
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          border-radius: 24px;
+          margin-bottom: 5rem;
+          overflow: hidden;
+          position: relative;
+        }
+
+        .trends-hero-image img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          filter: brightness(0.7) contrast(1.05); /* Colorful but clean inside dark UI */
+        }
+
+        /* =========================================
+           PROVINCE TABS (Scroller)
+           ========================================= */
+        .province-tabs-wrapper {
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          margin-bottom: 3rem;
+          padding-bottom: 0.5rem;
+          overflow-x: auto;
+          white-space: nowrap;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        .province-tabs-wrapper::-webkit-scrollbar {
+          display: none;
+        }
+
+        .province-tab-btn {
+          background: none;
+          border: none;
+          color: #71717a;
+          font-size: 1rem;
+          font-weight: 500;
+          padding: 0.75rem 0;
+          margin-right: 2rem;
+          cursor: pointer;
+          transition: color 0.3s ease;
+          position: relative;
+        }
+
+        .province-tab-btn:hover {
+          color: #ffffff;
+        }
+
+        .province-tab-btn.active {
+          color: #ffffff;
+          font-weight: 600;
+        }
+
+        .province-tab-btn.active::after {
+          content: '';
+          position: absolute;
+          bottom: -0.6rem;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background-color: #ffffff;
+        }
+
+        /* =========================================
+           CUSTOM PREMIUM DROPDOWN SYSTEM
+           ========================================= */
+        .custom-dropdown {
+          position: relative;
+          display: inline-block;
+        }
+
+        .dropdown-trigger {
+          font-family: inherit;
+          font-size: 0.9rem;
+          color: #a1a1aa;
+          background: transparent;
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          padding: 0.6rem 1.2rem;
+          border-radius: 8px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1rem;
+          min-width: 160px;
+          transition: border-color 0.3s ease, color 0.3s ease;
+        }
+
+        .dropdown-trigger:hover, 
+        .dropdown-trigger.active {
+          border-color: rgba(255, 255, 255, 0.2);
+          color: #ffffff;
+        }
+
+        .dropdown-arrow {
+          transition: transform 0.3s ease;
+        }
+
+        .dropdown-trigger.active .dropdown-arrow {
+          transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+          position: absolute;
+          top: calc(100% + 6px);
+          left: 0;
+          z-index: 100;
+          min-width: 100%;
+          background-color: #121212;
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 8px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+          padding: 0.4rem;
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+
+        .dropdown-item {
+          background: transparent;
+          border: none;
+          color: #a1a1aa;
+          padding: 0.6rem 1rem;
+          text-align: left;
+          font-size: 0.9rem;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: background 0.2s ease, color 0.2s ease;
+          white-space: nowrap;
+        }
+
+        .dropdown-item:hover {
+          background: rgba(255, 255, 255, 0.05);
+          color: #ffffff;
+        }
+
+        .dropdown-item.selected {
+          background: rgba(255, 255, 255, 0.08);
+          color: #ffffff;
+          font-weight: 500;
+        }
+
+        /* =========================================
+           FILTERS PANEL
+           ========================================= */
+        .filters-panel {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1.5rem;
+          margin-bottom: 4rem;
+          padding: 2rem 0;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .filter-group {
+          display: flex;
+          align-items: center;
+          gap: 1.5rem;
+          flex-wrap: wrap;
+        }
+
+        /* Minimal Range slider */
+        .slider-wrapper {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+        }
+
+        .slider-label {
+          font-family: "Georgia", serif;
+          font-style: italic;
+          font-size: 0.9rem;
+          color: #71717a;
+        }
+
+        .minimal-slider {
+          -webkit-appearance: none;
+          width: 120px;
+          height: 2px;
+          background: rgba(255, 255, 255, 0.1);
+          outline: none;
+          cursor: pointer;
+        }
+
+        .minimal-slider::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          background: #ffffff;
+          transition: transform 0.2s ease;
+        }
+
+        .minimal-slider::-webkit-slider-thumb:hover {
+          transform: scale(1.2);
+        }
+
+        /* Minimal Search */
+        .minimal-search-wrapper {
+          position: relative;
+        }
+
+        .minimal-search-input {
+          font-family: inherit;
+          font-size: 0.9rem;
+          background: transparent;
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          color: #ffffff;
+          padding: 0.6rem 1rem 0.6rem 2.2rem;
+          border-radius: 8px;
+          width: 220px;
+          transition: border-color 0.3s ease;
+        }
+
+        .minimal-search-input::placeholder {
+          color: #71717a;
+        }
+
+        .minimal-search-input:focus {
+          outline: none;
+          border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .search-icon {
+          position: absolute;
+          left: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          pointer-events: none;
+        }
+
+        /* =========================================
+           SUMMARY METRIC
+           ========================================= */
+        .metrics-bar {
+          display: flex;
+          align-items: center;
+          gap: 4rem;
+          margin-bottom: 3rem;
+          color: #71717a;
+          font-size: 0.9rem;
+        }
+
+        .metric-item strong {
+          color: #ffffff;
+          font-size: 1.1rem;
+          font-weight: 600;
+        }
+
+        /* =========================================
+           TRENDING CARDS
+           ========================================= */
+        .trends-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 1.5rem;
+        }
+
+        .trend-card {
+          background-color: #121212;
+          border: 1px solid rgba(255, 255, 255, 0.03);
+          border-radius: 20px;
+          padding: 2rem;
+          display: flex;
+          flex-direction: column;
+          position: relative;
+          overflow: hidden;
+          transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .trend-card:hover {
+          transform: translateY(-8px);
+          border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .card-top {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 2rem;
+        }
+
+        .emoji-wrapper {
+          font-size: 2.2rem;
+          line-height: 1;
+          transition: transform 0.3s ease; /* No grayscale filter, fully colorful */
+        }
+
+        .trend-card:hover .emoji-wrapper {
+          transform: scale(1.05);
+        }
+
+        .category-tag {
+          font-family: "Georgia", serif;
+          font-style: italic;
+          color: #71717a;
+          font-size: 0.85rem;
+        }
+
+        .card-middle {
+          margin-bottom: auto;
+        }
+
+        .product-name {
+          font-size: 1.3rem;
+          font-weight: 600;
+          color: #ffffff;
+          line-height: 1.3;
+          margin-bottom: 0.4rem;
+          letter-spacing: -0.01em;
+        }
+
+        .province-name-tag {
+          font-size: 0.85rem;
+          color: #a1a1aa;
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
+        }
+
+        .card-bottom {
+          border-top: 1px solid rgba(255, 255, 255, 0.05);
+          padding-top: 1.5rem;
+          margin-top: 2rem;
+        }
+
+        .confidence-area {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 0.75rem;
+        }
+
+        .confidence-label {
+          font-size: 0.75rem;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: #71717a;
+        }
+
+        .confidence-value {
+          font-family: "Georgia", serif;
+          font-style: italic;
+          font-size: 1.1rem;
+          color: #ffffff;
+        }
+
+        .conf-track {
+          width: 100%;
+          height: 1px;
+          background: rgba(255, 255, 255, 0.08);
+          position: relative;
+        }
+
+        .conf-fill {
+          height: 100%;
+          background-color: #ffffff;
+          transition: width 0.4s ease;
+        }
+
+        .card-footer-tags {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-top: 1rem;
+          font-size: 0.8rem;
+        }
+
+        .demand-scale {
+          font-weight: 600;
+          font-size: 0.75rem;
+          letter-spacing: 0.05em;
+        }
+        .demand-high { color: #10b981; }
+        .demand-medium { color: #f5a623; }
+        .demand-low { color: #71717a; }
+
+        .signal-label {
+          color: #a1a1aa;
+          font-family: "Georgia", serif;
+          font-style: italic;
+        }
+
+        .empty-state {
+          text-align: center;
+          padding: 8rem 0;
+          border: 1px dashed rgba(255, 255, 255, 0.08);
+          border-radius: 20px;
+          color: #71717a;
+        }
+
+        .empty-state h3 {
+          color: #ffffff;
+          font-family: "Georgia", serif;
+          font-style: italic;
+          font-size: 1.4rem;
+          margin-bottom: 0.5rem;
+        }
+
+        /* =========================================
+           RESPONSIVE DESIGN
+           ========================================= */
+        @media (max-width: 1024px) {
+          .trends-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+          }
+        }
+
         @media (max-width: 900px) {
-          .sidebar-desktop { display: none !important; }
-          .filter-toggle   { display: inline-flex !important; }
+          .trends-header {
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+          }
+          .header-desc {
+            margin-top: 0;
+          }
+          .filters-panel {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+          .filter-group {
+            width: 100%;
+          }
+          .minimal-search-wrapper, .minimal-search-input {
+            width: 100%;
+          }
+          .trends-hero-image {
+            height: 250px;
+          }
         }
 
-        /* stat row: 2×2 grid on tablet, 1-col on small mobile */
-        @media (max-width: 720px) {
-          .stat-row { grid-template-columns: 1fr 1fr !important; }
-        }
-        @media (max-width: 480px) {
-          .stat-row { grid-template-columns: 1fr !important; }
-          .stat-card, .signal-banner { padding: 20px 20px !important; }
-          .page-title { font-size: 32px !important; }
-          .search-input { max-width: 100% !important; }
-          .header-actions { flex-direction: column; align-items: flex-start !important; }
-        }
-
-        /* products grid */
         @media (max-width: 600px) {
-          .products-grid { grid-template-columns: 1fr !important; }
+          .trends-grid {
+            grid-template-columns: 1fr;
+            max-width: 380px;
+            margin: 0 auto;
+          }
         }
       `}</style>
 
-      {/* ── Mobile drawer ── */}
-      <div className={`drawer-overlay${sidebarOpen ? " open" : ""}`} onClick={() => setSidebarOpen(false)} />
-      <div className={`drawer-panel${sidebarOpen ? " open" : ""}`}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-          <span style={{ fontSize: 15, fontWeight: 700, color: "#0B1120" }}>Filters</span>
-          <button onClick={() => setSidebarOpen(false)} style={{
-            background: "rgba(10,132,255,0.08)", border: "none", cursor: "pointer",
-            width: 32, height: 32, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
-          }}>
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M1 1l12 12M13 1L1 13" stroke="#0A84FF" strokeWidth="2" strokeLinecap="round"/>
-            </svg>
-          </button>
-        </div>
-        <SidebarContent />
-      </div>
-
       <Navbar />
 
-      {/* ── Main content with navbar offset ── */}
-      <div style={{ paddingTop: 80 }}>
-        <div style={{ maxWidth: 1300, margin: "0 auto", padding: "40px 20px 96px" }}>
-
-          {/* ── Page Header ── */}
-          <div style={{ marginBottom: 32 }}>
-            <div className="chip" style={{ marginBottom: 14 }}>
-              <span className="chip-dot" />
-              AI-Powered Forecasts · Week 24 · {PRODUCTS.length} products
+      <div className="trends-container">
+        
+        {/* =========================================
+            HEADER SECTION
+            ========================================= */}
+        <div className="trends-header">
+          <div className="header-title-area">
+            {/* Blinking Live Telemetry indicator to indicate Real-Time Data */}
+            <div className="live-status-badge">
+              <span className="live-dot-pulse" />
+              Connected · Live POS Telemetry Feed
             </div>
-
-            <div className="header-actions" style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
-              <div>
-                <h1 className="page-title" style={{ fontSize: "clamp(34px, 5vw, 56px)", fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.1, color: "#0B1120", marginBottom: 10 }}>
-                  Demand <span style={{ color: "#0A84FF" }}>Predictions.</span>
-                </h1>
-                <p style={{ fontSize: 15, color: "#6B7A99", lineHeight: 1.65, fontWeight: 400 }}>
-                  Localised demand forecasts across Sri Lankan provinces — updated weekly.
-                </p>
-              </div>
-
-              {/* Search + filter toggle */}
-              <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-                {/* mobile filter btn */}
-                <button className="filter-toggle" onClick={() => setSidebarOpen(true)}>
-                  <svg width="14" height="12" viewBox="0 0 14 12" fill="none">
-                    <path d="M0 1h14M3 6h8M5 11h4" stroke="#0A84FF" strokeWidth="1.5" strokeLinecap="round"/>
-                  </svg>
-                  Filters
-                </button>
-
-                <div style={{ position: "relative" }}>
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9BA8BF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                    style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)" }}>
-                    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-                  </svg>
-                  <input className="search-input" placeholder="Search products..." value={search} onChange={e => setSearch(e.target.value)} />
-                </div>
-              </div>
-            </div>
+            <span className="section-subtitle">Real-Time Market Telemetry</span>
+            <h1 className="section-title">Sri Lankan Market Pulse</h1>
           </div>
-
-          {/* ── Stat Row ── */}
-          <div className="stat-row" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14, marginBottom: 32 }}>
-
-            {/* Avg Confidence */}
-            <div style={{
-              background: "linear-gradient(135deg, #0A84FF 0%, #0066CC 100%)",
-              borderRadius: 20, padding: "24px 28px", color: "#fff", border: "none",
-              boxShadow: "0 8px 28px rgba(10,132,255,0.35)",
-            }}>
-              <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const, opacity: 0.75, marginBottom: 8 }}>Avg Confidence</p>
-              <p style={{ fontSize: 44, fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1 }}>{avgConf}%</p>
-              <p style={{ fontSize: 12, fontWeight: 500, opacity: 0.7, marginTop: 8 }}>↑ Week on week</p>
-            </div>
-
-            {/* High Demand */}
-            <div className="stat-card">
-              <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const, color: "#9BA8BF", marginBottom: 8 }}>High Demand</p>
-              <p style={{ fontSize: 44, fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1, color: "#0B1120" }}>{highCount}</p>
-              <p style={{ fontSize: 12, fontWeight: 500, color: "#00C48C", marginTop: 8 }}>↑ {filtered.length} products total</p>
-            </div>
-
-            {/* Payday Surge */}
-            <div className="stat-card">
-              <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const, color: "#9BA8BF", marginBottom: 8 }}>Payday Surge</p>
-              <p style={{ fontSize: 44, fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1, color: "#0B1120" }}>+34%</p>
-              <p style={{ fontSize: 12, fontWeight: 500, color: "#9BA8BF", marginTop: 8 }}>↑ Western Province</p>
-            </div>
-
-            {/* Next Signal */}
-            <div className="signal-banner">
-              <div style={{ fontSize: 32, flexShrink: 0 }}>🪔</div>
-              <div style={{ minWidth: 0 }}>
-                <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const, color: "#E67E22", marginBottom: 6 }}>Next Signal</p>
-                <p style={{ fontSize: 22, fontWeight: 800, letterSpacing: "-0.02em", color: "#0B1120", lineHeight: 1.1, whiteSpace: "nowrap" as const }}>Vesak Poya</p>
-                <p style={{ fontSize: 12, fontWeight: 500, color: "#9BA8BF", marginTop: 6 }}>in 3 days</p>
-              </div>
-            </div>
+          <div className="header-desc">
+            Direct insight into provincial consumer velocity. This interface processes active, real-time transaction data mapped directly from checkout systems in Sri Lanka's 9 provinces. The metrics below update continuously as sales occur.
           </div>
-
-          {/* ── Layout: Sidebar + Grid ── */}
-          <div style={{ display: "flex", gap: 24, alignItems: "flex-start" }}>
-
-            {/* Desktop Sidebar */}
-            <aside className="sidebar-desktop">
-              <SidebarContent />
-            </aside>
-
-            {/* Products */}
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <p style={{ fontSize: 13, color: "#9BA8BF", fontWeight: 500, marginBottom: 18 }}>
-                Showing <strong style={{ color: "#0B1120" }}>{filtered.length}</strong> of {PRODUCTS.length} products
-              </p>
-
-              {filtered.length === 0 ? (
-                <div style={{
-                  textAlign: "center", padding: "80px 0", color: "#9BA8BF",
-                  background: "#fff", borderRadius: 20,
-                  border: "1px solid rgba(10,132,255,0.09)",
-                }}>
-                  <div style={{ fontSize: 44, marginBottom: 14 }}>🔍</div>
-                  <p style={{ fontSize: 16, fontWeight: 700, color: "#0B1120", marginBottom: 6 }}>No products match your filters</p>
-                  <p style={{ fontSize: 13, fontWeight: 400 }}>Try adjusting your filters or search query.</p>
-                </div>
-              ) : (
-                <div className="products-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 14 }}>
-                  {filtered.map(p => (
-                    <div key={p.id} className="product-card">
-                      {/* Top row */}
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                        <div style={{
-                          width: 44, height: 44, borderRadius: 12,
-                          background: "linear-gradient(135deg, #f0f6ff 0%, #e4eeff 100%)",
-                          display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22,
-                        }}>
-                          {p.emoji}
-                        </div>
-                        <span style={{
-                          fontSize: 10, fontWeight: 800, letterSpacing: "0.07em",
-                          color: demandColor[p.demandLevel],
-                          background: `${demandColor[p.demandLevel]}18`,
-                          padding: "4px 10px", borderRadius: 100,
-                        }}>
-                          {p.demandLevel}
-                        </span>
-                      </div>
-
-                      {/* Name */}
-                      <div>
-                        <p style={{ fontSize: 15, fontWeight: 700, color: "#0B1120", letterSpacing: "-0.01em", marginBottom: 3 }}>{p.name}</p>
-                        <p style={{ fontSize: 12, fontWeight: 500, color: "#9BA8BF" }}>{p.category}</p>
-                      </div>
-
-                      {/* Confidence Bar */}
-                      <div>
-                        <div className="conf-track">
-                          <div className="conf-fill" style={{ width: `${p.confidence}%` }} />
-                        </div>
-                        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 5 }}>
-                          <span style={{ fontSize: 13, fontWeight: 700, color: "#0A84FF" }}>{p.confidence}%</span>
-                        </div>
-                      </div>
-
-                      {/* Footer */}
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                        <span style={{ fontSize: 12, fontWeight: 500, color: "#9BA8BF", display: "flex", alignItems: "center", gap: 5 }}>
-                          <svg width="9" height="12" viewBox="0 0 10 13" fill="none">
-                            <path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 8 5 8s5-4.25 5-8c0-2.76-2.24-5-5-5z" fill="#CBD5E0"/>
-                            <circle cx="5" cy="5" r="1.5" fill="white"/>
-                          </svg>
-                          {p.province}
-                        </span>
-                        <span style={{
-                          fontSize: 11, fontWeight: 700, letterSpacing: "0.04em",
-                          color: signalColor[p.signal],
-                          background: `${signalColor[p.signal]}15`,
-                          padding: "3px 10px", borderRadius: 100,
-                        }}>
-                          {p.signal}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-
         </div>
+
+        {/* =========================================
+           TOP PAGE IMAGE (Colorful Editorial Banner - Static)
+           ========================================= */}
+        <div className="trends-hero-image">
+          <img 
+            src="https://www.igrain.in/admin/images/1717578894.jpg" 
+            alt="Real-time retail network telemetry visualization" 
+          />
+        </div>
+
+        {/* =========================================
+           PROVINCE TABS (Scroller)
+           ========================================= */}
+        <div className="province-tabs-wrapper">
+          {PROVINCES.map(p => (
+            <button 
+              key={p} 
+              className={`province-tab-btn${province === p ? " active" : ""}`}
+              onClick={() => setProvince(p)}
+            >
+              {p}
+            </button>
+          ))}
+        </div>
+
+        {/* =========================================
+           FILTERS PANEL
+           ========================================= */}
+        <div className="filters-panel">
+          <div className="filter-group">
+            
+            {/* Custom Category Dropdown */}
+            <CustomDropdown 
+              value={category} 
+              onChange={setCategory} 
+              options={CATEGORIES} 
+              labelPrefix="Category: "
+            />
+
+            {/* Custom Demand Dropdown */}
+            <CustomDropdown 
+              value={demandLevel} 
+              onChange={setDemandLevel} 
+              options={DEMAND_LEVELS} 
+              labelPrefix="Demand: "
+            />
+
+            {/* Custom Signal Dropdown */}
+            <CustomDropdown 
+              value={signal} 
+              onChange={setSignal} 
+              options={SIGNALS} 
+              labelPrefix="Signal: "
+            />
+
+            {/* Custom Sort Dropdown */}
+            <CustomDropdown 
+              value={sortBy} 
+              onChange={setSortBy} 
+              options={SORT_OPTIONS} 
+            />
+
+            {/* Confidence Slider */}
+            <div className="slider-wrapper">
+              <span className="slider-label">Confidence: {minConf}%+</span>
+              <input 
+                type="range" 
+                className="minimal-slider" 
+                min={0} 
+                max={90} 
+                step={5} 
+                value={minConf} 
+                onChange={e => setMinConf(+e.target.value)} 
+              />
+            </div>
+
+          </div>
+
+          {/* Minimal Search Input */}
+          <div className="minimal-search-wrapper">
+            <svg className="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#71717a" strokeWidth="2">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input 
+              className="minimal-search-input" 
+              placeholder="Search regional items..." 
+              value={search} 
+              onChange={e => setSearch(e.target.value)} 
+            />
+          </div>
+        </div>
+
+        {/* =========================================
+           SUMMARY METRIC
+           ========================================= */}
+        <div className="metrics-bar">
+          <div className="metric-item">
+            Showing <strong>{filtered.length}</strong> products
+          </div>
+          {filtered.length > 0 && (
+            <div className="metric-item">
+              Average Confidence: <strong>{avgConf}%</strong>
+            </div>
+          )}
+        </div>
+
+        {/* =========================================
+           TRENDING CARDS
+           ========================================= */}
+        {filtered.length === 0 ? (
+          <div className="empty-state">
+            <h3>No demand metrics found</h3>
+            <p>Try clearing your current filters or searching for a different product keyword.</p>
+          </div>
+        ) : (
+          <div className="trends-grid">
+            {filtered.map(p => (
+              <div key={p.id} className="trend-card">
+                
+                <div className="card-top">
+                  <div className="emoji-wrapper">{p.emoji}</div>
+                  <span className="category-tag">{p.category}</span>
+                </div>
+
+                <div className="card-middle">
+                  <h3 className="product-name">{p.name}</h3>
+                  <div className="province-name-tag">
+                    <svg width="8" height="11" viewBox="0 0 10 13" fill="none">
+                      <path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 8 5 8s5-4.25 5-8c0-2.76-2.24-5-5-5z" fill="#71717a"/>
+                    </svg>
+                    {p.province} Province
+                  </div>
+                </div>
+
+                <div className="card-bottom">
+                  <div className="confidence-area">
+                    <span className="confidence-label">Prediction Accuracy</span>
+                    <span className="confidence-value">{p.confidence}%</span>
+                  </div>
+                  
+                  {/* Luxury Thin Progress Line */}
+                  <div className="conf-track">
+                    <div className="conf-fill" style={{ width: `${p.confidence}%` }} />
+                  </div>
+
+                  <div className="card-footer-tags">
+                    <span className={`demand-scale ${demandTextClass[p.demandLevel]}`}>
+                      {p.demandLevel} VELOCITY
+                    </span>
+                    <span className="signal-label">{p.signal}</span>
+                  </div>
+                </div>
+
+              </div>
+            ))}
+          </div>
+        )}
+
       </div>
 
       <Footer />
