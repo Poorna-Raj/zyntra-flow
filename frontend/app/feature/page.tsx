@@ -11,7 +11,7 @@ const features = [
     tagline: "Localize your supply chain to regional realities.",
     description: "Gain granular insights into regional purchasing behaviors. Adapt to local economic drivers and optimize stock distribution province by province.",
     businessImpact: "Eliminates the dead-stock dilemma. Instead of shipping identical inventory island-wide, you align supply with actual regional demand (e.g., Western Province trends vs. Northern Province preferences). This frees up frozen capital, reduces transport costs, and ensures your regional shelves carry items that actually sell.",
-    image: "https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?q=80&w=800&auto=format&fit=crop", // Dark minimal map/grid concept
+    image: "/features/province-intelligence.png",// Dark minimal map/grid concept
     alt: "Regional mapping data visualization"
   },
   {
