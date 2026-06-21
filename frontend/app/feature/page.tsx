@@ -20,7 +20,7 @@ const features = [
     tagline: "Your 24/7 retail analyst, accessible in plain English.",
     description: "Instant inventory decisions. Chat directly with your retail data to get immediate recommendations on restocks, warehouse transfers, and markdown strategies.",
     businessImpact: "Demolishes the need for complex, manual spreadsheets. You don't need a dedicated data analyst to understand your performance. Simply ask, 'Which products in Kandy should I markdown this week?' to get instant, mathematically backed actions. This saves hours of weekly administrative work and prevents human error.",
-    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop", // Abstract dark interface/glow concept
+    image: "/features/ai-assistant.png", // Abstract dark interface/glow concept
     alt: "AI conversational interface concept"
   },
   {
@@ -29,7 +29,7 @@ const features = [
     tagline: "Granular planning down to the individual product unit.",
     description: "Predict product-level demand. Go beyond high-level category trends with hyper-granular forecasting for every individual SKU in your catalog.",
     businessImpact: "Prevents both stockouts of your bestsellers and costly overstocking of slow-movers. By predicting demand down to the exact size, color, or flavor SKU, you ensure customers never walk away empty-handed while protecting your warehouse from being choked by unsellable surplus.",
-    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=800&auto=format&fit=crop", // Highly structured, clean dark warehouse shelves
+    image: "/features/sku-forecasting.png", // Highly structured, clean dark warehouse shelves
     alt: "Sleek organized product inventory"
   },
   {
@@ -38,7 +38,7 @@ const features = [
     tagline: "Sync your inventory with Sri Lanka's cultural calendar.",
     description: "Anticipate festival-driven demand shifts. Automatically adjust your predictions based on regional holidays, cultural events, and local traditions.",
     businessImpact: "Capitalizes on peak shopping seasons without the stress of panic-buying. The system automatically ramps up stock predictions weeks before major festivals (like Avurudu, Ramadan, Vesak, or Christmas) and winds them down immediately after. This maximizes holiday profit margins while shielding you from post-festival margin erosion.",
-    image: "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?q=80&w=800&auto=format&fit=crop", // High quality abstract festive lights at night
+    image: "features/cultural-signals.png", // High quality abstract festive lights at night
     alt: "Festive regional celebration lights"
   }
 ];
