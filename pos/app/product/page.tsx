@@ -51,6 +51,7 @@ export default function ProductManagement() {
   // are handled via initError below.
   const [shopId, setShopId] = useState<string | null>(null);
   const [initError, setInitError] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -82,13 +83,16 @@ export default function ProductManagement() {
  async function init() {
   setLoading(true);
   setInitError(null);
+  
 
   const { data: { user }, error: userErr } = await supabase.auth.getUser();
   if (userErr || !user) {
     setInitError("You must be logged in to manage products.");
     setLoading(false);
+   
     return;
   }
+  setUserId(user.id);
 
   const { data: shopList, error: shopErr } = await supabase
     .from("shops")
@@ -326,6 +330,33 @@ export default function ProductManagement() {
     setError(null);
 
     try {
+      // 1) Ensure canonical master product exists (search by name, case-insensitive)
+      let master_product_id: string | null = null;
+
+      const { data: foundMasters, error: findErr } = await supabase
+        .from("master_products")
+        .select("id")
+        .ilike("name", name)
+        .limit(1);
+
+      if (findErr) throw new Error(findErr.message);
+
+      if (foundMasters && foundMasters.length > 0) {
+        master_product_id = foundMasters[0].id;
+      } else {
+        // create a new master product and return its id
+        const { data: newMaster, error: createErr } = await supabase
+          .from("master_products")
+          .insert({ name, category, created_by: userId! })
+          .select("id")
+          .single();
+
+        if (createErr) throw new Error(createErr.message);
+        master_product_id = newMaster.id;
+      }
+
+      // 2) Save shop-specific product while referencing the master_product_id.
+      //    Keep product_id in products table (don't remove it) and keep price shop-specific.
       const payload = {
         name,
         category,
@@ -333,6 +364,7 @@ export default function ProductManagement() {
         image_url: form.image_url.trim() || null,
         is_active: form.is_active,
         shop_id: shopId,
+        master_product_id,
       };
 
       const { error: saveErr } = form.product_id
