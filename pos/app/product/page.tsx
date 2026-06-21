@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect, useRef } from "react";
 import { createClient } from "@supabase/supabase-js";
+import { useRouter } from "next/navigation";
 
 export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -12,23 +13,16 @@ export const supabase = createClient(
 // Create it once in the dashboard: Storage → New bucket → "product-images"
 const IMAGE_BUCKET = "product-images";
 
-// ── Types — mirrors public.products + public.master_products ───────────
-type MasterProduct = {
-  id: string;
-  name: string;
-  category: string;
-};
-
+// ── Types — mirrors public.products ──────────────────────────────────
 type Product = {
   product_id: string;
-  master_product_id: string;
   name: string;
   price: number;
   image_url: string | null;
   is_active: boolean;
+  category: string;
   shop_id: string;
   created_at: string;
-  master_products?: MasterProduct; // joined, not a real column
 };
 
 type ProductFormState = {
@@ -49,6 +43,8 @@ const EMPTY_FORM: ProductFormState = {
   is_active: true,
 };
 
+
+
 export default function ProductManagement() {
   // shopId is resolved at runtime from the logged-in user — no more
   // hardcoded placeholder. null = not loaded yet, undefined-ish states
@@ -57,7 +53,6 @@ export default function ProductManagement() {
   const [initError, setInitError] = useState<string | null>(null);
 
   const [products, setProducts] = useState<Product[]>([]);
-  const [masterProducts, setMasterProducts] = useState<MasterProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
@@ -77,68 +72,121 @@ export default function ProductManagement() {
     setTimeout(() => setToast(null), 2800);
   }
 
+  
+
   // ── Bootstrap: resolve the logged-in user's shop, then load data ────
   useEffect(() => {
     init();
   }, []);
 
-  async function init() {
-    setLoading(true);
-    setInitError(null);
+ async function init() {
+  setLoading(true);
+  setInitError(null);
 
-    const {
-      data: { user },
-      error: userErr,
-    } = await supabase.auth.getUser();
-
-    if (userErr || !user) {
-      setInitError("You must be logged in to manage products.");
-      setLoading(false);
-      return;
-    }
-
-    const { data: shop, error: shopErr } = await supabase
-      .from("shops")
-      .select("shop_id")
-      .eq("created_by", user.id)
-      .single();
-
-    if (shopErr || !shop) {
-      setInitError(
-        "No shop found for this account. Please create a shop before adding products."
-      );
-      setLoading(false);
-      return;
-    }
-
-    setShopId(shop.shop_id);
-    await Promise.all([loadProducts(shop.shop_id), loadMasterProducts()]);
+  const { data: { user }, error: userErr } = await supabase.auth.getUser();
+  if (userErr || !user) {
+    setInitError("You must be logged in to manage products.");
     setLoading(false);
+    return;
   }
+
+  const { data: shopList, error: shopErr } = await supabase
+    .from("shops")
+    .select("shop_id")
+    .eq("created_by", user.id)
+    .order("created_at");
+
+  if (shopErr || !shopList || shopList.length === 0) {
+    setInitError("No shop found for this account. Please create a shop before adding products.");
+    setLoading(false);
+    return;
+  }
+
+  // Prefer the shop selected on the POS page; fall back to the first one
+  const remembered = localStorage.getItem("currentShopId");
+  const match = shopList.find((s) => s.shop_id === remembered);
+  const chosen = match ?? shopList[0];
+
+  localStorage.setItem("currentShopId", chosen.shop_id);
+  setShopId(chosen.shop_id);
+  await loadProducts(chosen.shop_id);
+  setLoading(false);
+}
 
   async function loadProducts(id: string) {
     const { data, error } = await supabase
-      .from("products")
-      .select("*, master_products(id, name, category)")
-      .eq("shop_id", id)
-      .order("created_at", { ascending: false });
+  .from("products")
+  .select("*")
+  .eq("shop_id", id)
+  .order("created_at", { ascending: false });
 
     if (error) setError(error.message);
     else setProducts((data as Product[]) ?? []);
   }
 
-  async function loadMasterProducts() {
-    const { data, error } = await supabase
-      .from("master_products")
-      .select("id, name, category")
-      .order("name");
-    if (!error) setMasterProducts((data as MasterProduct[]) ?? []);
+  function Sidebar({ userName, shopName }: { userName: string; shopName: string }) {
+    const router = useRouter();
+    const navItems = [
+      { label: "POS System",    icon: "🏪", path: "/billing" },
+      { label: "Dashboard",     icon: "📊", path: "/dashboard" },
+      { label: "Product",       icon: "📦", path: "/product" },
+      { label: "Sales Reports", icon: "📈", path: "/sales", active: true },
+      { label: "Settings",      icon: "⚙️", path: "/settings" },
+    ];
+  
+    return (
+      <aside style={{
+        width: 200, background: "#fff", display: "flex", flexDirection: "column",
+        borderRight: "1px solid #eef0f8", flexShrink: 0,
+        fontFamily: "'Plus Jakarta Sans', sans-serif",
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "20px 16px 16px", borderBottom: "1px solid #eef0f8" }}>
+          <img src="/logo new lokapos.ico" alt="LokaPOS" style={{ width: 32, height: 32, borderRadius: 8 }} />
+          <span style={{ fontSize: 13, fontWeight: 800, color: "#0B1120" }}>
+            Loka<span style={{ color: "#0A84FF" }}>POS</span>
+          </span>
+        </div>
+        <nav style={{ flex: 1, padding: "12px 10px", display: "flex", flexDirection: "column", gap: 4 }}>
+          {navItems.map((item) => (
+            <button key={item.label} onClick={() => router.push(item.path)} style={{
+              width: "100%", padding: "10px 14px", borderRadius: 10, border: "none",
+              background: item.active ? "linear-gradient(135deg,#0A84FF,#0055CC)" : "none",
+              color: item.active ? "#fff" : "#6B7A99",
+              fontFamily: "inherit", fontSize: 13, fontWeight: item.active ? 700 : 500,
+              textAlign: "left", cursor: "pointer", display: "flex", alignItems: "center", gap: 10,
+              boxShadow: item.active ? "0 4px 14px rgba(10,132,255,0.25)" : "none",
+            }}>
+              <span style={{ fontSize: 16 }}>{item.icon}</span>
+              {item.label}
+            </button>
+          ))}
+        </nav>
+        <div style={{ padding: "12px 14px", borderTop: "1px solid #eef0f8", display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{
+            width: 34, height: 34, borderRadius: "50%",
+            background: "linear-gradient(135deg,#0A84FF,#0055CC)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            color: "#fff", fontSize: 13, fontWeight: 700, flexShrink: 0,
+          }}>
+            {userName.charAt(0).toUpperCase()}
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <p style={{ fontSize: 12, fontWeight: 700, color: "#0B1120", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{userName}</p>
+            <p style={{ fontSize: 10, color: "#9BA8BF" }}>{shopName}</p>
+          </div>
+          <button onClick={async () => { await supabase.auth.signOut(); useRouter().push("/login"); }}
+            title="Logout" style={{ background: "none", border: "none", cursor: "pointer", fontSize: 16, color: "#9BA8BF" }}>
+            🚪
+          </button>
+        </div>
+      </aside>
+    );
   }
 
 
   const categories = useMemo(
-    () => Array.from(new Set(masterProducts.map((m) => m.category))).sort(),
-    [masterProducts]
+    () => Array.from(new Set(products.map((p) => p.category))).sort(),
+    [products]
   );
 
   const stats = useMemo(() => {
@@ -146,9 +194,7 @@ export default function ProductManagement() {
     const avgPrice = products.length
       ? products.reduce((s, p) => s + p.price, 0) / products.length
       : 0;
-    const usedCategories = new Set(
-      products.map((p) => p.master_products?.category).filter(Boolean)
-    ).size;
+    const usedCategories = new Set(products.map((p) => p.category).filter(Boolean)).size;
     return {
       total: products.length,
       active,
@@ -161,7 +207,7 @@ export default function ProductManagement() {
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
       const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase());
-      const matchesCategory = !categoryFilter || p.master_products?.category === categoryFilter;
+      const matchesCategory = !categoryFilter || p.category === categoryFilter;
       const matchesStatus = !statusFilter || String(p.is_active) === statusFilter;
       return matchesSearch && matchesCategory && matchesStatus;
     });
@@ -230,7 +276,7 @@ export default function ProductManagement() {
   function openEditModal(p: Product) {
     setForm({
       product_id: p.product_id,
-      category: p.master_products?.category ?? "",
+      category: p.category,
       name: p.name,
       price: String(p.price),
       image_url: p.image_url ?? "",
@@ -246,29 +292,9 @@ export default function ProductManagement() {
     setError(null);
   }
 
-  // Finds a master_products row matching name+category (case-insensitive),
-  // or creates a new one if none exists. This is what lets "Add Product"
-  // work without making the user pre-select a master product.
-  async function resolveMasterProductId(name: string, category: string, userId: string) {
-    const { data: existing, error: findErr } = await supabase
-      .from("master_products")
-      .select("id")
-      .ilike("name", name)
-      .eq("category", category)
-      .maybeSingle();
+ 
 
-    if (findErr) throw new Error(findErr.message);
-    if (existing) return existing.id;
-
-    const { data: created, error: createErr } = await supabase
-      .from("master_products")
-      .insert({ name, category, created_by: userId })
-      .select("id")
-      .single();
-
-    if (createErr) throw new Error(createErr.message);
-    return created.id;
-  }
+  
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -300,16 +326,9 @@ export default function ProductManagement() {
     setError(null);
 
     try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) throw new Error("You must be logged in.");
-
-      const masterProductId = await resolveMasterProductId(name, category, user.id);
-
       const payload = {
-        master_product_id: masterProductId,
         name,
+        category,
         price: priceNum,
         image_url: form.image_url.trim() || null,
         is_active: form.is_active,
@@ -325,7 +344,6 @@ export default function ProductManagement() {
       showToast(form.product_id ? "Product updated 🎉" : "Product added 🎉");
       closeModal();
       loadProducts(shopId);
-      loadMasterProducts(); // pick up any newly created master product
     } catch (err: any) {
       setError(err.message ?? "Something went wrong.");
     } finally {
@@ -333,6 +351,7 @@ export default function ProductManagement() {
     }
   }
 
+  
   async function handleDelete(product_id: string) {
     if (!shopId) return;
     if (!confirm("Delete this product? This cannot be undone.")) return;
@@ -345,6 +364,7 @@ export default function ProductManagement() {
     loadProducts(shopId);
   }
 
+  
   // ── Blocking states: not logged in / no shop found ──────────────────
   if (!loading && initError) {
     return (
@@ -747,7 +767,7 @@ export default function ProductManagement() {
                     </td>
                     <td style={{ padding: "12px 18px", fontWeight: 700, color: "#0B1120" }}>{p.name}</td>
                     <td style={{ padding: "12px 18px", color: "#6B7A99", fontWeight: 500 }}>
-                      {p.master_products?.category ?? "—"}
+                      {p.category ?? "—"}
                     </td>
                     <td style={{ padding: "12px 18px", fontWeight: 800, color: "#0A84FF" }}>
                       ${p.price.toFixed(2)}

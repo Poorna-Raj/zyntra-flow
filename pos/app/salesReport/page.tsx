@@ -341,52 +341,60 @@ export default function SalesReportPage() {
   // ── Load ──
 
   useEffect(() => {
-    async function load() {
-      setLoading(true);
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { router.push("/login"); return; }
+   async function load() {
+  setLoading(true);
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) { router.push("/login"); return; }
 
-      setUserName(user.user_metadata?.full_name ?? user.email ?? "User");
+  setUserName(user.user_metadata?.full_name ?? user.email ?? "User");
 
-      const { data: shop } = await supabase
-        .from("shops")
-        .select("shop_id, name")
-        .eq("created_by", user.id)
-        .single();
+  const { data: shopList, error: shopErr } = await supabase
+    .from("shops")
+    .select("shop_id, name")
+    .eq("created_by", user.id)
+    .order("created_at");
 
-      if (!shop) { router.push("/shopRegister"); return; }
-      setShopName(shop.name);
+  if (shopErr || !shopList || shopList.length === 0) {
+    router.push("/shopRegister");
+    return;
+  }
 
-      const { data: salesData, error } = await supabase
-        .from("sales")
-        .select(`
-          sale_id, total_price, sold_at, shop_id,
-          sale_items (
-            sale_item_id, product_id, quantity, unit_price,
-            products ( name, master_products ( category ) )
-          )
-        `)
-        .eq("shop_id", shop.shop_id)
-        .order("sold_at", { ascending: false });
+  const remembered = localStorage.getItem("currentShopId");
+  const match = shopList.find((s) => s.shop_id === remembered);
+  const shop = match ?? shopList[0];
 
-      if (error) { showToast("Failed to load: " + error.message, false); setLoading(false); return; }
+  setShopName(shop.name);
 
-      setSales((salesData ?? []).map((s: any) => ({
-        sale_id:     s.sale_id,
-        total_price: s.total_price,
-        sold_at:     s.sold_at,
-        shop_id:     s.shop_id,
-        items: (s.sale_items ?? []).map((i: any) => ({
-          sale_item_id: i.sale_item_id,
-          product_id:   i.product_id,
-          quantity:     i.quantity,
-          unit_price:   i.unit_price,
-          product_name: i.products?.name ?? "Unknown",
-          category:     i.products?.master_products?.category ?? "—",
-        })),
-      })));
-      setLoading(false);
-    }
+  const { data: salesData, error } = await supabase
+    .from("sales")
+    .select(`
+      sale_id, total_price, sold_at, shop_id,
+      sale_items (
+        sale_item_id, product_id, quantity, unit_price,
+        products ( name, master_products ( category ) )
+      )
+    `)
+    .eq("shop_id", shop.shop_id)
+    .order("sold_at", { ascending: false });
+
+  if (error) { showToast("Failed to load: " + error.message, false); setLoading(false); return; }
+
+  setSales((salesData ?? []).map((s: any) => ({
+    sale_id:     s.sale_id,
+    total_price: s.total_price,
+    sold_at:     s.sold_at,
+    shop_id:     s.shop_id,
+    items: (s.sale_items ?? []).map((i: any) => ({
+      sale_item_id: i.sale_item_id,
+      product_id:   i.product_id,
+      quantity:     i.quantity,
+      unit_price:   i.unit_price,
+      product_name: i.products?.name ?? "Unknown",
+      category:     i.products?.master_products?.category ?? "—",
+    })),
+  })));
+  setLoading(false);
+}
     load();
   }, []);
 

@@ -77,37 +77,40 @@ export default function DashboardPage() {
   }, []);
 
   async function init() {
-    setLoading(true);
-    setInitError(null);
+  setLoading(true);
+  setInitError(null);
 
-    const {
-      data: { user },
-      error: userErr,
-    } = await supabase.auth.getUser();
+  const {
+    data: { user },
+    error: userErr,
+  } = await supabase.auth.getUser();
 
-    if (userErr || !user) {
-      setInitError("You must be logged in to view the dashboard.");
-      setLoading(false);
-      return;
-    }
-
-    const { data: shop, error: shopErr } = await supabase
-      .from("shops")
-      .select("shop_id, name")
-      .eq("created_by", user.id)
-      .single();
-
-    if (shopErr || !shop) {
-      setInitError("No shop found for this account. Please create a shop first.");
-      setLoading(false);
-      return;
-    }
-
-    setShopId(shop.shop_id);
-    setShopName(shop.name);
+  if (userErr || !user) {
+    setInitError("You must be logged in to view the dashboard.");
     setLoading(false);
+    return;
   }
 
+  const { data: shopList, error: shopErr } = await supabase
+    .from("shops")
+    .select("shop_id, name")
+    .eq("created_by", user.id)
+    .order("created_at");
+
+  if (shopErr || !shopList || shopList.length === 0) {
+    setInitError("No shop found for this account. Please create a shop first.");
+    setLoading(false);
+    return;
+  }
+
+  const remembered = localStorage.getItem("currentShopId");
+  const match = shopList.find((s) => s.shop_id === remembered);
+  const shop = match ?? shopList[0];
+
+  setShopId(shop.shop_id);
+  setShopName(shop.name);
+  setLoading(false);
+}
   // ── Date bounds for the selected range ────────────────────────────
   const { rangeStart, rangeEnd } = useMemo(() => {
     const now = new Date();
