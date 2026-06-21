@@ -1,363 +1,270 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-
-const navLinks = [
-  { label: 'Home', href: '/' },
-  { label: 'Features', href: '/feature' },
-  { label: 'Predictive AI', href: '/product' },
-  { label: 'About Us', href: '/aboutus' },
-  { label: 'Team', href: '/team' },
-  { label: 'Contact', href: '/contact' },
-  { label: 'Legal', href: '/legal' },
-];
+import { useState } from "react";
+import Link from "next/link";
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [hovered, setHovered] = useState<string | null>(null);
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const pathname = usePathname();
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 40);
-
-    window.addEventListener('scroll', handleScroll, {
-      passive: true,
-    });
-
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    setMenuOpen(false);
-  }, [pathname]);
-
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : '';
-
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [menuOpen]);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <>
       <style>{`
-        .lk-nav-links {
+        /* WRAPPER TO CENTER THE FLOATING NAV */
+        .nav-wrapper {
+          position: fixed;
+          top: 1.5rem;
+          left: 0;
+          right: 0;
           display: flex;
+          justify-content: center;
+          z-index: 100;
+          font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+          padding: 0 1rem;
         }
 
-        .lk-nav-cta {
+        /* THE BLACK PILL CONTAINER */
+        .pill-nav {
+          background-color: #18181b; /* Dark zinc/almost black */
+          border-radius: 999px;
           display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 6px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+          width: 100%;
+          max-width: 960px; /* Expanded slightly to comfortably fit the 6th link */
+          border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .lk-hamburger {
+        /* 1. LEFT LOGO (White Circle) */
+        .nav-logo {
+          width: 44px;
+          height: 44px;
+          background-color: #ffffff;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #000000;
+          text-decoration: none;
+          flex-shrink: 0;
+          transition: transform 0.2s ease;
+        }
+
+        .nav-logo:hover {
+          transform: scale(1.05);
+        }
+
+        /* 2. CENTER DESKTOP LINKS */
+        .desktop-links {
           display: none;
+          align-items: center;
+          gap: 1.5rem; /* Tightened gap to support 6 text elements */
+          padding: 0 1rem;
         }
 
-        @media (max-width: 768px) {
-          .lk-nav-links {
-            display: none;
-          }
+        .nav-link {
+          color: #e4e4e7; /* Light gray text */
+          text-decoration: none;
+          font-size: 0.95rem;
+          font-weight: 400;
+          transition: color 0.2s ease;
+        }
 
-          .lk-nav-cta {
-            display: none;
-          }
+        .nav-link:hover {
+          color: #ffffff; /* Turns solid white on hover */
+        }
 
-          .lk-hamburger {
+        /* =========================================
+           PERSISTENT NEON PURPLE CAPSULE EFFECT 
+           (Active by default, intensifies on hover)
+           ========================================= */
+        .nav-link-glow {
+          padding: 0.5rem 1rem;
+          border-radius: 999px;
+          font-weight: 500;
+          
+          /* Permanent Base Glow Styles */
+          background-color: #09090b; /* Solid dark mask inside */
+          border: 1px solid #c084fc; /* Vibrant purple/lilac border line */
+          color: #f5f3ff !important; /* Soft white with lilac tint */
+          
+          /* Double layered default glow */
+          box-shadow: 
+            0 0 10px rgba(168, 85, 247, 0.35), 
+            0 0 20px rgba(168, 85, 247, 0.15),
+            inset 0 0 4px rgba(168, 85, 247, 0.3);
+            
+          transition: border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                      box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                      transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                      color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Soft highlight breathing effect when hovered */
+        .nav-link-glow:hover {
+          color: #ffffff !important;
+          transform: scale(1.02); /* Slight high-end physical expansion */
+          border-color: #d8b4fe; /* Brighter lavender border */
+          
+          /* Intensified layered glow */
+          box-shadow: 
+            0 0 16px rgba(168, 85, 247, 0.55), 
+            0 0 32px rgba(168, 85, 247, 0.25),
+            inset 0 0 6px rgba(168, 85, 247, 0.45) !important;
+        }
+
+        /* 3. RIGHT CONTACT BUTTON */
+        .nav-contact {
+          display: none;
+          background-color: #ffffff;
+          color: #000000;
+          text-decoration: none;
+          padding: 0.7rem 1.4rem;
+          border-radius: 999px;
+          font-size: 0.95rem;
+          font-weight: 600;
+          transition: transform 0.2s ease;
+          white-space: nowrap;
+        }
+
+        .nav-contact:hover {
+          transform: scale(1.02);
+        }
+
+        /* MOBILE MENU ELEMENTS */
+        .nav-right-mobile {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding-right: 0.5rem;
+        }
+
+        .mobile-toggle {
+          display: flex;
+          background: none;
+          border: none;
+          color: #ffffff;
+          cursor: pointer;
+          padding: 0.4rem;
+          align-items: center;
+          justify-content: center;
+        }
+
+        /* FLOATING MOBILE MENU DROPDOWN */
+        .mobile-menu-wrapper {
+          position: absolute;
+          top: 4.5rem;
+          left: 0;
+          right: 0;
+          background-color: #18181b;
+          border-radius: 24px;
+          padding: 1.5rem;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+          border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .mobile-menu-wrapper .nav-link {
+          font-size: 1.1rem;
+          padding: 0.5rem 0;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Clean overrides for the glowing pill within mobile dropdown list */
+        .mobile-menu-wrapper .nav-link-glow {
+          border-bottom: 1px solid transparent !important;
+          width: fit-content;
+          margin: 0.25rem 0;
+        }
+
+        .mobile-menu-wrapper .nav-contact {
+          display: block;
+          text-align: center;
+          margin-top: 1rem;
+        }
+
+        /* DESKTOP BREAKPOINT */
+        @media (min-width: 890px) { /* Adjusted breakpoint slightly for wider menu array */
+          .desktop-links {
             display: flex;
+          }
+          .nav-contact {
+            display: inline-block;
+          }
+          .mobile-toggle {
+            display: none;
+          }
+          .nav-right-mobile {
+            padding-right: 0;
           }
         }
       `}</style>
 
-      {/* NAVBAR WRAPPER */}
-      <div
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 1000,
-          padding: scrolled ? '0' : '0.75rem 1.5rem',
-          transition: 'padding 0.4s ease',
-        }}
-      >
-        <motion.nav
-          initial={{ y: -90, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{
-            duration: 0.8,
-            ease: [0.16, 1, 0.3, 1],
-          }}
-          style={{
-            maxWidth: '1200px',
-            margin: '0 auto',
-            padding: '0 1.25rem',
-            height: '64px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            background: scrolled
-              ? 'rgba(255,255,255,0.92)'
-              : 'rgba(255,255,255,0.6)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            borderRadius: scrolled ? '0' : '20px',
-            border: scrolled ? '0' : '1px solid rgba(30,144,255,0.12)',
-            boxShadow: scrolled
-              ? '0 1px 0 rgba(30,144,255,0.08), 0 4px 24px rgba(13,27,42,0.06)'
-              : '0 4px 32px rgba(30,144,255,0.1)',
-            transition: 'all 0.4s cubic-bezier(0.16,1,0.3,1)',
-          }}
-        >
-          {/* LOGO */}
-          <Link
-            href="/"
-            style={{
-              fontWeight: 800,
-              fontSize: '1.4rem',
-              color: '#1e293b',
-              textDecoration: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-            }}
-          >
-            <span
-              style={{
-                width: '28px',
-                height: '28px',
-                borderRadius: '8px',
-                background: 'linear-gradient(135deg, #1e90ff, #00bfff)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#fff',
-                fontWeight: 800,
-                fontSize: '0.75rem',
-              }}
-            >
-              L
-            </span>
-
-            Loka<span style={{ color: '#1e90ff' }}>lens</span>
+      <div className="nav-wrapper">
+        <nav className="pill-nav">
+          
+          {/* 1. Left Circular Brand Logo */}
+          <Link href="/" className="nav-logo" aria-label="Home">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 16.5C14.4853 16.5 16.5 14.4853 16.5 12C16.5 9.51472 14.4853 7.5 12 7.5C9.51472 7.5 7.5 9.51472 7.5 12C7.5 14.4853 9.51472 16.5 12 16.5Z" fill="currentColor"/>
+              <path d="M21.5 12C21.5 14.8 17.2 17 12 17C6.8 17 2.5 14.8 2.5 12C2.5 9.2 6.8 7 12 7C17.2 7 21.5 9.2 21.5 12Z" stroke="currentColor" strokeWidth="2" transform="rotate(-20 12 12)"/>
+            </svg>
           </Link>
 
-          {/* DESKTOP LINKS */}
-          <div className="lk-nav-links" style={{ gap: '0.25rem' }}>
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
-
-              return (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  onMouseEnter={() => setHovered(link.label)}
-                  onMouseLeave={() => setHovered(null)}
-                  style={{
-                    position: 'relative',
-                    fontSize: '0.88rem',
-                    fontWeight: 500,
-                    color:
-                      isActive || hovered === link.label
-                        ? '#1e90ff'
-                        : '#475569',
-                    textDecoration: 'none',
-                    padding: '0.45rem 0.9rem',
-                    borderRadius: '100px',
-                  }}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
+          {/* 2. Center Desktop Links */}
+          <div className="desktop-links">
+            <Link href="/" className="nav-link">Home</Link>
+            <Link href="/feature" className="nav-link">Features</Link>
+            <Link href="/product" className="nav-link nav-link-glow">Lokalens AI</Link>
+            <Link href="/team" className="nav-link">Team</Link>
+            <Link href="/aboutus" className="nav-link">About Us</Link>
+            <Link href="/contact" className="nav-link">Contact</Link>
           </div>
 
-          {/* CTA */}
-          <div className="lk-nav-cta">
-            <motion.a
-              href="#"
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
-              style={{
-                padding: '0.55rem 1.3rem',
-                background: '#1e90ff',
-                color: '#fff',
-                borderRadius: '100px',
-                fontSize: '0.84rem',
-                textDecoration: 'none',
-                fontWeight: 600,
-              }}
+          {/* 3. Right CTA Button */}
+          <div className="nav-right-mobile">
+            <Link href="/contact" className="nav-contact">
+              Download Free POS
+            </Link>
+            
+            <button 
+              className="mobile-toggle" 
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle menu"
             >
-              Get Early Access
-            </motion.a>
+              {isMobileMenuOpen ? (
+                // Close Icon (X)
+                <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                // Hamburger Menu Icon
+                <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </button>
           </div>
 
-          {/* HAMBURGER */}
-          <button
-            className="lk-hamburger"
-            onClick={() => setMenuOpen(!menuOpen)}
-            style={{
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '5px',
-            }}
-          >
-            <span
-              style={{
-                display: 'block',
-                width: '22px',
-                height: '2px',
-                background: '#334155',
-                borderRadius: '2px',
-                transition: 'all 0.3s ease',
-                transform: menuOpen ? 'translateY(7px) rotate(45deg)' : 'none',
-              }}
-            />
-            <span
-              style={{
-                display: 'block',
-                width: '22px',
-                height: '2px',
-                background: '#334155',
-                borderRadius: '2px',
-                transition: 'all 0.3s ease',
-                opacity: menuOpen ? 0 : 1,
-              }}
-            />
-            <span
-              style={{
-                display: 'block',
-                width: '22px',
-                height: '2px',
-                background: '#334155',
-                borderRadius: '2px',
-                transition: 'all 0.3s ease',
-                transform: menuOpen ? 'translateY(-7px) rotate(-45deg)' : 'none',
-              }}
-            />
-          </button>
-        </motion.nav>
+          {/* 4. Mobile Dropdown Menu */}
+          {isMobileMenuOpen && (
+            <div className="mobile-menu-wrapper">
+              <Link href="/" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
+              <Link href="/feature" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Features</Link>
+              <Link href="/product" className="nav-link nav-link-glow" onClick={() => setIsMobileMenuOpen(false)}>Lokalens AI</Link>
+              <Link href="/team" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Team</Link>
+              <Link href="/aboutus" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>About Us</Link>
+              <Link href="/contact" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
+              <Link href="/contact" className="nav-contact" onClick={() => setIsMobileMenuOpen(false)}>
+                Download Free POS
+              </Link>
+            </div>
+          )}
+        </nav>
       </div>
-
-      {/* MOBILE MENU */}
-      <AnimatePresence>
-        {menuOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setMenuOpen(false)}
-              style={{
-                position: 'fixed',
-                inset: 0,
-                background: 'rgba(0,0,0,0.4)',
-                zIndex: 998,
-              }}
-            />
-
-            <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ ease: [0.16, 1, 0.3, 1], duration: 0.4 }}
-              style={{
-                position: 'fixed',
-                top: 0,
-                right: 0,
-                width: '280px',
-                height: '100%',
-                background: '#fff',
-                zIndex: 999,
-                padding: '2rem 1.5rem',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '0.25rem',
-              }}
-            >
-              {/* Mobile Logo */}
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.4rem',
-                  marginBottom: '1.5rem',
-                  fontWeight: 800,
-                  fontSize: '1.2rem',
-                  color: '#1e293b',
-                }}
-              >
-                <span
-                  style={{
-                    width: '24px',
-                    height: '24px',
-                    borderRadius: '6px',
-                    background: 'linear-gradient(135deg, #1e90ff, #00bfff)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#fff',
-                    fontWeight: 800,
-                    fontSize: '0.7rem',
-                  }}
-                >
-                  L
-                </span>
-                Loka<span style={{ color: '#1e90ff' }}>lens</span>
-              </div>
-
-              {navLinks.map((link) => {
-                const isActive = pathname === link.href;
-                return (
-                  <Link
-                    key={link.label}
-                    href={link.href}
-                    onClick={() => setMenuOpen(false)}
-                    style={{
-                      display: 'block',
-                      padding: '0.75rem 1rem',
-                      borderRadius: '10px',
-                      textDecoration: 'none',
-                      color: isActive ? '#1e90ff' : '#334155',
-                      fontSize: '0.95rem',
-                      fontWeight: isActive ? 600 : 500,
-                      background: isActive ? 'rgba(30,144,255,0.07)' : 'transparent',
-                    }}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
-
-              <motion.a
-                href="#"
-                whileTap={{ scale: 0.96 }}
-                style={{
-                  marginTop: 'auto',
-                  padding: '0.75rem 1.3rem',
-                  background: '#1e90ff',
-                  color: '#fff',
-                  borderRadius: '100px',
-                  fontSize: '0.9rem',
-                  textDecoration: 'none',
-                  fontWeight: 600,
-                  textAlign: 'center',
-                }}
-              >
-                Get Early Access
-              </motion.a>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
     </>
   );
 }
