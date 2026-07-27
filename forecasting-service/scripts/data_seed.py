@@ -5,7 +5,7 @@ from datetime import timedelta, date
 CREATED_BY_USER = "b1a6992f-5df4-445c-bbf9-2cbcf2d74d79"
 WEEK1_DATE = date(2025, 1, 6)
 
-df = pd.read_csv("../dataset/v3.csv")
+df = pd.read_csv("v3.csv")
 
 products = df[["product_name", "category"]].drop_duplicates().reset_index(drop=True)
 products["id"] = [str(uuid.uuid4()) for _ in range(len(products))]
