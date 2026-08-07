@@ -1,5 +1,5 @@
 """
-restock_model.py
+reorder_predict.py
 
 Standalone script version (no notebook) of the restock recommendation model.
 Combines:
@@ -10,10 +10,10 @@ into a ranked "what to restock / buy next week" list.
 
 Usage:
     # Train the model once (creates restock_model.joblib + restock_encoders.joblib)
-    python restock_model.py train --context path/to/context_dataset.csv
+    python reorder_predict.py train --context path/to/context_dataset.csv
 
     # Get recommendations for a seller
-    python restock_model.py recommend --seller path/to/seller_export.xlsx \\
+    python reorder_predict.py recommend --seller path/to/seller_export.xlsx \
         --province Western --week 31 --context path/to/context_dataset.csv
 """
 
@@ -46,6 +46,16 @@ FUZZY_MATCH_CUTOFF = 0.55  # difflib similarity threshold for matching product n
 
 DEFAULT_MODEL_PATH = "restock_model.joblib"
 DEFAULT_ENCODER_PATH = "restock_encoders.joblib"
+
+
+def _safe_mode(s):
+    """Most-common value in a group, including NaN (dropna=False) — a group
+    where every row has a missing holiday_type is common (most weeks have no
+    holiday), and the correct mode there is "missing", not an error."""
+    m = s.mode(dropna=False)
+    return m.iloc[0] if not m.empty else None
+
+
 
 
 _SIZE_UNIT_PATTERN = re.compile(
@@ -100,6 +110,9 @@ def build_product_name_map(seller_names, context_names, cutoff=FUZZY_MATCH_CUTOF
     return mapping
 
 
+# ---------------------------------------------------------------------------
+# Data loading
+# ---------------------------------------------------------------------------
 
 def load_context_data(path: str) -> pd.DataFrame:
     """
@@ -134,6 +147,9 @@ def load_seller_export(path: str, sheet_name: str = "Sales Export") -> pd.DataFr
     return df
 
 
+# ---------------------------------------------------------------------------
+# Training
+# ---------------------------------------------------------------------------
 
 def train_model(context_df: pd.DataFrame, model_path: str = DEFAULT_MODEL_PATH,
                  encoder_path: str = DEFAULT_ENCODER_PATH):
@@ -170,6 +186,10 @@ def train_model(context_df: pd.DataFrame, model_path: str = DEFAULT_MODEL_PATH,
     return gbr, encoder
 
 
+# ---------------------------------------------------------------------------
+# Prediction
+# ---------------------------------------------------------------------------
+
 def predict_market_demand(context_df, encoder, model, week_number, province):
     """
     For each product, estimate 'next week' conditions by averaging the
@@ -185,7 +205,7 @@ def predict_market_demand(context_df, encoder, model, week_number, province):
 
     agg_cols = [c for c in CATEGORICAL_COLS if c not in ("province", "product_name", "category")]
     per_product = subset.groupby(["product_name", "category"], as_index=False).agg(
-        {**{c: (lambda s: s.mode().iloc[0]) for c in agg_cols}, "week_number": "first"}
+        {**{c: _safe_mode for c in agg_cols}, "week_number": "first"}
     )
     per_product["province"] = province
 
@@ -220,7 +240,7 @@ def get_restock_recommendations(context_df, encoder, model, seller_df, province,
     market_demand_df = predict_market_demand(context_df, encoder, model, week_number, province)
     seller_signals_df = compute_seller_signals(seller_df)
 
-    #Fuzzy-match seller product names onto context dataset product names
+    # --- Fuzzy-match seller product names onto context dataset product names ---
     name_map = build_product_name_map(
         seller_signals_df["product_name"].unique(),
         market_demand_df["product_name"].unique(),
@@ -241,7 +261,7 @@ def get_restock_recommendations(context_df, encoder, model, seller_df, province,
     )
     combined["has_sales_history"] = combined["seller_predicted_next_7_days"].notna()
 
-    # Calibration: scale market-wide predictions down to this shop's scale ---
+    # --- Calibration: scale market-wide predictions down to this shop's scale ---
     matched_for_calibration = combined[combined["has_sales_history"]].copy()
     matched_for_calibration = matched_for_calibration[matched_for_calibration["predicted_market_demand"] > 0]
     if len(matched_for_calibration) >= 2:
@@ -281,6 +301,10 @@ def get_restock_recommendations(context_df, encoder, model, seller_df, province,
         "suggested_order_qty", "has_sales_history", "low_confidence",
     ]]
 
+
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
 
 def main():
     parser = argparse.ArgumentParser(description="Restock recommendation model")
