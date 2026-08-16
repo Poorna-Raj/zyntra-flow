@@ -1,58 +1,40 @@
 "use client";
 
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/sections/Footer";
 import { supabase } from "@/lib/supabase";
 
-/* ─────────────────────────── types ─────────────────────────── */
-type Province =
-  | "All"
-  | "Western"
-  | "Southern"
-  | "Central"
-  | "Northern"
-  | "Eastern"
-  | "North Western"
-  | "North Central"
-  | "Uva"
-  | "Sabaragamuwa";
-type Category = "All" | string;
-type DemandLevel = "All Levels" | "HIGH" | "MEDIUM" | "LOW";
-type SortBy = "Units ↓" | "Units ↑" | "Name A–Z" | "Trend ↓" | "Trend ↑";
-
-interface ForecastRow {
-  id: string;
-  master_product_id: string;
-  province: Exclude<Province, "All">;
-  week: string;
-  units: number;
-}
-
-interface MasterProduct {
-  id: string;
-  name: string;
+type ProvinceDemandPrediction = {
+  id: number;
+  province: string;
   category: string;
-  image_url: string | null;
-}
+  current_score: number | null;
+  projected_score: number | null;
+  slope_per_day: number | null;
+  trend: string | null;
+  confidence: string | null;
+  days_of_history: number | null;
+  avg_listing_count: number | null;
+  current_label: string | null;
+  predicted_label: string | null;
+  predicted_good_seller: boolean | null;
+  generated_at: string | null;
+  top_items: string | null;
+};
 
-interface ProductCard {
-  id: string;
-  name: string;
-  category: string;
-  province: Exclude<Province, "All">;
-  imageUrl: string | null;
-  predictedUnits: number;
-  trendPct: number | null; // null when no prior week to compare against
-  demandLevel: "HIGH" | "MEDIUM" | "LOW";
-  week: string;
-}
+type SortBy =
+  | "projected-desc"
+  | "projected-asc"
+  | "current-desc"
+  | "current-asc"
+  | "category";
 
-const PROVINCES: Province[] = [
+const PROVINCES = [
   "All",
   "Western",
-  "Southern",
   "Central",
+  "Southern",
   "Northern",
   "Eastern",
   "North Western",
@@ -60,858 +42,908 @@ const PROVINCES: Province[] = [
   "Uva",
   "Sabaragamuwa",
 ];
-const DEMAND_LEVELS: DemandLevel[] = ["All Levels", "HIGH", "MEDIUM", "LOW"];
-const SORT_OPTIONS: SortBy[] = [
-  "Units ↓",
-  "Units ↑",
-  "Name A–Z",
-  "Trend ↓",
-  "Trend ↑",
+
+const DEMAND_LEVELS = [
+  "All Levels",
+  "HIGH",
+  "MEDIUM",
+  "LOW",
 ];
 
-const demandTextClass: Record<string, string> = {
-  HIGH: "demand-high",
-  MEDIUM: "demand-medium",
-  LOW: "demand-low",
-};
-
-// Simple terciles-based demand level from units within the currently loaded set
-function computeDemandLevel(
-  units: number,
-  sorted: number[],
-): "HIGH" | "MEDIUM" | "LOW" {
-  if (sorted.length === 0) return "MEDIUM";
-  const idx = sorted.findIndex((v) => v === units);
-  const pct = idx / Math.max(1, sorted.length - 1); // 0 = lowest, 1 = highest (sorted ascending)
-  if (pct >= 0.66) return "HIGH";
-  if (pct >= 0.33) return "MEDIUM";
-  return "LOW";
+function formatScore(value: number | null) {
+  if (value === null) return "—";
+  return `${(value * 100).toFixed(1)}%`;
 }
 
-/* ────────────────────────── dropdown ───────────────────────── */
-interface DropdownProps<T extends string> {
-  value: T;
-  onChange: (val: T) => void;
-  options: T[];
-  labelPrefix?: string;
+function normalize(value: string | null) {
+  if (!value) return "UNKNOWN";
+
+  return value
+    .trim()
+    .toUpperCase()
+    .replace(/[_-]/g, " ");
 }
 
-function CustomDropdown<T extends string>({
-  value,
-  onChange,
-  options,
-  labelPrefix = "",
-}: DropdownProps<T>) {
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+function formatNumber(value: number | null) {
+  if (value === null) return "—";
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  return (
-    <div className="custom-dropdown" ref={dropdownRef}>
-      <button
-        type="button"
-        className={`dropdown-trigger ${isOpen ? "active" : ""}`}
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <span>
-          {labelPrefix}
-          {value}
-        </span>
-        <svg
-          className="dropdown-arrow"
-          width="10"
-          height="6"
-          viewBox="0 0 10 6"
-          fill="none"
-        >
-          <path
-            d="M1 1l4 4 4-4"
-            stroke="#a1a1aa"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </button>
-
-      {isOpen && (
-        <div className="dropdown-menu">
-          {options.map((opt) => (
-            <button
-              key={opt}
-              type="button"
-              className={`dropdown-item ${value === opt ? "selected" : ""}`}
-              onClick={() => {
-                onChange(opt);
-                setIsOpen(false);
-              }}
-            >
-              {opt}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+  return value.toLocaleString(undefined, {
+    maximumFractionDigits: 1,
+  });
 }
 
-/* ─────────────────────────── page ──────────────────────────── */
+function getDemandClass(label: string | null) {
+  const value = normalize(label);
+
+  if (value === "HIGH") return "high";
+  if (value === "MEDIUM") return "medium";
+  if (value === "LOW") return "low";
+
+  return "unknown";
+}
+
+function getTrendClass(trend: string | null) {
+  const value = normalize(trend);
+
+  if (value === "RISING") return "rising";
+  if (value === "FALLING") return "falling";
+
+  return "stable";
+}
+
+function getTrendIcon(trend: string | null) {
+  const value = normalize(trend);
+
+  if (value === "RISING") return "↑";
+  if (value === "FALLING") return "↓";
+
+  return "→";
+}
+
 export default function ProductPage() {
-  const [province, setProvince] = useState<Province>("All");
-  const [category, setCategory] = useState<Category>("All");
-  const [demandLevel, setDemandLevel] = useState<DemandLevel>("All Levels");
-  const [sortBy, setSortBy] = useState<SortBy>("Units ↓");
-  const [search, setSearch] = useState("");
+  const [data, setData] = useState<
+    ProvinceDemandPrediction[]
+  >([]);
 
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [cards, setCards] = useState<ProductCard[]>([]);
-  const [categories, setCategories] = useState<string[]>(["All"]);
+
+  const [error, setError] = useState<string | null>(
+    null,
+  );
+
+  const [province, setProvince] =
+    useState("All");
+
+  const [category, setCategory] =
+    useState("All");
+
+  const [demandLevel, setDemandLevel] =
+    useState("All Levels");
+
+  const [sortBy, setSortBy] =
+    useState<SortBy>("projected-desc");
+
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
-    async function load() {
-      setLoading(true);
-      setError(null);
+    async function loadPredictions() {
       try {
-        // 1. Latest two weeks of forecasts (need previous week for trend %)
-        const { data: forecastRows, error: forecastErr } = await supabase
-          .from("province_forecasts")
-          .select("id, master_product_id, province, week, units")
-          .order("week", { ascending: false })
-          .limit(2000); // adjust as data grows; consider server-side filtering by week range
+        setLoading(true);
+        setError(null);
 
-        if (forecastErr) throw forecastErr;
-        if (!forecastRows || forecastRows.length === 0) {
-          setCards([]);
-          setLoading(false);
-          return;
-        }
-
-        // 2. Master products for name/category/image
-        const { data: products, error: productsErr } = await supabase
-          .from("master_products")
-          .select("id, name, category, image_url");
-
-        if (productsErr) throw productsErr;
-
-        const productMap = new Map<string, MasterProduct>(
-          (products ?? []).map((p) => [p.id, p as MasterProduct]),
-        );
-
-        // 3. Group forecasts by (province, master_product_id), sorted by week desc
-        const grouped = new Map<string, ForecastRow[]>();
-        for (const row of forecastRows as ForecastRow[]) {
-          const key = `${row.province}::${row.master_product_id}`;
-          if (!grouped.has(key)) grouped.set(key, []);
-          grouped.get(key)!.push(row);
-        }
-
-        const builtCards: ProductCard[] = [];
-        for (const [, rows] of grouped) {
-          // rows sorted desc by week already (from query order)
-          const latest = rows[0];
-          const previous = rows.find((r) => r.week !== latest.week);
-
-          const trendPct =
-            previous && previous.units > 0
-              ? Math.round(
-                  ((latest.units - previous.units) / previous.units) * 1000,
-                ) / 10
-              : null;
-
-          const product = productMap.get(latest.master_product_id);
-
-          builtCards.push({
-            id: `${latest.province}-${latest.master_product_id}`,
-            name: product?.name ?? "Unknown product",
-            category: product?.category ?? "Uncategorized",
-            province: latest.province,
-            imageUrl: product?.image_url ?? null,
-            predictedUnits: latest.units,
-            trendPct,
-            demandLevel: "MEDIUM", // placeholder, recalculated below
-            week: latest.week,
+        const { data, error } = await supabase
+          .from("province_demand_prediction")
+          .select("*")
+          .order("generated_at", {
+            ascending: false,
           });
+
+        if (error) {
+          throw error;
         }
 
-        // Compute demand level relative to the full loaded set
-        const allUnitsSorted = builtCards
-          .map((c) => c.predictedUnits)
-          .sort((a, b) => a - b);
-        for (const card of builtCards) {
-          card.demandLevel = computeDemandLevel(
-            card.predictedUnits,
-            allUnitsSorted,
-          );
-        }
+        setData(data ?? []);
+      } catch (err) {
+        console.error(err);
 
-        const uniqueCategories = Array.from(
-          new Set(builtCards.map((c) => c.category)),
-        ).sort();
-        setCategories(["All", ...uniqueCategories]);
-        setCards(builtCards);
-      } catch (e: any) {
-        setError(e.message ?? "Failed to load forecasts");
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Failed to load predictions.",
+        );
       } finally {
         setLoading(false);
       }
     }
 
-    load();
+    loadPredictions();
   }, []);
 
-  const filtered = useMemo(() => {
-    return cards
-      .filter(
-        (p) =>
-          (province === "All" || p.province === province) &&
-          (category === "All" || p.category === category) &&
-          (demandLevel === "All Levels" || p.demandLevel === demandLevel) &&
-          p.name.toLowerCase().includes(search.toLowerCase()),
-      )
-      .sort((a, b) => {
-        if (sortBy === "Units ↓") return b.predictedUnits - a.predictedUnits;
-        if (sortBy === "Units ↑") return a.predictedUnits - b.predictedUnits;
-        if (sortBy === "Trend ↓")
-          return (b.trendPct ?? -Infinity) - (a.trendPct ?? -Infinity);
-        if (sortBy === "Trend ↑")
-          return (a.trendPct ?? Infinity) - (b.trendPct ?? Infinity);
-        return a.name.localeCompare(b.name);
-      });
-  }, [cards, province, category, demandLevel, sortBy, search]);
+  const categories = useMemo(() => {
+    const unique = Array.from(
+      new Set(
+        data.map((item) => item.category),
+      ),
+    ).sort();
 
-  const totalUnits = filtered.reduce((s, p) => s + p.predictedUnits, 0);
+    return ["All", ...unique];
+  }, [data]);
+
+  const filteredData = useMemo(() => {
+    const searchText =
+      search.trim().toLowerCase();
+
+    return data
+      .filter((item) => {
+        if (
+          province !== "All" &&
+          item.province !== province
+        ) {
+          return false;
+        }
+
+        if (
+          category !== "All" &&
+          item.category !== category
+        ) {
+          return false;
+        }
+
+        if (
+          demandLevel !== "All Levels" &&
+          normalize(item.predicted_label) !==
+            demandLevel
+        ) {
+          return false;
+        }
+
+        if (searchText) {
+          const matchesCategory =
+            item.category
+              .toLowerCase()
+              .includes(searchText);
+
+          const matchesProvince =
+            item.province
+              .toLowerCase()
+              .includes(searchText);
+
+          if (
+            !matchesCategory &&
+            !matchesProvince
+          ) {
+            return false;
+          }
+        }
+
+        return true;
+      })
+      .sort((a, b) => {
+        switch (sortBy) {
+          case "projected-desc":
+            return (
+              (b.projected_score ?? 0) -
+              (a.projected_score ?? 0)
+            );
+
+          case "projected-asc":
+            return (
+              (a.projected_score ?? 0) -
+              (b.projected_score ?? 0)
+            );
+
+          case "current-desc":
+            return (
+              (b.current_score ?? 0) -
+              (a.current_score ?? 0)
+            );
+
+          case "current-asc":
+            return (
+              (a.current_score ?? 0) -
+              (b.current_score ?? 0)
+            );
+
+          case "category":
+            return a.category.localeCompare(
+              b.category,
+            );
+
+          default:
+            return 0;
+        }
+      });
+  }, [
+    data,
+    province,
+    category,
+    demandLevel,
+    sortBy,
+    search,
+  ]);
+
+  const highCount = filteredData.filter(
+    (item) =>
+      normalize(item.predicted_label) ===
+      "HIGH",
+  ).length;
+
+  const mediumCount = filteredData.filter(
+    (item) =>
+      normalize(item.predicted_label) ===
+      "MEDIUM",
+  ).length;
+
+  const lowCount = filteredData.filter(
+    (item) =>
+      normalize(item.predicted_label) ===
+      "LOW",
+  ).length;
 
   return (
-    <div className="trends-page">
-      <style>{`
-        .trends-page {
-          background-color: #000000;
-          color: #ffffff;
-          font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    <div className="page">
+      <style jsx>{`
+        .page {
           min-height: 100vh;
+          background: #000;
+          color: #fff;
         }
 
-        .trends-container {
-          max-width: 1100px;
+        .container {
+          max-width: 1200px;
           margin: 0 auto;
-          padding: 8rem 1rem 10rem 1rem;
+          padding: 120px 24px 100px;
         }
 
-        .trends-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-end;
-          gap: 4rem;
-          margin-bottom: 4rem;
+        .header {
+          margin-bottom: 50px;
         }
 
-        .header-title-area { flex: 1.2; }
-
-        .live-status-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.6rem;
-          font-size: 0.75rem;
-          font-weight: 600;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
+        .eyebrow {
           color: #10b981;
-          background-color: rgba(16, 185, 129, 0.06);
-          border: 1px solid rgba(16, 185, 129, 0.15);
-          padding: 0.4rem 0.9rem;
-          border-radius: 100px;
-          margin-bottom: 1.5rem;
-        }
-
-        .live-dot-pulse {
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background-color: #10b981;
-          box-shadow: 0 0 8px #10b981;
-          animation: status-pulse 2s infinite ease-in-out;
-        }
-
-        @keyframes status-pulse {
-          0%, 100% { opacity: 0.4; transform: scale(0.9); }
-          50% { opacity: 1; transform: scale(1.15); }
-        }
-
-        .section-subtitle {
-          font-family: "Georgia", serif;
-          font-style: italic;
-          color: #a1a1aa;
-          font-size: 1.1rem;
-          margin-bottom: 1rem;
-          display: block;
-        }
-
-        .section-title {
-          font-size: clamp(2.5rem, 4vw, 3.5rem);
+          font-size: 12px;
           font-weight: 700;
-          letter-spacing: -0.03em;
-          line-height: 1.1;
-          color: #ffffff;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          margin-bottom: 16px;
         }
 
-        .header-desc {
-          flex: 1;
+        .title {
+          margin: 0;
+          font-size: clamp(40px, 6vw, 72px);
+          line-height: 1;
+          letter-spacing: -0.04em;
+        }
+
+        .description {
+          max-width: 650px;
+          margin-top: 20px;
           color: #a1a1aa;
-          font-size: 1.05rem;
           line-height: 1.7;
-          margin-top: 2rem;
+          font-size: 16px;
         }
 
-        .trends-hero-image {
-          width: 100%;
-          height: 380px;
-          background: #121212;
-          border: 1px solid rgba(255, 255, 255, 0.05);
+        .hero {
+          position: relative;
+          overflow: hidden;
+          padding: 40px;
+          border: 1px solid #1f1f1f;
           border-radius: 24px;
-          margin-bottom: 5rem;
-          overflow: hidden;
+          margin-bottom: 50px;
+          background:
+            radial-gradient(
+              circle at 20% 20%,
+              rgba(16, 185, 129, 0.12),
+              transparent 35%
+            ),
+            #101010;
+        }
+
+        .hero-title {
           position: relative;
+          z-index: 1;
+          margin: 0;
+          font-family: Georgia, serif;
+          font-style: italic;
+          font-size: 38px;
         }
 
-        .trends-hero-image img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          filter: brightness(0.7) contrast(1.05);
+        .hero-text {
+          position: relative;
+          z-index: 1;
+          max-width: 600px;
+          margin-top: 12px;
+          color: #a1a1aa;
+          line-height: 1.7;
         }
 
-        .province-tabs-wrapper {
-          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-          margin-bottom: 3rem;
-          padding-bottom: 0.5rem;
+        .province-tabs {
+          display: flex;
+          gap: 28px;
           overflow-x: auto;
-          white-space: nowrap;
-          -webkit-overflow-scrolling: touch;
+          border-bottom: 1px solid #202020;
+          margin-bottom: 30px;
         }
 
-        .province-tabs-wrapper::-webkit-scrollbar { display: none; }
-
-        .province-tab-btn {
-          background: none;
-          border: none;
+        .province-button {
+          flex-shrink: 0;
+          padding: 14px 0;
+          border: 0;
+          background: transparent;
           color: #71717a;
-          font-size: 1rem;
-          font-weight: 500;
-          padding: 0.75rem 0;
-          margin-right: 2rem;
           cursor: pointer;
-          transition: color 0.3s ease;
-          position: relative;
+          font-size: 14px;
         }
 
-        .province-tab-btn:hover { color: #ffffff; }
-
-        .province-tab-btn.active {
-          color: #ffffff;
-          font-weight: 600;
+        .province-button.active {
+          color: #fff;
+          border-bottom: 2px solid #fff;
         }
 
-        .province-tab-btn.active::after {
-          content: '';
-          position: absolute;
-          bottom: -0.6rem;
-          left: 0;
-          right: 0;
-          height: 2px;
-          background-color: #ffffff;
-        }
-
-        .custom-dropdown { position: relative; display: inline-block; }
-
-        .dropdown-trigger {
-          font-family: inherit;
-          font-size: 0.9rem;
-          color: #a1a1aa;
-          background: transparent;
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          padding: 0.6rem 1.2rem;
-          border-radius: 8px;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 1rem;
-          min-width: 160px;
-          transition: border-color 0.3s ease, color 0.3s ease;
-        }
-
-        .dropdown-trigger:hover,
-        .dropdown-trigger.active {
-          border-color: rgba(255, 255, 255, 0.2);
-          color: #ffffff;
-        }
-
-        .dropdown-arrow { transition: transform 0.3s ease; }
-
-        .dropdown-trigger.active .dropdown-arrow { transform: rotate(180deg); }
-
-        .dropdown-menu {
-          position: absolute;
-          top: calc(100% + 6px);
-          left: 0;
-          z-index: 100;
-          min-width: 100%;
-          background-color: #121212;
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 8px;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-          padding: 0.4rem;
-          display: flex;
-          flex-direction: column;
-          gap: 2px;
-        }
-
-        .dropdown-item {
-          background: transparent;
-          border: none;
-          color: #a1a1aa;
-          padding: 0.6rem 1rem;
-          text-align: left;
-          font-size: 0.9rem;
-          border-radius: 6px;
-          cursor: pointer;
-          transition: background 0.2s ease, color 0.2s ease;
-          white-space: nowrap;
-        }
-
-        .dropdown-item:hover {
-          background: rgba(255, 255, 255, 0.05);
-          color: #ffffff;
-        }
-
-        .dropdown-item.selected {
-          background: rgba(255, 255, 255, 0.08);
-          color: #ffffff;
-          font-weight: 500;
-        }
-
-        .filters-panel {
+        .filters {
           display: flex;
           flex-wrap: wrap;
-          align-items: center;
-          justify-content: space-between;
-          gap: 1.5rem;
-          margin-bottom: 4rem;
-          padding: 2rem 0;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          gap: 12px;
+          margin-bottom: 30px;
         }
 
-        .filter-group {
+        .select,
+        .search {
+          min-height: 44px;
+          padding: 0 14px;
+          border: 1px solid #262626;
+          border-radius: 10px;
+          background: #111;
+          color: #fff;
+          font-size: 14px;
+        }
+
+        .search {
+          min-width: 240px;
+        }
+
+        .stats {
           display: flex;
-          align-items: center;
-          gap: 1.5rem;
           flex-wrap: wrap;
-        }
-
-        .minimal-search-wrapper { position: relative; }
-
-        .minimal-search-input {
-          font-family: inherit;
-          font-size: 0.9rem;
-          background: transparent;
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          color: #ffffff;
-          padding: 0.6rem 1rem 0.6rem 2.2rem;
-          border-radius: 8px;
-          width: 220px;
-          transition: border-color 0.3s ease;
-        }
-
-        .minimal-search-input::placeholder { color: #71717a; }
-
-        .minimal-search-input:focus {
-          outline: none;
-          border-color: rgba(255, 255, 255, 0.25);
-        }
-
-        .search-icon {
-          position: absolute;
-          left: 10px;
-          top: 50%;
-          transform: translateY(-50%);
-          pointer-events: none;
-        }
-
-        .metrics-bar {
-          display: flex;
-          align-items: center;
-          gap: 4rem;
-          margin-bottom: 3rem;
+          gap: 30px;
+          margin-bottom: 30px;
           color: #71717a;
-          font-size: 0.9rem;
+          font-size: 14px;
         }
 
-        .metric-item strong {
-          color: #ffffff;
-          font-size: 1.1rem;
-          font-weight: 600;
+        .stats strong {
+          color: #fff;
+          margin-left: 5px;
         }
 
-        .trends-grid {
+        .grid {
           display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 1.5rem;
+          grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+          gap: 20px;
         }
 
-        .trend-card {
-          background-color: #121212;
-          border: 1px solid rgba(255, 255, 255, 0.03);
+        .card {
+          padding: 24px;
+          border: 1px solid #1f1f1f;
           border-radius: 20px;
-          padding: 2rem;
-          display: flex;
-          flex-direction: column;
-          position: relative;
-          overflow: hidden;
-          transition: transform 0.3s ease, border-color 0.3s ease;
+          background: #101010;
+          transition:
+            transform 0.2s ease,
+            border-color 0.2s ease;
         }
 
-        .trend-card:hover {
-          transform: translateY(-8px);
-          border-color: rgba(255, 255, 255, 0.1);
+        .card:hover {
+          transform: translateY(-4px);
+          border-color: #333;
         }
 
-        .card-top {
+        .card-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
-          margin-bottom: 1.5rem;
+          gap: 20px;
         }
 
-        .product-image-wrapper {
-          width: 56px;
-          height: 56px;
-          border-radius: 12px;
-          overflow: hidden;
-          background: #1a1a1a;
-          flex-shrink: 0;
+        .category {
+          margin: 0;
+          font-size: 24px;
+          text-transform: capitalize;
         }
 
-        .product-image-wrapper img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-
-        .product-image-fallback {
-          width: 100%;
-          height: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 1.5rem;
-          color: #444;
-        }
-
-        .category-tag {
-          font-family: "Georgia", serif;
-          font-style: italic;
+        .province {
+          margin-top: 6px;
           color: #71717a;
-          font-size: 0.85rem;
+          font-size: 13px;
         }
 
-        .card-middle { margin-bottom: auto; }
-
-        .product-name {
-          font-size: 1.3rem;
-          font-weight: 600;
-          color: #ffffff;
-          line-height: 1.3;
-          margin-bottom: 0.4rem;
-          letter-spacing: -0.01em;
+        .demand {
+          font-size: 11px;
+          font-weight: 800;
+          letter-spacing: 0.08em;
         }
 
-        .province-name-tag {
-          font-size: 0.85rem;
-          color: #a1a1aa;
-          display: flex;
-          align-items: center;
-          gap: 0.4rem;
+        .demand.high {
+          color: #10b981;
         }
 
-        .card-bottom {
-          border-top: 1px solid rgba(255, 255, 255, 0.05);
-          padding-top: 1.5rem;
-          margin-top: 2rem;
+        .demand.medium {
+          color: #f59e0b;
         }
 
-        .units-area {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 0.75rem;
+        .demand.low {
+          color: #71717a;
         }
 
-        .units-label {
-          font-size: 0.75rem;
+        .demand.unknown {
+          color: #52525b;
+        }
+
+        .scores {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 10px;
+          margin-top: 24px;
+        }
+
+        .score {
+          padding: 16px;
+          border-radius: 12px;
+          background: #171717;
+        }
+
+        .score-label {
+          display: block;
+          margin-bottom: 7px;
+          color: #71717a;
+          font-size: 10px;
           text-transform: uppercase;
           letter-spacing: 0.08em;
+        }
+
+        .score-value {
+          font-family: Georgia, serif;
+          font-size: 24px;
+        }
+
+        .score-value.projected {
+          color: #10b981;
+        }
+
+        .seller {
+          margin-top: 14px;
+          padding: 10px 12px;
+          border-radius: 8px;
+          background: #171717;
+          color: #a1a1aa;
+          font-size: 12px;
+        }
+
+        .seller.good {
+          color: #10b981;
+          background: rgba(
+            16,
+            185,
+            129,
+            0.08
+          );
+        }
+
+        .details {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+          margin-top: 24px;
+          padding-top: 20px;
+          border-top: 1px solid #222;
+        }
+
+        .detail-label {
+          display: block;
+          margin-bottom: 5px;
+          color: #52525b;
+          font-size: 10px;
+          text-transform: uppercase;
+        }
+
+        .detail-value {
+          color: #d4d4d8;
+          font-size: 13px;
+        }
+
+        .trend {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 20px;
+          color: #a1a1aa;
+          font-size: 13px;
+        }
+
+        .trend.rising {
+          color: #10b981;
+        }
+
+        .trend.falling {
+          color: #ef4444;
+        }
+
+        .trend.stable {
           color: #71717a;
         }
 
-        .units-value {
-          font-family: "Georgia", serif;
-          font-style: italic;
-          font-size: 1.1rem;
-          color: #ffffff;
-        }
-
-        .card-footer-tags {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-top: 1rem;
-          font-size: 0.8rem;
-        }
-
-        .demand-scale {
-          font-weight: 600;
-          font-size: 0.75rem;
-          letter-spacing: 0.05em;
-        }
-        .demand-high { color: #10b981; }
-        .demand-medium { color: #f5a623; }
-        .demand-low { color: #71717a; }
-
-        .trend-label {
-          font-family: "Georgia", serif;
-          font-style: italic;
-          display: flex;
-          align-items: center;
-          gap: 0.3rem;
-        }
-        .trend-up { color: #10b981; }
-        .trend-down { color: #ef4444; }
-        .trend-flat { color: #71717a; }
-
-        .empty-state {
+        .empty {
+          padding: 80px 20px;
           text-align: center;
-          padding: 8rem 0;
-          border: 1px dashed rgba(255, 255, 255, 0.08);
+          border: 1px dashed #222;
           border-radius: 20px;
           color: #71717a;
         }
 
-        .empty-state h3 {
-          color: #ffffff;
-          font-family: "Georgia", serif;
-          font-style: italic;
-          font-size: 1.4rem;
-          margin-bottom: 0.5rem;
+        .error {
+          color: #ef4444;
         }
 
-        @media (max-width: 1024px) {
-          .trends-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+        @media (max-width: 1000px) {
+          .grid {
+            grid-template-columns:
+              repeat(2, minmax(0, 1fr));
+          }
         }
 
-        @media (max-width: 900px) {
-          .trends-header { flex-direction: column; gap: 1.5rem; margin-bottom: 4rem; }
-          .header-desc { margin-top: 0; }
-          .filters-panel { flex-direction: column; align-items: flex-start; }
-          .filter-group { width: 100%; }
-          .minimal-search-wrapper, .minimal-search-input { width: 100%; }
-          .trends-hero-image { height: 250px; }
-        }
+        @media (max-width: 650px) {
+          .container {
+            padding: 90px 16px 70px;
+          }
 
-        @media (max-width: 600px) {
-          .trends-grid { grid-template-columns: 1fr; max-width: 380px; margin: 0 auto; }
+          .grid {
+            grid-template-columns: 1fr;
+          }
+
+          .hero {
+            padding: 28px;
+          }
+
+          .hero-title {
+            font-size: 30px;
+          }
+
+          .search {
+            width: 100%;
+          }
         }
       `}</style>
 
       <Navbar />
 
-      <div className="trends-container">
-        <div className="trends-header">
-          <div className="header-title-area">
-            <div className="live-status-badge">
-              <span className="live-dot-pulse" />
-              Connected · Live Forecast Feed
-            </div>
-            <span className="section-subtitle">Real-Time Market Telemetry</span>
-            <h1 className="section-title">Sri Lankan Market Pulse</h1>
+      <main className="container">
+        <header className="header">
+          <div className="eyebrow">
+            LOKALENS · DEMAND INTELLIGENCE
           </div>
-          <div className="header-desc">
-            Province-level demand forecasts generated from historical sales
-            patterns across Sri Lanka&apos;s 9 provinces.
-          </div>
-        </div>
 
-        <div className="trends-hero-image">
-          <img
-            src="https://www.igrain.in/admin/images/1717578894.jpg"
-            alt="Real-time retail network telemetry visualization"
-          />
-        </div>
+          <h1 className="title">
+            Sri Lankan Market Pulse
+          </h1>
 
-        <div className="province-tabs-wrapper">
-          {PROVINCES.map((p) => (
+          <p className="description">
+            Explore AI-generated demand predictions
+            across Sri Lankan provinces and product
+            categories.
+          </p>
+        </header>
+
+        <section className="hero">
+          <h2 className="hero-title">
+            See where demand is moving.
+          </h2>
+
+          <p className="hero-text">
+            Compare current and projected demand
+            scores, monitor category trends, and
+            understand the confidence behind each
+            prediction.
+          </p>
+        </section>
+
+        <div className="province-tabs">
+          {PROVINCES.map((item) => (
             <button
-              key={p}
-              className={`province-tab-btn${province === p ? " active" : ""}`}
-              onClick={() => setProvince(p)}
+              key={item}
+              type="button"
+              className={`province-button ${
+                province === item
+                  ? "active"
+                  : ""
+              }`}
+              onClick={() =>
+                setProvince(item)
+              }
             >
-              {p}
+              {item}
             </button>
           ))}
         </div>
 
-        <div className="filters-panel">
-          <div className="filter-group">
-            <CustomDropdown
-              value={category}
-              onChange={setCategory}
-              options={categories}
-              labelPrefix="Category: "
-            />
-
-            <CustomDropdown
-              value={demandLevel}
-              onChange={setDemandLevel}
-              options={DEMAND_LEVELS}
-              labelPrefix="Demand: "
-            />
-
-            <CustomDropdown
-              value={sortBy}
-              onChange={setSortBy}
-              options={SORT_OPTIONS}
-            />
-          </div>
-
-          <div className="minimal-search-wrapper">
-            <svg
-              className="search-icon"
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#71717a"
-              strokeWidth="2"
-            >
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.35-4.35" />
-            </svg>
-            <input
-              className="minimal-search-input"
-              placeholder="Search regional items..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div>
-        </div>
-
-        <div className="metrics-bar">
-          <div className="metric-item">
-            Showing <strong>{filtered.length}</strong> products
-          </div>
-          {filtered.length > 0 && (
-            <div className="metric-item">
-              Total Predicted Units:{" "}
-              <strong>{totalUnits.toLocaleString()}</strong>
-            </div>
-          )}
-        </div>
-
-        {loading ? (
-          <div className="empty-state">
-            <h3>Loading forecasts…</h3>
-          </div>
-        ) : error ? (
-          <div className="empty-state">
-            <h3>Couldn&apos;t load forecasts</h3>
-            <p>{error}</p>
-          </div>
-        ) : filtered.length === 0 ? (
-          <div className="empty-state">
-            <h3>No demand metrics found</h3>
-            <p>
-              Try clearing your current filters or searching for a different
-              product keyword.
-            </p>
-          </div>
-        ) : (
-          <div className="trends-grid">
-            {filtered.map((p) => (
-              <div key={p.id} className="trend-card">
-                <div className="card-top">
-                  <div className="product-image-wrapper">
-                    {p.imageUrl ? (
-                      <img src={p.imageUrl} alt={p.name} />
-                    ) : (
-                      <div className="product-image-fallback">📦</div>
-                    )}
-                  </div>
-                  <span className="category-tag">{p.category}</span>
-                </div>
-
-                <div className="card-middle">
-                  <h3 className="product-name">{p.name}</h3>
-                  <div className="province-name-tag">
-                    <svg width="8" height="11" viewBox="0 0 10 13" fill="none">
-                      <path
-                        d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 8 5 8s5-4.25 5-8c0-2.76-2.24-5-5-5z"
-                        fill="#71717a"
-                      />
-                    </svg>
-                    {p.province} Province
-                  </div>
-                </div>
-
-                <div className="card-bottom">
-                  <div className="units-area">
-                    <span className="units-label">
-                      Predicted Units ({p.week})
-                    </span>
-                    <span className="units-value">
-                      {p.predictedUnits.toLocaleString()}
-                    </span>
-                  </div>
-
-                  <div className="card-footer-tags">
-                    <span
-                      className={`demand-scale ${demandTextClass[p.demandLevel]}`}
-                    >
-                      {p.demandLevel} DEMAND
-                    </span>
-                    <span
-                      className={`trend-label ${
-                        p.trendPct === null
-                          ? "trend-flat"
-                          : p.trendPct > 0
-                            ? "trend-up"
-                            : p.trendPct < 0
-                              ? "trend-down"
-                              : "trend-flat"
-                      }`}
-                    >
-                      {p.trendPct === null
-                        ? "No prior data"
-                        : `${p.trendPct > 0 ? "▲" : p.trendPct < 0 ? "▼" : "—"} ${Math.abs(p.trendPct)}%`}
-                    </span>
-                  </div>
-                </div>
-              </div>
+        <div className="filters">
+          <select
+            className="select"
+            value={category}
+            onChange={(e) =>
+              setCategory(e.target.value)
+            }
+          >
+            {categories.map((item) => (
+              <option
+                key={item}
+                value={item}
+              >
+                Category: {item}
+              </option>
             ))}
+          </select>
+
+          <select
+            className="select"
+            value={demandLevel}
+            onChange={(e) =>
+              setDemandLevel(e.target.value)
+            }
+          >
+            {DEMAND_LEVELS.map((item) => (
+              <option
+                key={item}
+                value={item}
+              >
+                Demand: {item}
+              </option>
+            ))}
+          </select>
+
+          <select
+            className="select"
+            value={sortBy}
+            onChange={(e) =>
+              setSortBy(
+                e.target.value as SortBy,
+              )
+            }
+          >
+            <option value="projected-desc">
+              Projected Score ↓
+            </option>
+
+            <option value="projected-asc">
+              Projected Score ↑
+            </option>
+
+            <option value="current-desc">
+              Current Score ↓
+            </option>
+
+            <option value="current-asc">
+              Current Score ↑
+            </option>
+
+            <option value="category">
+              Category A–Z
+            </option>
+          </select>
+
+          <input
+            className="search"
+            type="search"
+            placeholder="Search category or province..."
+            value={search}
+            onChange={(e) =>
+              setSearch(e.target.value)
+            }
+          />
+        </div>
+
+        <div className="stats">
+          <span>
+            Predictions
+            <strong>
+              {filteredData.length}
+            </strong>
+          </span>
+
+          <span>
+            High
+            <strong>{highCount}</strong>
+          </span>
+
+          <span>
+            Medium
+            <strong>{mediumCount}</strong>
+          </span>
+
+          <span>
+            Low
+            <strong>{lowCount}</strong>
+          </span>
+        </div>
+
+        {loading && (
+          <div className="empty">
+            Loading demand predictions...
           </div>
         )}
-      </div>
+
+        {!loading && error && (
+          <div className="empty">
+            <p className="error">
+              Failed to load demand predictions.
+            </p>
+
+            <p>{error}</p>
+          </div>
+        )}
+
+        {!loading &&
+          !error &&
+          filteredData.length === 0 && (
+            <div className="empty">
+              No demand predictions found.
+            </div>
+          )}
+
+        {!loading &&
+          !error &&
+          filteredData.length > 0 && (
+            <div className="grid">
+              {filteredData.map((item) => {
+                const demandClass =
+                  getDemandClass(
+                    item.predicted_label,
+                  );
+
+                const trendClass =
+                  getTrendClass(item.trend);
+
+                return (
+                  <article
+                    key={item.id}
+                    className="card"
+                  >
+                    <div className="card-header">
+                      <div>
+                        <h2 className="category">
+                          {item.category}
+                        </h2>
+
+                        <div className="province">
+                          {item.province} Province
+                        </div>
+                      </div>
+
+                      <span
+                        className={`demand ${demandClass}`}
+                      >
+                        {normalize(
+                          item.predicted_label,
+                        )}
+                      </span>
+                    </div>
+
+                    <div className="scores">
+                      <div className="score">
+                        <span className="score-label">
+                          Current Score
+                        </span>
+
+                        <span className="score-value">
+                          {formatScore(
+                            item.current_score,
+                          )}
+                        </span>
+                      </div>
+
+                      <div className="score">
+                        <span className="score-label">
+                          Projected Score
+                        </span>
+
+                        <span className="score-value projected">
+                          {formatScore(
+                            item.projected_score,
+                          )}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div
+                      className={`seller ${
+                        item.predicted_good_seller
+                          ? "good"
+                          : ""
+                      }`}
+                    >
+                      {item.predicted_good_seller
+                        ? "✓ Predicted Good Seller"
+                        : "○ Not predicted as a good seller"}
+                    </div>
+
+                    <div className="details">
+                      <div>
+                        <span className="detail-label">
+                          Confidence
+                        </span>
+
+                        <span className="detail-value">
+                          {normalize(
+                            item.confidence,
+                          )}
+                        </span>
+                      </div>
+
+                      <div>
+                        <span className="detail-label">
+                          History
+                        </span>
+
+                        <span className="detail-value">
+                          {formatNumber(
+                            item.days_of_history,
+                          )}{" "}
+                          days
+                        </span>
+                      </div>
+
+                      <div>
+                        <span className="detail-label">
+                          Avg Listings
+                        </span>
+
+                        <span className="detail-value">
+                          {formatNumber(
+                            item.avg_listing_count,
+                          )}
+                        </span>
+                      </div>
+
+                      <div>
+                        <span className="detail-label">
+                          Daily Slope
+                        </span>
+
+                        <span className="detail-value">
+                          {item.slope_per_day !==
+                          null
+                            ? item.slope_per_day.toFixed(
+                                4,
+                              )
+                            : "—"}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div
+                      className={`trend ${trendClass}`}
+                    >
+                      <span>
+                        {getTrendIcon(
+                          item.trend,
+                        )}{" "}
+                        {normalize(item.trend)}
+                      </span>
+
+                      <span>
+                        {normalize(
+                          item.current_label,
+                        )}{" "}
+                        →{" "}
+                        {normalize(
+                          item.predicted_label,
+                        )}
+                      </span>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          )}
+      </main>
 
       <Footer />
     </div>
