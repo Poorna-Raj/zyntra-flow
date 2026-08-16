@@ -1,0 +1,104 @@
+[2026-08-15 11:15:38] ===== Daily pipeline run starting =====
+[2026-08-15 11:15:38] ----- Phase 1: SCRAPE -----
+[2026-08-15 11:15:38] [scrape] Starting glomark (glomark_category_client.py)...
+[2026-08-15 11:15:38] [scrape] glomark FAILED:
+Traceback (most recent call last):
+  File "c:\Users\User\Downloads\Lokalens\zyntra-flow\forecasting-service\scrapping_tool\base.py", line 90, in run_module
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\User\Downloads\Lokalens\zyntra-flow\forecasting-service\scrapping_tool\glomark_category_client.py", line 38, in <module>
+    from supabase_writer import get_client, upsert_records
+ModuleNotFoundError: No module named 'supabase_writer'
+
+[2026-08-15 11:15:38] [scrape] Refreshing Keells session cookie (Playwright + Cloudflare)...
+[2026-08-15 11:16:14] ===== Daily pipeline run starting =====
+[2026-08-15 11:16:14] ----- Phase 1: SCRAPE -----
+[2026-08-15 11:16:14] [scrape] Starting glomark (glomark_category_client.py)...
+[2026-08-15 11:23:57] [scrape] glomark completed successfully.
+[2026-08-15 11:23:57] [scrape] Refreshing Keells session cookie (Playwright + Cloudflare)...
+[2026-08-15 11:24:20] [scrape] Keells session cookie refreshed successfully.
+[2026-08-15 11:24:20] [scrape] Starting keells (keells_catalog_client.py)...
+[2026-08-15 11:25:04] [scrape] keells completed successfully.
+[2026-08-15 11:25:04] [scrape] Starting daraz (daraz_catalog_client.py)...
+[2026-08-15 11:28:45] [scrape] daraz completed successfully.
+[2026-08-15 11:28:45] [scrape] Starting spar (spar_catalog_client.py)...
+[2026-08-15 11:34:48] [scrape] spar completed successfully.
+[2026-08-15 11:34:48] [scrape] Starting cargills (cargills_catalog_client.py)...
+[2026-08-15 11:34:48] [scrape] cargills completed successfully.
+[2026-08-15 11:34:48] Phase 1 complete. Succeeded (5/5): ['glomark', 'keells', 'daraz', 'spar', 'cargills']. Failed: none.
+[2026-08-15 11:34:48] ----- Phase 2: AGGREGATE -----
+[2026-08-15 11:34:48] [aggregate] Starting glomark (glomark_category_signal.py)...
+[2026-08-15 11:34:49] [aggregate] glomark completed successfully.
+[2026-08-15 11:34:49] [aggregate] Starting keells (keells_category_signal.py)...
+[2026-08-15 11:34:51] [aggregate] keells completed successfully.
+[2026-08-15 11:34:51] [aggregate] Starting spar (spar_category_signal.py)...
+[2026-08-15 11:35:27] [aggregate] spar FAILED:
+Traceback (most recent call last):
+  File "c:\Users\User\Downloads\Lokalens\zyntra-flow\forecasting-service\scrapping_tool\base.py", line 91, in run_module
+    module.main()
+  File "c:\Users\User\Downloads\Lokalens\zyntra-flow\forecasting-service\scrapping_tool\spar_category_signal.py", line 121, in main
+    agg_rows = aggregate(rows)
+               ^^^^^^^^^^^^^^^
+  File "c:\Users\User\Downloads\Lokalens\zyntra-flow\forecasting-service\scrapping_tool\spar_category_signal.py", line 74, in aggregate
+    for (category, scraped_date), group_rows in sorted(groups.items()):
+                                                ^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '<' not supported between instances of 'NoneType' and 'str'
+
+[2026-08-15 11:35:27] [aggregate] Starting cargills (cargills_category_signal.py)...
+[2026-08-15 11:35:30] [aggregate] cargills completed successfully.
+[2026-08-15 11:35:30] [aggregate] Starting daraz (daraz_category_signal.py)...
+[2026-08-15 11:35:34] [aggregate] daraz completed successfully.
+[2026-08-15 11:35:34] Phase 2 complete. Succeeded (4/5): ['glomark', 'keells', 'cargills', 'daraz']. Failed: ['spar'].
+[2026-08-15 11:35:34] ===== Daily pipeline finished WITH FAILURES: ['spar'] =====
+[2026-08-15 11:58:02] ===== Daily pipeline run starting =====
+[2026-08-15 11:58:02] ----- Phase 1: SCRAPE -----
+[2026-08-15 11:58:02] [scrape] Starting glomark (glomark_catalog_client.py)...
+[2026-08-15 11:58:02] [scrape] glomark FAILED:
+Traceback (most recent call last):
+  File "c:\Users\User\Downloads\Lokalens\zyntra-flow\forecasting-service\scrapping_tool\base.py", line 82, in run_module
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'glomark_catalog_client'
+
+[2026-08-15 11:58:02] [scrape] Refreshing Keells session cookie (Playwright + Cloudflare)...
+[2026-08-15 11:58:26] [scrape] Keells session cookie refreshed successfully.
+[2026-08-15 11:58:26] [scrape] Starting keells (keells_catalog_client.py)...
+[2026-08-15 12:03:02] ===== Daily pipeline run starting =====
+[2026-08-15 12:03:02] ----- Phase 1: SCRAPE -----
+[2026-08-15 12:03:02] [scrape] Starting glomark (glomark_catalog_client.py)...
+[2026-08-15 12:03:02] [scrape] glomark FAILED:
+Traceback (most recent call last):
+  File "c:\Users\User\Downloads\Lokalens\zyntra-flow\forecasting-service\scrapping_tool\base.py", line 82, in run_module
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'glomark_catalog_client'
+
+[2026-08-15 12:03:02] [scrape] Refreshing Keells session cookie (Playwright + Cloudflare)...
+[2026-08-15 12:03:44] ===== Daily pipeline run starting =====
+[2026-08-15 12:03:44] ----- Phase 1: SCRAPE -----
+[2026-08-15 12:03:44] [scrape] Starting glomark (glomark_category_client.py)...
+[2026-08-15 12:13:34] [scrape] glomark completed successfully.
+[2026-08-15 12:13:34] [scrape] Refreshing Keells session cookie (Playwright + Cloudflare)...
+[2026-08-15 12:14:00] [scrape] Keells session cookie refreshed successfully.
+[2026-08-15 12:14:00] [scrape] Starting keells (keells_catalog_client.py)...
+[2026-08-15 12:14:41] [scrape] keells completed successfully.
+[2026-08-15 12:14:41] [scrape] Starting daraz (daraz_catalog_client.py)...
+[2026-08-15 12:18:35] [scrape] daraz completed successfully.
+[2026-08-15 12:18:35] [scrape] Starting spar (spar_catalog_client.py)...
+[2026-08-15 12:25:01] [scrape] spar completed successfully.
+[2026-08-15 12:25:01] [scrape] Starting cargills (cargills_catalog_client.py)...
+[2026-08-15 12:28:24] [scrape] cargills completed successfully.
+[2026-08-15 12:28:24] Phase 1 complete. Succeeded (5/5): ['glomark', 'keells', 'daraz', 'spar', 'cargills']. Failed: none.
+[2026-08-15 12:28:24] ----- Phase 2: AGGREGATE -----
+[2026-08-15 12:28:24] [aggregate] Starting glomark (glomark_category_signal.py)...
+[2026-08-15 12:28:58] [aggregate] glomark completed successfully.
+[2026-08-15 12:28:58] [aggregate] Starting keells (keells_category_signal.py)...
+[2026-08-15 12:29:03] [aggregate] keells completed successfully.
+[2026-08-15 12:29:03] [aggregate] Starting spar (spar_category_signal.py)...
+[2026-08-15 12:30:15] [aggregate] spar completed successfully.
+[2026-08-15 12:30:15] [aggregate] Starting cargills (cargills_category_signal.py)...
+[2026-08-15 12:30:22] [aggregate] cargills completed successfully.
+[2026-08-15 12:30:22] [aggregate] Starting daraz (daraz_category_signal.py)...
+[2026-08-15 12:30:28] [aggregate] daraz completed successfully.
+[2026-08-15 12:30:28] Phase 2 complete. Succeeded (5/5): ['glomark', 'keells', 'spar', 'cargills', 'daraz']. Failed: none.
+[2026-08-15 12:30:28] ===== Daily pipeline completed successfully =====

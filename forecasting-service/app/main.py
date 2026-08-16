@@ -29,6 +29,7 @@ from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from pydantic import BaseModel
 from supabase import create_client
 from dotenv import load_dotenv
+from restock_signal import build_recommendations as build_market_signal
 
 from reorder_predict import load_context_data, get_restock_recommendations
 
@@ -37,21 +38,24 @@ load_dotenv()  # reads .env in the current working directory
 app = FastAPI(title="Province Forecast + Restock Service")
 
 SUPABASE_URL = os.environ["SUPABASE_URL"]
-SUPABASE_KEY = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
+SUPABASE_KEY = os.environ["SUPABASE_SERVICE_KEY"]
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-CONTEXT_DATASET_PATH = os.environ["CONTEXT_DATASET_PATH"]
+CONTEXT_DATASET_PATH = os.environ.get("CONTEXT_DATASET_PATH")
 RESTOCK_MODEL_PATH = os.environ.get("RESTOCK_MODEL_PATH", "restock_model.joblib")
 RESTOCK_ENCODER_PATH = os.environ.get("RESTOCK_ENCODER_PATH", "restock_encoders.joblib")
 
-# --- g-model (province/product forecast) — loaded at import time ---
-model = joblib.load("../model/g-model.joblib")
-with open("../model/feature_columns.json") as f:
-    meta = json.load(f)
-
-FEATURE_COLS = meta["feature_cols"]
-PROVINCE_MAP = meta["province_map"]
-PRODUCT_MAP = meta["product_map"]
+try:
+    model = joblib.load("../model/g-model.joblib")
+    with open("../model/feature_columns.json") as f:
+        meta = json.load(f)
+    FEATURE_COLS = meta["feature_cols"]
+    PROVINCE_MAP = meta["province_map"]
+    PRODUCT_MAP = meta["product_map"]
+except Exception as e:
+    print(f"[main] g-model artifacts not loaded: {e} - /predict and /predict-all will be unavailable.")
+    model = None
+    FEATURE_COLS = PROVINCE_MAP = PRODUCT_MAP = {}
 
 # --- restock model artifacts — loaded once at startup, kept separate from g-model ---
 _context_df = None
@@ -59,24 +63,21 @@ _restock_model = None
 _restock_encoder = None
 
 
+# Replace the startup event's exception-raising with a warning instead:
 @app.on_event("startup")
 def load_restock_artifacts():
     global _context_df, _restock_model, _restock_encoder
 
-    try:
-        _context_df = load_context_data(CONTEXT_DATASET_PATH)
-    except Exception as e:
-        raise RuntimeError(f"Failed to load context dataset from {CONTEXT_DATASET_PATH}: {e}")
+    if not CONTEXT_DATASET_PATH:
+        print("[main] CONTEXT_DATASET_PATH not set - /restock/recommend will be unavailable.")
+        return
 
     try:
+        _context_df = load_context_data(CONTEXT_DATASET_PATH)
         _restock_model = joblib.load(RESTOCK_MODEL_PATH)
         _restock_encoder = joblib.load(RESTOCK_ENCODER_PATH)
     except Exception as e:
-        raise RuntimeError(
-            f"Failed to load model/encoder ({RESTOCK_MODEL_PATH}, {RESTOCK_ENCODER_PATH}). "
-            f"Run `python reorder_predict.py train --context ...` first. Original error: {e}"
-        )
-
+        print(f"[main] Restock model artifacts not loaded: {e} - /restock/recommend will be unavailable.")
 
 class PredictRequest(BaseModel):
     province: str
@@ -253,3 +254,41 @@ def health():
         "restock_model_loaded": _restock_model is not None,
         "context_rows": len(_context_df) if _context_df is not None else 0,
     }
+    
+@app.get("/market-signal")
+def market_signal():
+    """
+    Live category-level demand/stock signal from the competitor
+    scraper pipeline - a same-day snapshot (not a forecast), blending
+    each store's demand_score and stock_risk into one row per category.
+    Separate from /restock/recommend, which needs an uploaded seller
+    export and serves a different, ML-driven recommendation.
+    """
+    df = build_market_signal(supabase)
+    if df.empty:
+        raise HTTPException(status_code=503, detail="No market signal data available yet.")
+    df = df.replace([float("inf"), float("-inf")], None)
+    return {"count": len(df), "signals": df.to_dict(orient="records")}
+
+
+@app.get("/market-signal/low-stock")
+def market_signal_low_stock():
+    """Categories currently flagged LOW STOCK ALERT - a quick-glance
+    endpoint, same pattern as /market-trend/good-sellers."""
+    df = build_market_signal(supabase)
+    if df.empty:
+        raise HTTPException(status_code=503, detail="No market signal data available yet.")
+    alerts = df[df["stock_signal"] == "LOW STOCK ALERT"]
+    alerts = alerts.replace([float("inf"), float("-inf")], None)
+    return {"count": len(alerts), "low_stock_categories": alerts.to_dict(orient="records")}
+
+
+@app.get("/market-signal/{category}")
+def market_signal_for_category(category: str):
+    df = build_market_signal(supabase)
+    if df.empty:
+        raise HTTPException(status_code=503, detail="No market signal data available yet.")
+    match = df[df["category"].str.lower() == category.lower()]
+    if match.empty:
+        raise HTTPException(status_code=404, detail=f"No market signal found for category '{category}'")
+    return match.to_dict(orient="records")[0]
