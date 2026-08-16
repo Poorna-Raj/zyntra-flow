@@ -1,0 +1,105 @@
+{
+  "candidate_endpoints": {
+    "GetDepartments": {
+      "status_code": 401
+    },
+    "GetDepartmentList": {
+      "status_code": 401
+    },
+    "GetMenu": {
+      "status_code": 401
+    },
+    "GetCategoryTree": {
+      "status_code": 401
+    },
+    "GetCategories": {
+      "status_code": 401
+    },
+    "GetSubDepartments": {
+      "status_code": 401
+    },
+    "GetOutletDepartments": {
+      "status_code": 401
+    }
+  },
+  "department_sweep": {
+    "2": {
+      "item_count_this_page": 5,
+      "total_pages_reported": 142,
+      "sample_item_name": "100 Plus Isotonic Drink Lemon & Lime Can 325ml",
+      "department_code": "B"
+    },
+    "3": {
+      "item_count_this_page": 5,
+      "total_pages_reported": 74,
+      "sample_item_name": "Ambewela Butter Salted 200g",
+      "department_code": "C"
+    },
+    "4": {
+      "item_count_this_page": 5,
+      "total_pages_reported": 8,
+      "sample_item_name": "Cleaned Handella",
+      "department_code": "S"
+    },
+    "5": {
+      "item_count_this_page": 5,
+      "total_pages_reported": 86,
+      "sample_item_name": "Alerics Ice Cream Cookie Espresso 1L",
+      "department_code": "D"
+    },
+    "6": {
+      "item_count_this_page": 5,
+      "total_pages_reported": 14,
+      "sample_item_name": "Al-Madina Almond Dates 270g",
+      "department_code": "F"
+    },
+    "7": {
+      "item_count_this_page": 5,
+      "total_pages_reported": 444,
+      "sample_item_name": "#N/A",
+      "department_code": "G"
+    },
+    "9": {
+      "item_count_this_page": 5,
+      "total_pages_reported": 530,
+      "sample_item_name": "4Ever Aloe Lavender Moisturising Body Milk 200ml",
+      "department_code": "H"
+    },
+    "10": {
+      "item_count_this_page": 5,
+      "total_pages_reported": 2,
+      "sample_item_name": "De Siam Fish Sauce/Thai S/Sauce 60ml",
+      "department_code": "T"
+    },
+    "12": {
+      "item_count_this_page": 5,
+      "total_pages_reported": 14,
+      "sample_item_name": "Aust. Beef Topside",
+      "department_code": "M"
+    },
+    "13": {
+      "item_count_this_page": 5,
+      "total_pages_reported": 2,
+      "sample_item_name": "Keells Gift Vouchers 1000/=",
+      "department_code": "U"
+    },
+    "15": {
+      "item_count_this_page": 5,
+      "total_pages_reported": 9,
+      "sample_item_name": "Keells Cream Bun 2S",
+      "department_code": "K"
+    },
+    "16": {
+      "item_count_this_page": 5,
+      "total_pages_reported": 51,
+      "sample_item_name": "Ambarella",
+      "department_code": "V"
+    },
+    "20": {
+      "item_count_this_page": 5,
+      "total_pages_reported": 6,
+      "sample_item_name": "25W Adapter Only",
+      "department_code": "D03"
+    }
+  }
+}

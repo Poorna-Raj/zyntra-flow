@@ -1,160 +1,120 @@
 """
-base_scraper.py
+run_all_scrapers.py
 
-Reusable Playwright scraper foundation for e-commerce sites
-(Keells, Cargills, Daraz). Handles browser lifecycle, retries,
-polite rate-limiting, and writes structured output for the
-forecasting pipeline (product, province, price, stock, date).
+Single daily entry point - runs all five store scrapers in sequence
+(Glomark, Keells, Daraz, SPAR, Cargills), each appending to its own
+CSV. Keells specifically needs a fresh session cookie refreshed via
+Playwright (Cloudflare-protected) right before it runs, since Keells'
+session cookies expire within the hour - so that step is wired in as
+a required prerequisite just for that one store, not a sixth
+independent scraper.
+
+One failed store doesn't stop the others, and everything gets logged
+to dataset/scrape_run_log.txt so you can check each morning whether
+all five actually ran.
+
+This is the script that gets scheduled (Task Scheduler / GitHub
+Actions), not the individual client files directly.
 
 Install:
-    pip install playwright pandas
+    pip install requests pandas playwright python-dotenv
     playwright install chromium
 """
 
 import asyncio
-import csv
-import random
-import time
-from dataclasses import dataclass, asdict, field
-from datetime import date
+import sys
+import traceback
+from datetime import datetime
 from pathlib import Path
-from typing import Optional
 
-from playwright.async_api import async_playwright, Page, Browser, TimeoutError as PWTimeout
+LOG_PATH = Path("dataset") / "scrape_run_log.txt"
 
-
-
-@dataclass
-class ProductRecord:
-    source: str                # "keells" | "cargills" | "daraz"
-    province: str               # e.g. "Western", "Southern" — set per scrape run
-    category: str
-    product_name: str
-    price: Optional[float]
-    original_price: Optional[float] = None   # useful for discount tracking
-    in_stock: Optional[bool] = None
-    url: str = ""
-    scraped_date: str = field(default_factory=lambda: date.today().isoformat())
+# Maps a friendly name -> the importable module name (i.e. the .py
+# filename without ".py"). All files must be in the same folder as
+# this script, or importable on the Python path.
+SCRAPERS = {
+    "glomark": "glomark_category_client",
+    "keells": "keells_catalog_client",
+    "daraz": "daraz_catalog_client",
+    "spar": "spar_catalog_client",
+    "cargills": "cargills_catalog_client",
+}
 
 
+def log(message: str) -> None:
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    line = f"[{timestamp}] {message}"
+    print(line)
+    LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with open(LOG_PATH, "a", encoding="utf-8") as f:
+        f.write(line + "\n")
 
-class BaseScraper:
+
+def refresh_keells_session() -> bool:
     """
-    Common scraping scaffolding. Subclasses implement `scrape_category()`
-    with the site-specific selectors.
+    Runs keells_session_refresh.py's cookie-harvesting flow before the
+    Keells scrape. Returns False (without raising) if it fails, so the
+    caller can decide to skip Keells' scrape rather than run it against
+    a stale/missing cookie and get silently empty or blocked results.
     """
-
-    def __init__(
-        self,
-        source_name: str,
-        headless: bool = True,
-        min_delay: float = 1.5,
-        max_delay: float = 4.0,
-        max_retries: int = 3,
-    ):
-        self.source_name = source_name
-        self.headless = headless
-        self.min_delay = min_delay
-        self.max_delay = max_delay
-        self.max_retries = max_retries
-        self.records: list[ProductRecord] = []
-
-    async def _polite_wait(self):
-        """Randomized delay between requests to avoid hammering the site."""
-        await asyncio.sleep(random.uniform(self.min_delay, self.max_delay))
-
-    async def _goto_with_retry(self, page: Page, url: str) -> bool:
-        for attempt in range(1, self.max_retries + 1):
-            try:
-                await page.goto(url, wait_until="domcontentloaded", timeout=20000)
-                return True
-            except PWTimeout:
-                print(f"[{self.source_name}] timeout on {url}, attempt {attempt}/{self.max_retries}")
-                await asyncio.sleep(2 * attempt)  # backoff
-            except Exception as e:
-                print(f"[{self.source_name}] error on {url}: {e}")
-                await asyncio.sleep(2 * attempt)
+    log("Refreshing Keells session cookie (Playwright + Cloudflare)...")
+    try:
+        from keells_session_refresh import main as refresh_main
+        asyncio.run(refresh_main())
+        log("Keells session cookie refreshed successfully.")
+        return True
+    except Exception:
+        log(f"Keells session refresh FAILED:\n{traceback.format_exc()}")
         return False
 
-    async def new_browser(self, p) -> Browser:
-        """
-        Launch with args that reduce automation fingerprinting.
-        For sites with heavier bot detection (Daraz), consider
-        adding playwright-stealth on top of this.
-        """
-        return await p.chromium.launch(
-            headless=self.headless,
-            args=[
-                "--disable-blink-features=AutomationControlled",
-                "--no-sandbox",
-            ],
-        )
 
-    async def new_context(self, browser: Browser):
-        context = await browser.new_context(
-            user_agent=(
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/124.0.0.0 Safari/537.36"
-            ),
-            viewport={"width": 1366, "height": 768},
-            locale="en-US",
-        )
-        return context
+def run_one(name: str, module_name: str) -> bool:
+    """
+    Import a scraper module fresh and call its main(). Wrapped in a
+    try/except so one broken scraper (bad selector, dead endpoint,
+    network hiccup, stale cookie) doesn't prevent the other stores
+    from running.
+    """
+    log(f"Starting {name} ({module_name}.py)...")
+    try:
+        module = __import__(module_name)
+        module.main()
+        log(f"{name} completed successfully.")
+        return True
+    except Exception:
+        log(f"{name} FAILED:\n{traceback.format_exc()}")
+        return False
 
-    def save_csv(self, out_path: str):
-        Path(out_path).parent.mkdir(parents=True, exist_ok=True)
-        if not self.records:
-            print(f"[{self.source_name}] no records to save.")
-            return
-        with open(out_path, "w", newline="", encoding="utf-8") as f:
-            writer = csv.DictWriter(f, fieldnames=list(asdict(self.records[0]).keys()))
-            writer.writeheader()
-            for r in self.records:
-                writer.writerow(asdict(r))
-        print(f"[{self.source_name}] saved {len(self.records)} records -> {out_path}")
 
-    # Override in subclasses
-    async def scrape_category(self, page: Page, category_url: str, province: str):
-        raise NotImplementedError
+def main():
+    log("= Daily scrape run starting =")
 
-    async def discover_categories(self, page: Page) -> dict[str, str]:
-        raise NotImplementedError(
-            f"{self.source_name} scraper does not implement category discovery yet."
-        )
+    results = {}
 
-    async def run(
-        self,
-        category_urls: dict[str, str] | None = None,
-        province: str = "Western",
-        all_categories: bool = False,
-    ):
-        """
-        category_urls: {"category_name": "url", ...} — hand-picked categories.
-        all_categories: if True, ignores category_urls and calls
-            discover_categories() to scrape the entire site's catalog.
-            Expect this to take much longer and hit far more pages —
-            make sure min_delay/max_delay are set generously before
-            running this at full scale.
-        """
-        async with async_playwright() as p:
-            browser = await self.new_browser(p)
-            context = await self.new_context(browser)
-            page = await context.new_page()
+    for name, module_name in SCRAPERS.items():
+        if name == "keells":
+            cookie_ok = refresh_keells_session()
+            if not cookie_ok:
+                log("Skipping Keells scrape - session refresh failed, "
+                    "running it against a stale/missing cookie would "
+                    "likely just produce empty or blocked results.")
+                results["keells"] = False
+                continue
 
-            if all_categories:
-                print(f"[{self.source_name}] discovering full category list...")
-                category_urls = await self.discover_categories(page)
-                print(f"[{self.source_name}] found {len(category_urls)} categories.")
+        results[name] = run_one(name, module_name)
 
-            if not category_urls:
-                print(f"[{self.source_name}] no categories to scrape - aborting.")
-                await browser.close()
-                return
+    succeeded = [k for k, v in results.items() if v]
+    failed = [k for k, v in results.items() if not v]
 
-            for category, url in category_urls.items():
-                print(f"[{self.source_name}] scraping category: {category}")
-                await self.scrape_category(page, url, province)
-                await self._polite_wait()
+    log(f"Run complete. Succeeded ({len(succeeded)}/5): {succeeded}. "
+        f"Failed: {failed or 'none'}.")
 
-            await browser.close()
+    if failed:
+        # Non-zero exit lets Task Scheduler / GitHub Actions flag this
+        # run as failed, even though some stores succeeded - you want
+        # visibility on partial failures, not a silent green checkmark.
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

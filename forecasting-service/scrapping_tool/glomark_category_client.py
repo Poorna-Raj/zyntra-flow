@@ -34,6 +34,8 @@ from dataclasses import dataclass, asdict, field
 from datetime import date
 from pathlib import Path
 from typing import Optional
+import json
+from supabase_writer import get_client, upsert_records
 
 import requests
 
@@ -182,33 +184,33 @@ def fetch_all_products(limit: int = PAGE_LIMIT, delay_range=(1.0, 3.0)) -> list[
     return all_records
 
 
-def save_csv(records: list[GlomarkProductRecord], out_path: str, append: bool = False):
-    """append=True writes the header only if the file doesn't exist yet,
-    then adds new rows below whatever's already there - so a scheduled
-    run builds up history over time instead of erasing yesterday's data."""
-    path = Path(out_path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    if not records:
-        print("[glomark] no records to save.")
-        return
+def _glomark_row_transform(row: dict) -> dict:
+    """branch_stocks was stored as a JSON string in the dataclass field
+    (json.dumps output) - Supabase's jsonb column needs a real object,
+    not a string, so parse it back before sending."""
+    if row.get("branch_stocks"):
+        try:
+            row["branch_stocks"] = json.loads(row["branch_stocks"])
+        except (json.JSONDecodeError, TypeError):
+            row["branch_stocks"] = None
+    return row
 
-    file_exists = path.exists()
-    mode = "a" if append else "w"
-    write_header = not (append and file_exists)
 
-    with open(out_path, mode, newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=list(asdict(records[0]).keys()))
-        if write_header:
-            writer.writeheader()
-        for r in records:
-            writer.writerow(asdict(r))
-    action = "appended" if append else "saved"
-    print(f"[glomark] {action} {len(records)} records -> {out_path}")
+def save_to_supabase(records: list[GlomarkProductRecord]) -> None:
+    client = get_client()
+    upsert_records(
+        client, "glomark_catalog_client", records,
+        on_conflict="product_id,scraped_date",
+        row_transform=_glomark_row_transform,
+    )
 
+
+
+    
 
 def main():
     all_records = fetch_all_products()
-    save_csv(all_records, "dataset/glomark_catalog_snapshot.csv", append=False)
+    save_to_supabase(all_records)
 
 
 if __name__ == "__main__":

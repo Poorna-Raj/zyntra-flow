@@ -1,0 +1,419 @@
+category,product_rank,product_name,demand_value,price,rating_score,item_url,source,demand_metric,stock_in_hand,item_code,inventory,sku_code
+baby diapers,1,Marvel Large Baby Diapers - 96 Pcs,14000.0,6232.0,4.9258262874711765,https://www.daraz.lk/products/marvel-large-baby-diapers-96-pcs-i101978060.html,daraz,sold_count_numeric,,,,
+baby diapers,2,Marvel Medium Baby Diapers - 96 Pcs,12100.0,6232.0,4.92379679144385,https://www.daraz.lk/products/marvel-medium-baby-diapers-96-pcs-i101966117.html,daraz,sold_count_numeric,,,,
+baby diapers,3,Marvel XL Baby Diapers - 96 Pcs,8500.0,6492.0,4.93404255319149,https://www.daraz.lk/products/marvel-xl-baby-diapers-96-pcs-i101982020.html,daraz,sold_count_numeric,,,,
+baby diapers,4,Velona Cuddles Disposable Baby Diapers Large (9kg to 14kg) 32 Pcs,8100.0,3052.0,4.950566426364572,https://www.daraz.lk/products/velona-cuddles-disposable-baby-diapers-large-9kg-to-14kg-32-pcs-i100054492.html,daraz,sold_count_numeric,,,,
+baby diapers,5,Pretty Baby | Disposable Baby Diapers | Medium 30 Pcs,8000.0,1679.0,4.9284116331096195,https://www.daraz.lk/products/medium-30-pcs-pretty-baby-disposable-baby-diapers-i224589470.html,daraz,sold_count_numeric,,,,
+baby diapers,6,Velona Cuddles Medium Baby Diapers - 34 Pcs (6-10kg),7900.0,3022.0,4.9335232668566,https://www.daraz.lk/products/velona-cuddles-medium-baby-diapers-34-pcs-6-10kg-i100051497.html,daraz,sold_count_numeric,,,,
+baby diapers,7,Pretty Baby | Disposable Baby Diapers | Large 30 Pcs,7600.0,1679.0,4.940322580645161,https://www.daraz.lk/products/large-30-pcs-pretty-baby-disposable-baby-diapers-i224587577.html,daraz,sold_count_numeric,,,,
+baby diapers,8,Velona Cuddles Disposable Baby Diapers Small (3kg to 8kg) 36 Pcs,6800.0,2648.0,4.925767918088737,https://www.daraz.lk/products/velona-cuddles-disposable-baby-diapers-small-3kg-to-8kg-36-pcs-i100052511.html,daraz,sold_count_numeric,,,,
+baby diapers,9,Velona Cuddles Disposable Baby Diapers New Born (Below 5kg) 24 Pcs,6700.0,1692.0,4.951794322442421,https://www.daraz.lk/products/velona-cuddles-disposable-baby-diapers-new-born-below-5kg-24-pcs-i100054467.html,daraz,sold_count_numeric,,,,
+baby diapers,10,Velona Cuddles Ezy Pants Disposable Baby Diapers Large (9kg to 14kg) 18Pcs,5000.0,1866.0,4.965201465201465,https://www.daraz.lk/products/velona-cuddles-ezy-pants-disposable-baby-diapers-large-9kg-to-14kg-18pcs-i100055439.html,daraz,sold_count_numeric,,,,
+biscuits,1,Munchee Milk Short Cake Biscuits 200G,133200.0,219.0,4.864061456245825,https://www.daraz.lk/products/munchee-milk-short-cake-biscuits-200g-i106348270.html,daraz,sold_count_numeric,,,,
+biscuits,2,Munchee Lemon Puff 200g,97400.0,125.0,4.867680362342284,https://www.daraz.lk/products/munchee-lemon-puff-200g-i100538085.html,daraz,sold_count_numeric,,,,
+biscuits,3,Munchee Chocolate Puff 200g (1 pack/ 3 pack),72300.0,238.0,4.8498669707335615,https://www.daraz.lk/products/munchee-chocolate-puff-200g-1-pack-3-pack-i100534091.html,daraz,sold_count_numeric,,,,
+biscuits,4,Munchee Chocolate Cream Biscuits 100g,68400.0,99.0,4.886683738796415,https://www.daraz.lk/products/munchee-chocolate-cream-biscuits-100g-i106350138.html,daraz,sold_count_numeric,,,,
+biscuits,5,Munchee Onion Biscuit 30G,61700.0,47.0,4.812581913499344,https://www.daraz.lk/products/munchee-onion-biscuit-30g-i119068702.html,daraz,sold_count_numeric,,,,
+biscuits,6,Munchee Tikiri Marie 80g,58500.0,84.0,4.942995169082126,https://www.daraz.lk/products/munchee-tikiri-marie-80g-i261263296.html,daraz,sold_count_numeric,,,,
+biscuits,7,Maliban Chocolate Cream 100g,39000.0,91.0,4.925638179800222,https://www.daraz.lk/products/maliban-chocolate-cream-100g-i104252339.html,daraz,sold_count_numeric,,,,
+biscuits,8,Munchee Hawaian Cookies 200G,37000.0,182.0,4.879170056956876,https://www.daraz.lk/products/munchee-hawaian-cookies-200g-i100533078.html,daraz,sold_count_numeric,,,,
+biscuits,9,Maliban Gold Marie 80g,28200.0,63.0,4.935672514619883,https://www.daraz.lk/products/maliban-gold-marie-80g-i104251532.html,daraz,sold_count_numeric,,,,
+biscuits,10,Munchee Cream Cracker 490G,20500.0,446.0,4.740509620384816,https://www.daraz.lk/products/munchee-cream-cracker-490g-i119066953.html,daraz,sold_count_numeric,,,,
+coconut oil,1,Extra Virgin Coconut Oil 5 Liter Can - Cold Pressed White Kernel - Cook Fry Bake Keto Hair Skin Beauty Multi Purpose Usage,1000.0,11680.0,4.88421052631579,https://www.daraz.lk/products/extra-virgin-coconut-oil-5-liter-can-cold-pressed-white-kernel-cook-fry-bake-keto-hair-skin-beauty-multi-purpose-usage-i161443833.html,daraz,sold_count_numeric,,,,
+coconut oil,2,Gravity Extra Virgin Coconut Oil 200 ml (නෑඹුල් පොල්තෙල්) - Plastic Bottle,901.0,688.0,4.929203539823009,https://www.daraz.lk/products/gravity-extra-virgin-coconut-oil-200-ml-plastic-bottle-i100862791.html,daraz,sold_count_numeric,,,,
+coconut oil,3,Renuka Coconut Oil 1000Ml,881.0,1577.0,4.759615384615385,https://www.daraz.lk/products/renuka-coconut-oil-1000ml-i134722424.html,daraz,sold_count_numeric,,,,
+coconut oil,4,Fortune Coconut Oil 2.9l,749.0,4275.0,4.922480620155039,https://www.daraz.lk/products/fortune-coconut-oil-29l-i169748728.html,daraz,sold_count_numeric,,,,
+coconut oil,5,Pure Coconut Oil 5 Liter Can - Cook & Fry පිරිසිදු පොල්තෙල් ලීටර් 5 කෑන් - පිසීමට සහ බැදීමට,745.0,6720.0,4.927631578947368,https://www.daraz.lk/products/pure-coconut-oil-5-liter-can-cook-fry-5-i161445592.html,daraz,sold_count_numeric,,,,
+coconut oil,6,Gravity Extra Virgin Coconut Oil 375 ml (නෑඹුල් පොල්තෙල්) GB,730.0,1104.0,4.94811320754717,https://www.daraz.lk/products/gravity-extra-virgin-coconut-oil-375-ml-pb-i100810025.html,daraz,sold_count_numeric,,,,
+coconut oil,7,Gravity Pure Coconut Oil for Deep Frying & Cooking 1L Plastic Bottle පිරිසිදු පොල්තෙල් 1000ml - Made in Sri Lanka with Sri Lankan Coconuts,706.0,1363.0,4.890710382513661,https://www.daraz.lk/products/gravity-pure-coconut-oil-for-deep-frying-cooking-1l-plastic-bottle-1000ml-made-in-sri-lanka-with-sri-lankan-coconuts-i100874683.html,daraz,sold_count_numeric,,,,
+coconut oil,8,Extra Virgin Coconut Oil 2 Liter Can - Cold Pressed White Kernel - Cook Fry Bake Keto Hair Skin Beauty Multi Purpose Usage,704.0,4960.0,4.963235294117647,https://www.daraz.lk/products/extra-virgin-coconut-oil-2-liter-can-cold-pressed-white-kernel-cook-fry-bake-keto-hair-skin-beauty-multi-purpose-usage-i161440875.html,daraz,sold_count_numeric,,,,
+coconut oil,9,"Virgin Coconut Oil 750ml glass bottle- No Coconut Smell or Taste - Cook, Fry, Pasta, Salad Dressing, Bake Cake, Skincare & Haircare",553.0,2826.0,4.951612903225806,https://www.daraz.lk/products/virgin-coconut-oil-750ml-glass-bottle-no-coconut-smell-or-taste-cook-fry-pasta-salad-dressing-bake-cake-skincare-haircare-i100856912.html,daraz,sold_count_numeric,,,,
+coconut oil,10,Pure Coconut Oil 2 Liter Can - Cook & Fry පිරිසිදු පොල්තෙල් ලීටර් 2 කෑන් - පිසීමට සහ බැදීමට,536.0,2880.0,4.909090909090909,https://www.daraz.lk/products/pure-coconut-oil-2-liter-can-cook-fry-2-i161451040.html,daraz,sold_count_numeric,,,,
+coffee,1,Wijaya Coffee (100g),3000.0,340.0,4.938679245283019,https://www.daraz.lk/products/wijaya-coffee-100g-i100014146.html,daraz,sold_count_numeric,,,,
+coffee,2,Lavazza – Crema E Gusto 250g Coffee Pack Made in Italy,1000.0,3399.0,4.55,https://www.daraz.lk/products/lavazza-crema-e-gusto-250g-coffee-pack-i173377977.html,daraz,sold_count_numeric,,,,
+coffee,3,LAVAZZA Crema E Gusto Forte Ground Coffee 250g Made in Italy by Italian mart,570.0,3713.0,4.8901098901098905,https://www.daraz.lk/products/lavazza-crema-e-gusto-forte-250g-i111324763.html,daraz,sold_count_numeric,,,,
+coffee,4,Bru Instant Coffee Sachet 1.2g (24 Packets),558.0,623.0,4.72093023255814,https://www.daraz.lk/products/bru-instant-coffee-sachet-12g-24-packets-i193181086.html,daraz,sold_count_numeric,,,,
+coffee,5,Nescafe Sunrise Coffee Sachets 1.9g ×24,373.0,594.0,4.841269841269841,https://www.daraz.lk/products/nescafe-sunrise-coffee-sachets-19g-24-i195057087.html,daraz,sold_count_numeric,,,,
+coffee,6,Khao Shong 3 in 1 Super Rich 150g Pack,365.0,1208.0,4.98,https://www.daraz.lk/products/khao-shong-3-in-1-super-rich-150g-pack-i129434705.html,daraz,sold_count_numeric,,,,
+coffee,7,"Zara Cafe - milk coffee mix, 1kg",337.0,2325.0,4.894736842105263,https://www.daraz.lk/products/zara-cafe-milk-coffee-mix-1kg-i102144261.html,daraz,sold_count_numeric,,,,
+coffee,8,Bru Instant Coffee  (24packets),290.0,488.0,4.7317073170731705,https://www.daraz.lk/products/bru-instant-coffee-24packets-i216466776.html,daraz,sold_count_numeric,,,,
+coffee,9,"French Press Coffee & Tea Maker 600ml Thickened Borosilicate Glass Coffee Press Rust-Free and Dishwasher Safe,Black",261.0,2450.0,4.866666666666666,https://www.daraz.lk/products/french-press-coffee-tea-maker-600ml-thickened-borosilicate-glass-coffee-press-rust-free-and-dishwasher-safeblack-i197340580.html,daraz,sold_count_numeric,,,,
+coffee,10,Lavazza Qualita Rossa Ground Coffee 250g Made In Italy by Italian Mart,252.0,3861.0,5.0,https://www.daraz.lk/products/lavazza-qualita-rossa-250g-i120787435.html,daraz,sold_count_numeric,,,,
+cooking oil,1,Food Thermometer TP300 Digital Kitchen Water Oil Thermometer for Meat Cooking Food Probe BBQ Electronic Oven Kitchen Tools,16300.0,985.0,5.0,https://www.daraz.lk/products/food-thermometer-tp300-digital-kitchen-water-oil-thermometer-for-meat-cooking-food-probe-bbq-electronic-oven-kitchen-tools-i298572631.html,daraz,sold_count_numeric,,,,
+cooking oil,2,Fortune Cooking Oil 01 Ltr,10200.0,1008.0,4.904109589041096,https://www.daraz.lk/products/fortune-cooking-oil-01-ltr-i100434427.html,daraz,sold_count_numeric,,,,
+cooking oil,3,"Cake Baking Spatula And Brush Set cake spatula and brush Silicone Spatula and Two Piece of Pastry Brush Set Special for Cake Mixer, Cooking, Baking, Glazing, Oil Brush for Cooking Silicon, Oil Brush for Kitchen Use (Random Color)",4300.0,322.0,4.756786102062975,https://www.daraz.lk/products/cake-baking-spatula-cake-baking-spatula-and-brush-set-cake-spatula-and-brush-silicone-spatula-and-two-piece-of-pastry-brush-set-special-for-cake-mixer-cooking-baking-glazing-oil-brush-for-cooking-silicon-oil-brush-for-kitchen-use-random-color-i100001708.html,daraz,sold_count_numeric,,,,
+cooking oil,4,Fortune Sunflower Oil 05 Ltr,3900.0,4735.0,4.9103053435114505,https://www.daraz.lk/products/fortune-sunflower-oil-05-ltr-i100425447.html,daraz,sold_count_numeric,,,,
+cooking oil,5,Fortune Sunflower Oil 01 Ltr,3700.0,1184.0,4.94488188976378,https://www.daraz.lk/products/fortune-sunflower-oil-01-ltr-i100433465.html,daraz,sold_count_numeric,,,,
+cooking oil,6,Kitchen Baking Oil Cook Oil Spray Empty Bottle Vinegar Bottle Oil Dispenser Cooking Tool Salad BBQ Cooking Glass Oil sprayer,3100.0,1172.0,4.713643178410795,https://www.daraz.lk/products/kitchen-baking-oil-cook-oil-spray-empty-bottle-vinegar-bottle-oil-dispenser-cooking-tool-salad-bbq-cooking-glass-oil-sprayer-i112914167.html,daraz,sold_count_numeric,,,,
+cooking oil,7,Fortune Cooking Oil 02 Ltr,2200.0,2252.0,4.915151515151515,https://www.daraz.lk/products/fortune-cooking-oil-02-ltr-i100434428.html,daraz,sold_count_numeric,,,,
+cooking oil,8,Oil bottle   [Stainless Steel 100ML Oil Sprayer for Cooking Series] Cooking Salad Grilling Roasting Air Fryer Kitchen - Clear Mister Dispenser BBQ Refillable Oil Vinegar Glass Spritzer with Oil Spray 100Ml spary bottle Olive Oil Sprayer for Cooking.,1600.0,399.0,4.608333333333333,https://www.daraz.lk/products/oil-bottle-stainless-steel-100ml-oil-sprayer-for-cooking-series-cooking-salad-grilling-roasting-air-fryer-kitchen-clear-mister-dispenser-bbq-refillable-oil-vinegar-glass-spritzer-with-oil-spray-100ml-spary-bottle-olive-oil-sprayer-for-cooking-i242882612.html,daraz,sold_count_numeric,,,,
+cooking oil,9,Fortune Sunflower Oil 500 ml,1300.0,789.0,4.907407407407407,https://www.daraz.lk/products/fortune-sunflower-oil-500-ml-i100425446.html,daraz,sold_count_numeric,,,,
+cooking oil,10,Hand Wiping Kitchen Cooking Apron For Men And Women Oil Proof Waterproof Adult Waist Fashion Apron Wear,1200.0,612.0,4.8655462184873945,https://www.daraz.lk/products/hand-wiping-kitchen-cooking-apron-for-men-and-women-oil-proof-waterproof-adult-waist-fashion-apron-wear-i352152653.html,daraz,sold_count_numeric,,,,
+curry powder,1,Wijaya Chilli Powder 100g.,34800.0,153.0,4.933621933621934,https://www.daraz.lk/products/wijaya-chilli-powder-100g-i100017121.html,daraz,sold_count_numeric,,,,
+curry powder,2,Wijaya Curry powder 50g,21300.0,76.0,4.969387755102041,https://www.daraz.lk/products/wijaya-curry-powder-50g-i122361105.html,daraz,sold_count_numeric,,,,
+curry powder,3,Wijaya Curry Powder - 100g,7600.0,152.0,4.957345971563981,https://www.daraz.lk/products/wijaya-curry-powder-100g-i100016117.html,daraz,sold_count_numeric,,,,
+curry powder,4,Wijaya Meat Curry Powder 25g,6600.0,56.0,4.944099378881988,https://www.daraz.lk/products/wijaya-meat-curry-powder-25g-i100017130.html,daraz,sold_count_numeric,,,,
+curry powder,5,Wijaya Curry Powder 250g.,5500.0,380.0,4.925,https://www.daraz.lk/products/wijaya-curry-powder-250g-i100015109.html,daraz,sold_count_numeric,,,,
+curry powder,6,Wijaya Roasted Curry Powder 100g...,3600.0,187.0,4.9393939393939394,https://www.daraz.lk/products/wijaya-roasted-curry-powder-100g-i100018113.html,daraz,sold_count_numeric,,,,
+curry powder,7,Wijaya Meat Curry Powder 50g,3500.0,104.0,4.958904109589041,https://www.daraz.lk/products/wijaya-meat-curry-powder-50g-i100019131.html,daraz,sold_count_numeric,,,,
+curry powder,8,Wijaya Roasted Curry Powder 50g,2900.0,92.0,4.948387096774193,https://www.daraz.lk/products/wijaya-roasted-curry-powder-50g-i100019127.html,daraz,sold_count_numeric,,,,
+curry powder,9,Wijaya Pepper Powder (100g),2900.0,465.0,4.950909090909091,https://www.daraz.lk/products/wijaya-pepper-powder-100g-i100026029.html,daraz,sold_count_numeric,,,,
+curry powder,10,Wijaya Jaffna Curry Powder 100g.,2600.0,162.0,4.90979381443299,https://www.daraz.lk/products/wijaya-jaffna-curry-powder-100g-i100031015.html,daraz,sold_count_numeric,,,,
+dhal,1,Orient Mysore Dhal 1Kg,17600.0,369.0,4.874497991967871,https://www.daraz.lk/products/orient-mysore-dhal-1kg-i131671016.html,daraz,sold_count_numeric,,,,
+dhal,2,Orient Mysoor Dhal 500g,10700.0,183.0,4.871060171919771,https://www.daraz.lk/products/orient-mysoor-dhal-500g-i131664382.html,daraz,sold_count_numeric,,,,
+dhal,3,Mysore Dhal    Red Lentil Dhal 250g  මයිසුර් පරිප්පු  மைசூர் பருப்பு,470.0,170.0,4.882352941176471,https://www.daraz.lk/products/mysore-dhal-red-lentil-dhal-250g-i121193732.html,daraz,sold_count_numeric,,,,
+dhal,4,Orient Black Gram Dhal 500g,295.0,335.0,4.822222222222222,https://www.daraz.lk/products/orient-black-gram-dhal-500g-i131663494.html,daraz,sold_count_numeric,,,,
+dhal,5,ready to eat fried chana & dhal 1kg,79.0,1599.0,4.5,https://www.daraz.lk/products/fried-chana-dal-1kg-nut-i183911676.html,daraz,sold_count_numeric,,,,
+dhal,6,Mysore Dhal 1kg,74.0,400.0,5.0,https://www.daraz.lk/products/mysore-dhal-1kg-i182863952.html,daraz,sold_count_numeric,,,,
+dhal,7,Mysoor Dhal 1Kg,55.0,285.0,5.0,https://www.daraz.lk/products/1kg-i192765078.html,daraz,sold_count_numeric,,,,
+dhal,8,Dhaluwa Coconut Milk Powder 300g Box,48.0,773.0,5.0,https://www.daraz.lk/products/dhaluwa-coconut-milk-powder-300g-box-i1754507494.html,daraz,sold_count_numeric,,,,
+dhal,9,Dhaluwa Coconut Milk Powder 1kg Pack,42.0,2172.0,5.0,https://www.daraz.lk/products/dhaluwa-coconut-milk-powder-1kg-pack-i1754726801.html,daraz,sold_count_numeric,,,,
+dhal,10,Dhaluwa Coconut Milk Powder 150g Box,38.0,392.0,5.0,https://www.daraz.lk/products/dhaluwa-coconut-milk-powder-150g-box-i1754726852.html,daraz,sold_count_numeric,,,,
+dishwashing liquid,1,"Vim Dishwash Bar, 100G (1 pack/5 pack)",205600.0,67.0,4.937005277044855,https://www.daraz.lk/products/vim-dishwash-bar-100g-1-pack5-pack-i2158009.html,daraz,sold_count_numeric,,,,
+dishwashing liquid,2,"Natural Fresh Super Cloth Cleaning Laundry  Detergent Washing Machine  Hand Washing Liquid 4L  Laundry For Front & Top Load Machine Natural Fresh  Laundry Detergent Liquid Soap Eco  High Efficiency (HE), Fine Scent",39900.0,799.0,4.621651785714286,https://www.daraz.lk/products/4l-front-top-load-machine-natural-fresh-he-i173946200.html,daraz,sold_count_numeric,,,,
+dishwashing liquid,3,Diva Fresh Rose & Lime Detergent Powder 500g,33400.0,146.0,4.9068627450980395,https://www.daraz.lk/products/diva-fresh-rose-lime-detergent-powder-500g-i132927300.html,daraz,sold_count_numeric,,,,
+dishwashing liquid,4,Diva Fresh Rose & Lime Detergent Powder 1Kg,29900.0,240.0,4.926158301158301,https://www.daraz.lk/products/diva-fresh-rose-lime-detergent-powder-1kg-i121195324.html,daraz,sold_count_numeric,,,,
+dishwashing liquid,5,"Vim Dishwash Bar, 200G",16700.0,128.0,4.909246575342466,https://www.daraz.lk/products/vim-dishwash-bar-200g-i101340273.html,daraz,sold_count_numeric,,,,
+dishwashing liquid,6,Diva Fresh Jasmine & Lime Detergent Powder 1Kg,16200.0,255.0,4.898466033601169,https://www.daraz.lk/products/diva-fresh-jasmine-lime-detergent-powder-1kg-i121187897.html,daraz,sold_count_numeric,,,,
+dishwashing liquid,7,"Laundry | Detergent Washing Machine | Hand Washing Liquid 4L | Laundry For Front & Top Load Machine Natural Fresh | Laundry Detergent Liquid Soap Eco | High Efficiency (HE), Fine Scent",10200.0,799.0,4.797953964194374,https://www.daraz.lk/products/4l-he-i169850635.html,daraz,sold_count_numeric,,,,
+dishwashing liquid,8,Diva Fresh Jamine & Lime Detergent Powder 500g,10000.0,133.0,4.943765281173594,https://www.daraz.lk/products/diva-fresh-jamine-lime-detergent-powder-500g-i132921846.html,daraz,sold_count_numeric,,,,
+dishwashing liquid,9,Natural Fresh Hand Machine Dish Wash Made In Sri Lanka - 4L,8200.0,749.0,4.81877444589309,https://www.daraz.lk/products/4l-i175178432.html,daraz,sold_count_numeric,,,,
+dishwashing liquid,10,"4L Cloth Conditioner Natural Fresh Life Fresh Fabric Conditioner After Wash Liquid Fabric Softener - For Softness, Shine & Long Lasting Freshness",7700.0,800.0,4.765384615384615,https://www.daraz.lk/products/4l-i175172778.html,daraz,sold_count_numeric,,,,
+flour,1,Wijaya Gram Flour 200g (Kadala),1300.0,140.0,4.89247311827957,https://www.daraz.lk/products/wijaya-gram-flour-200g-kadala-i122349430.html,daraz,sold_count_numeric,,,,
+flour,2,Wijaya Thosai Mixture 400g,1300.0,437.0,4.916,https://www.daraz.lk/products/wijaya-thosai-mixture-400g-i122358164.html,daraz,sold_count_numeric,,,,
+flour,3,Thosai Mixture - 400G,1300.0,394.0,4.867924528301887,https://www.daraz.lk/products/thosai-mixture-400g-i120847278.html,daraz,sold_count_numeric,,,,
+flour,4,Tapioca / Cassava / Manioc flour 500 gm මඤ්ඤොක්කා පිටි / மரவள்ளிக்கிழங்கு மா,804.0,550.0,4.658333333333333,https://www.daraz.lk/products/tapioca-cassava-manioc-flour-500-gm-i143188059.html,daraz,sold_count_numeric,,,,
+flour,5,Alli Red Rice String Hopper Flour   - 1kg,747.0,359.0,4.8522727272727275,https://www.daraz.lk/products/alli-red-rice-string-hopper-flour-1kg-i120851256.html,daraz,sold_count_numeric,,,,
+flour,6,"Coconut Flour 500g For Gluten Free KETO Diets  (ප්‍රෝටීන් තන්තුමය ගුණ ඉහළ, සිරුරේ බර පාලනයට ස්වභාවික පොල් පිටි)",691.0,592.0,4.839285714285714,https://www.daraz.lk/products/coconut-flour-500g-for-gluten-free-keto-diets-i111336689.html,daraz,sold_count_numeric,,,,
+flour,7,Mogrills Instant Atta Thosai Mix 400g,558.0,383.0,4.739130434782608,https://www.daraz.lk/products/mogrills-instant-atta-thosai-mix-400g-i120815540.html,daraz,sold_count_numeric,,,,
+flour,8,White Rice String Hopper Flour - 1Kg,534.0,349.0,4.931506849315069,https://www.daraz.lk/products/white-rice-string-hopper-flour-1kg-i120847277.html,daraz,sold_count_numeric,,,,
+flour,9,New Peacock Agar-Agar Powder 12G (White),512.0,394.0,4.864864864864865,https://www.daraz.lk/products/new-peacock-agar-agar-12g-i144700229.html,daraz,sold_count_numeric,,,,
+flour,10,Aashirvaad Whole Wheat Atta Flour 1kg,461.0,790.0,4.901960784313726,https://www.daraz.lk/products/aashirvaad-whole-wheat-atta-flour-1kg-i106466303.html,daraz,sold_count_numeric,,,,
+instant noodles,1,Prima Kottu mee Korean Ramen Noodles 110g - Fiery Chicken,9600.0,240.0,4.882506527415144,https://www.daraz.lk/products/prima-kottu-mee-korean-ramen-noodles-110g-i216352326.html,daraz,sold_count_numeric,,,,
+instant noodles,2,Wok Noodles - 500g,2200.0,257.0,4.747368421052632,https://www.daraz.lk/products/wok-noodles-500g-i120854182.html,daraz,sold_count_numeric,,,,
+instant noodles,3,Prima Toppz Instant Noodles 80g,1400.0,157.0,4.8765432098765435,https://www.daraz.lk/products/prima-toppz-instant-noodles-80g-i130038846.html,daraz,sold_count_numeric,,,,
+instant noodles,4,Prima Kottu mee Nai Miris Noodles 80g,967.0,128.0,4.9338235294117645,https://www.daraz.lk/products/prima-kottu-mee-nai-miris-noodles-80g-i216356226.html,daraz,sold_count_numeric,,,,
+instant noodles,5,Prima Instant Noodles 400G,880.0,451.0,4.82051282051282,https://www.daraz.lk/products/prima-instant-noodles-400g-i130042545.html,daraz,sold_count_numeric,,,,
+instant noodles,6,Chinese Noodles 500g,875.0,243.0,4.907407407407407,https://www.daraz.lk/products/chinese-noodles-500g-i120651037.html,daraz,sold_count_numeric,,,,
+instant noodles,7,Prima Stella Chicken Instant Noodles 74G,843.0,124.0,4.872093023255814,https://www.daraz.lk/products/prima-stella-chicken-instant-noodles-74g-i168819328.html,daraz,sold_count_numeric,,,,
+instant noodles,8,Prima Kottu mee Nai Miris Noodles Five Bags 400g,783.0,641.0,4.961832061068702,https://www.daraz.lk/products/prima-kottu-mee-nai-miris-noodles-five-bags-400g-i216347971.html,daraz,sold_count_numeric,,,,
+instant noodles,9,Samyang 3X Spicy Hot Chicken Flavor Ramen Noodles Special Edition - Korean Delight (140g) (Exp 18/09/2026),661.0,770.0,4.846153846153846,https://www.daraz.lk/products/samyang-3x-spicy-hot-chicken-flavor-ramen-noodles-special-edition-korean-delight-140g-exp-18092026-i214516755.html,daraz,sold_count_numeric,,,,
+instant noodles,10,Buldak Carbonara Hot Chicken Flavor Ramen,601.0,807.5,4.915254237288136,https://www.daraz.lk/products/buldak-carbonara-hot-chicken-flavor-ramen-i253159924.html,daraz,sold_count_numeric,,,,
+milk powder,1,"Sustagen Nutritional Supplement Vanilla Flavor 400g, High Calcium",147600.0,3870.0,4.925417220499187,https://www.daraz.lk/products/sustagen-nutritional-supplement-vanilla-flavor-400g-high-calcium-i103670217.html,daraz,sold_count_numeric,,,,
+milk powder,2,Ratthi Full Cream Milk Powder - 400g,133600.0,1149.0,4.8542116630669545,https://www.daraz.lk/products/ratthi-full-cream-milk-powder-400g-i100013085.html,daraz,sold_count_numeric,,,,
+milk powder,3,Diamond Full Cream Milk Powder 400g (foil bag),115100.0,1058.0,4.9454770755886,https://www.daraz.lk/products/diamond-full-cream-milk-powder-400g-foil-bag-i213210093.html,daraz,sold_count_numeric,,,,
+milk powder,4,Sustagen Nutritional Supplement Chocolate Flavor 400G,74600.0,3870.0,4.917471466198419,https://www.daraz.lk/products/sustagen-nutritional-supplement-chocolate-flavor-400g-i103634218.html,daraz,sold_count_numeric,,,,
+milk powder,5,Maliban Maliban Kiri 400g Shelf,30700.0,1164.0,4.920774647887324,https://www.daraz.lk/products/maliban-maliban-kiri-400g-shelf-i104249531.html,daraz,sold_count_numeric,,,,
+milk powder,6,Puredale Kirithe 400G,12900.0,836.0,4.826023391812866,https://www.daraz.lk/products/puredale-kirithe-400g-i137652495.html,daraz,sold_count_numeric,,,,
+milk powder,7,Puredale Full Cream Milk Powder 400g Shelf,12600.0,1056.0,4.889258950874272,https://www.daraz.lk/products/puredale-full-cream-milk-powder-400g-shelf-i152237245.html,daraz,sold_count_numeric,,,,
+milk powder,8,Anchor Shape Up Non Fat Milk Powder – 400g.,3900.0,1176.0,4.920110192837465,https://www.daraz.lk/products/anchor-shape-up-non-fat-milk-powder-400g-i100009210.html,daraz,sold_count_numeric,,,,
+milk powder,9,Sooriya Full Cream Milk Powder 400g -Box,1200.0,1049.0,4.939024390243903,https://www.daraz.lk/products/sooriya-full-cream-milk-powder-400g-box-i270827164.html,daraz,sold_count_numeric,,,,
+milk powder,10,Maliban Melko Milk Powder 400g,659.0,1039.0,4.894736842105263,https://www.daraz.lk/products/maliban-melko-milk-powder-400g-i277008323.html,daraz,sold_count_numeric,,,,
+noodles,1,Prima Kottu-Mee Hot & spicy (80g),120100.0,122.0,4.87200956937799,https://www.daraz.lk/products/prima-kottu-mee-hot-spicy-80g-i122612874.html,daraz,sold_count_numeric,,,,
+noodles,2,Prima Kottu mee Korean Ramen Noodles 110g - Fiery Chicken,9600.0,240.0,4.882506527415144,https://www.daraz.lk/products/prima-kottu-mee-korean-ramen-noodles-110g-i216352326.html,daraz,sold_count_numeric,,,,
+noodles,3,Wijaya Special Noodles 400g,9100.0,204.0,4.936888888888889,https://www.daraz.lk/products/wijaya-special-noodles-400g-i100018126.html,daraz,sold_count_numeric,,,,
+noodles,4,Wijaya Noodles  500g,5500.0,230.0,4.923344947735192,https://www.daraz.lk/products/wijaya-noodles-500g-i100030015.html,daraz,sold_count_numeric,,,,
+noodles,5,Wok Noodles - 500g,2200.0,257.0,4.747368421052632,https://www.daraz.lk/products/wok-noodles-500g-i120854182.html,daraz,sold_count_numeric,,,,
+noodles,6,Prima Toppz Instant Noodles 80g,1400.0,157.0,4.8765432098765435,https://www.daraz.lk/products/prima-toppz-instant-noodles-80g-i130038846.html,daraz,sold_count_numeric,,,,
+noodles,7,Prima Kottu mee Nai Miris Noodles 80g,967.0,128.0,4.9338235294117645,https://www.daraz.lk/products/prima-kottu-mee-nai-miris-noodles-80g-i216356226.html,daraz,sold_count_numeric,,,,
+noodles,8,Prima Instant Noodles 400G,880.0,451.0,4.82051282051282,https://www.daraz.lk/products/prima-instant-noodles-400g-i130042545.html,daraz,sold_count_numeric,,,,
+noodles,9,Chinese Noodles 500g,875.0,243.0,4.907407407407407,https://www.daraz.lk/products/chinese-noodles-500g-i120651037.html,daraz,sold_count_numeric,,,,
+noodles,10,Prima Stella Chicken Instant Noodles 74G,843.0,124.0,4.872093023255814,https://www.daraz.lk/products/prima-stella-chicken-instant-noodles-74g-i168819328.html,daraz,sold_count_numeric,,,,
+rice,1,Araliya Premium Keeri Samba Rice - 5Kg,46500.0,1299.0,4.900521080056845,https://www.daraz.lk/products/araliya-premium-keeri-samba-rice-5kg-i2158431.html,daraz,sold_count_numeric,,,,
+rice,2,Fortune Biriyani 01 Kg,1100.0,1036.0,4.9421487603305785,https://www.daraz.lk/products/fortune-biriyani-01-kg-i100434432.html,daraz,sold_count_numeric,,,,
+rice,3,Fortune Biriyani 05 Kg,911.0,4270.0,4.836879432624113,https://www.daraz.lk/products/fortune-biriyani-05-kg-i100423464.html,daraz,sold_count_numeric,,,,
+rice,4,CIC White Basmati Rice 2kg,831.0,1321.0,4.833333333333333,https://www.daraz.lk/products/cic-white-basmati-rice-2kg-i126637276.html,daraz,sold_count_numeric,,,,
+rice,5,Kernell's Corn Rice 400G,279.0,600.0,4.866666666666666,https://www.daraz.lk/products/kernells-corn-rice-400g-i200648697.html,daraz,sold_count_numeric,,,,
+rice,6,Black Rice / Karuppu kavuni rice 75g packet - Porridge pack,177.0,499.0,5.0,https://www.daraz.lk/products/black-rice-karuppu-kavuni-rice-75g-packet-porridge-pack-i468059863.html,daraz,sold_count_numeric,,,,
+rice,7,දේශීය සහල් - සුවඳැල් 01Kg / SUWADEL TRADITIONAL RICE,170.0,690.0,4.0,https://www.daraz.lk/products/suwadel-traditional-rice-i190599785.html,daraz,sold_count_numeric,,,,
+rice,8,Little Rice Parts For breakfast  1Kg,147.0,300.0,4.62962962962963,https://www.daraz.lk/products/little-rice-parts-for-breakfast-1kg-i166191172.html,daraz,sold_count_numeric,,,,
+rice,9,red rice 4kg organic,146.0,1180.0,4.884615384615385,https://www.daraz.lk/products/red-rice-4kg-organic-i140081719.html,daraz,sold_count_numeric,,,,
+rice,10,Karuppu kavuni / Black rice 200g - Premium quality,142.0,989.0,5.0,https://www.daraz.lk/products/karuppu-kavuni-black-rice-200g-premium-quality-i456801937.html,daraz,sold_count_numeric,,,,
+salt,1,Iodised Table Salt 400Gr,3700.0,131.0,4.89125,https://www.daraz.lk/products/iodised-table-salt-400gr-i101014272.html,daraz,sold_count_numeric,,,,
+salt,2,Hiru Table Salt 400g ලුණුකුඩු   உப்புதூள்,2200.0,180.0,4.9393939393939394,https://www.daraz.lk/products/hiru-table-salt-400g-i124630410.html,daraz,sold_count_numeric,,,,
+salt,3,Ajinomoto Powder 100g අජිනමොටො அஜினமோடோ,776.0,196.0,4.273809523809524,https://www.daraz.lk/products/ajinomoto-powder-100g-i139667966.html,daraz,sold_count_numeric,,,,
+salt,4,Iodised Table Salt 1kg,461.0,261.0,4.781818181818182,https://www.daraz.lk/products/iodised-table-salt-1kg-i101012308.html,daraz,sold_count_numeric,,,,
+salt,5,Brinda himalayan pink rock salt powder 250g,441.0,832.0,4.409090909090909,https://www.daraz.lk/products/brinda-himalayan-pink-rock-salt-powder-250g-i204343326.html,daraz,sold_count_numeric,,,,
+salt,6,"Epsom Salt  ( Magnesium Sulfate)For Garden Bath, Foot Soak and other uses 250g 500g 1kg 2kg 5kg",299.0,450.0,4.875,https://www.daraz.lk/products/epsom-salt-for-garden-bath-foot-soak-and-other-uses-250g-500g-1kg-2kg-5kg-i104930012.html,daraz,sold_count_numeric,,,,
+salt,7,Brinda himalayan pink salt powder 900g,294.0,2200.0,4.935483870967742,https://www.daraz.lk/products/brinda-himalayan-pink-salt-powder-900g-i240627401.html,daraz,sold_count_numeric,,,,
+salt,8,"Pink Rock Salt Crystal 500g Pack 100% Pure natural salt, Boosts Immunity, Metabolism, Stabilizes blood pressure, diabetes, Treats Sinus and more health benefits Himalayan Rock Salt",280.0,1601.23,4.73469387755102,https://www.daraz.lk/products/pink-rock-salt-crystal-500g-pack-100-pure-natural-salt-boosts-immunity-metabolism-stabilizes-blood-pressure-diabetes-treats-sinus-and-more-health-benefits-himalayan-rock-salt-i137453175.html,daraz,sold_count_numeric,,,,
+salt,9,Brindhaa Himalayan Pink Rock Salt Crystals 250g Bottle - Indian Imported,257.0,695.0,4.838709677419355,https://www.daraz.lk/products/brindhaa-himalayan-pink-rock-salt-crystals-250g-bottle-indian-imported-i286307863.html,daraz,sold_count_numeric,,,,
+salt,10,Black Salt Powder 100g Pack Suitable for Daily use,253.0,328.21,4.428571428571429,https://www.daraz.lk/products/black-salt-powder-100g-pack-suitable-for-daily-use-i123182321.html,daraz,sold_count_numeric,,,,
+sanitary napkins,1,Fems Aya Drytex 8s,45700.0,119.0,4.951792336217553,https://www.daraz.lk/products/fems-aya-drytex-8s-i195442294.html,daraz,sold_count_numeric,,,,
+sanitary napkins,2,Fems Aya Sanitary Napkins 8s,26000.0,119.0,4.946745562130178,https://www.daraz.lk/products/fems-aya-sanitary-napkins-8s-i167247267.html,daraz,sold_count_numeric,,,,
+sanitary napkins,3,Fems Drytex Wings 16Pcs,23500.0,277.0,4.932578486875965,https://www.daraz.lk/products/fems-drytex-wings-16pcs-i100330709.html,daraz,sold_count_numeric,,,,
+sanitary napkins,4,Fems Drytex Wings 10Pcs,23400.0,217.0,4.9491525423728815,https://www.daraz.lk/products/fems-drytex-wings-10pcs-i100330713.html,daraz,sold_count_numeric,,,,
+sanitary napkins,5,Fems Superior 16pcs,23000.0,369.0,4.931654676258993,https://www.daraz.lk/products/fems-superior-16pcs-i100330712.html,daraz,sold_count_numeric,,,,
+sanitary napkins,6,Fems Cotton Feel Wings 16Pcs,17700.0,277.0,4.914441416893733,https://www.daraz.lk/products/fems-cotton-feel-wings-16pcs-i100332692.html,daraz,sold_count_numeric,,,,
+sanitary napkins,7,Fems Cotton Feel Wings - 10s,9500.0,217.0,4.947986577181208,https://www.daraz.lk/products/fems-cotton-feel-wings-10s-i100425429.html,daraz,sold_count_numeric,,,,
+sanitary napkins,8,Fems Superior 8pcs,7600.0,249.0,4.944333996023857,https://www.daraz.lk/products/fems-superior-8pcs-i100333721.html,daraz,sold_count_numeric,,,,
+sanitary napkins,9,Eva Drytex Heavy Flow Wings 8Pcs,5100.0,228.0,4.922413793103448,https://www.daraz.lk/products/eva-drytex-heavy-flow-wings-8pcs-i121506461.html,daraz,sold_count_numeric,,,,
+sanitary napkins,10,Eva Cotton Feel Heavy Flow Wings 8 Pcs,4700.0,228.0,4.928104575163399,https://www.daraz.lk/products/eva-cotton-feel-heavy-flow-wings-8-pcs-i122589942.html,daraz,sold_count_numeric,,,,
+shampoo,1,"Dove Intense Repair Shampoo, 180ml",9000.0,698.0,4.932717678100264,https://www.daraz.lk/products/dove-intense-repair-shampoo-180ml-i2158159.html,daraz,sold_count_numeric,,,,
+shampoo,2,"Lifebuoy Health Strong & Thick Shampoo, 175Ml",5800.0,494.0,4.932673267326733,https://www.daraz.lk/products/lifebuoy-health-strong-thick-shampoo-175ml-i104978325.html,daraz,sold_count_numeric,,,,
+shampoo,3,"Sunsilk Damage Restore Shampoo, 180ml",3500.0,594.0,4.893129770992366,https://www.daraz.lk/products/sunsilk-damage-restore-shampoo-180ml-i2158253.html,daraz,sold_count_numeric,,,,
+shampoo,4,"Dove Oxygen Moisture Shampoo, 180ml",3400.0,675.0,4.895734597156398,https://www.daraz.lk/products/dove-oxygen-moisture-shampoo-180ml-i2158167.html,daraz,sold_count_numeric,,,,
+shampoo,5,Dandex Deep Clean & Nourish 80ml Shampoo,3000.0,240.0,4.710204081632653,https://www.daraz.lk/products/dandex-deep-clean-nourish-80ml-shampoo-i104843900.html,daraz,sold_count_numeric,,,,
+shampoo,6,"Lifebuoy Health Anti-Dandruff Shampoo, 175ml",2800.0,421.0,4.947368421052632,https://www.daraz.lk/products/lifebuoy-health-anti-dandruff-shampoo-175ml-i2158242.html,daraz,sold_count_numeric,,,,
+shampoo,7,"Lifebuoy Health Strong & Long Shampoo, 175ml",2600.0,494.0,4.923076923076923,https://www.daraz.lk/products/lifebuoy-health-strong-long-shampoo-175ml-i2158236.html,daraz,sold_count_numeric,,,,
+shampoo,8,"Tresemme Keratin Smooth Shampoo, 185ml",2500.0,1120.0,4.814814814814815,https://www.daraz.lk/products/tresemme-keratin-smooth-shampoo-185ml-i100758163.html,daraz,sold_count_numeric,,,,
+shampoo,9,Nature's Secrets AntiDandruff Godapara Shampoo 200ml,2200.0,566.0,4.882943143812709,https://www.daraz.lk/products/natures-secrets-antidandruff-godapara-shampoo-200ml-i101254774.html,daraz,sold_count_numeric,,,,
+shampoo,10,Herbal Blooms Anti-Dandruff Shampoo,2100.0,618.0,4.797153024911032,https://www.daraz.lk/products/herbal-blooms-anti-dandruff-shampoo-i123422144.html,daraz,sold_count_numeric,,,,
+soap,1,"Lifebuoy Kohomba Body Soap, 100g",87300.0,152.0,4.9144385026737964,https://www.daraz.lk/products/lifebuoy-kohomba-body-soap-100g-i2158199.html,daraz,sold_count_numeric,,,,
+soap,2,"Lifebuoy Total 10 Body Soap, 100g",45400.0,154.0,4.84180790960452,https://www.daraz.lk/products/lifebuoy-total-10-body-soap-100g-i2158195.html,daraz,sold_count_numeric,,,,
+soap,3,Harischandra Saman Soap 70 G,37100.0,118.0,4.906350914962325,https://www.daraz.lk/products/harischandra-saman-soap-70g-i133334808.html,daraz,sold_count_numeric,,,,
+soap,4,Dettol Pro Fresh Anti Bacterial Soap 100g,35600.0,135.0,4.912703583061889,https://www.daraz.lk/products/dettol-pro-fresh-anti-bacterial-soap-100g-i101370243.html,daraz,sold_count_numeric,,,,
+soap,5,Misumi  Misumi Beauty Soap - Sakura 90 g,33900.0,147.0,4.913043478260869,https://www.daraz.lk/products/misumi-misumi-beauty-soap-sakura-90-g-3-bundle-pack-i148103581.html,daraz,sold_count_numeric,,,,
+soap,6,Velvet Soap- Rose and Milk 95g,32600.0,139.0,4.937888198757764,https://www.daraz.lk/products/velvet-soap-rose-and-milk-95g-i101252113.html,daraz,sold_count_numeric,,,,
+soap,7,"Lifebuoy Turmeric Body Soap, 100g",26100.0,154.0,4.88,https://www.daraz.lk/products/lifebuoy-turmeric-body-soap-100g-i2158200.html,daraz,sold_count_numeric,,,,
+soap,8,"Lifebuoy Mild Care Body Soap, 100g",25400.0,154.0,4.861538461538461,https://www.daraz.lk/products/lifebuoy-mild-care-body-soap-100g-i2158196.html,daraz,sold_count_numeric,,,,
+soap,9,Velvet Orange & Honey soap 95g,24900.0,139.0,4.927648578811369,https://www.daraz.lk/products/velvet-orange-honey-soap-95g-i101260086.html,daraz,sold_count_numeric,,,,
+soap,10,Dettol Soap Cologne Fresh 70G,15900.0,102.0,4.9227642276422765,https://www.daraz.lk/products/dettol-soap-cologne-fresh-70g-i600830422.html,daraz,sold_count_numeric,,,,
+spices,1,Wijaya Chilli Pieces 50g,49000.0,76.0,4.92816091954023,https://www.daraz.lk/products/wijaya-chilli-pieces-50g-i100014132.html,daraz,sold_count_numeric,,,,
+spices,2,Wijaya Pappadam 70g.,36200.0,128.0,4.922257053291536,https://www.daraz.lk/products/wijaya-pappadam-70g-i100026027.html,daraz,sold_count_numeric,,,,
+spices,3,Wijaya Chilli Powder 100g.,34800.0,153.0,4.933621933621934,https://www.daraz.lk/products/wijaya-chilli-powder-100g-i100017121.html,daraz,sold_count_numeric,,,,
+spices,4,Wijaya Chilli Powder 50g,30000.0,79.0,4.932307692307693,https://www.daraz.lk/products/wijaya-chilli-powder-50g-i122353350.html,daraz,sold_count_numeric,,,,
+spices,5,Wijaya Curry powder 50g,21300.0,76.0,4.969387755102041,https://www.daraz.lk/products/wijaya-curry-powder-50g-i122361105.html,daraz,sold_count_numeric,,,,
+spices,6,Wijaya Fenugreek Seeds 50g.,19900.0,41.0,4.954191033138401,https://www.daraz.lk/products/wijaya-fenugreek-seeds-50g-i100031023.html,daraz,sold_count_numeric,,,,
+spices,7,Wijaya Chilli Pieces 100g,15600.0,158.0,4.934840425531915,https://www.daraz.lk/products/wijaya-chilli-pieces-100g-i122363034.html,daraz,sold_count_numeric,,,,
+spices,8,Wijaya Mustard Seeds 50g,15200.0,47.0,4.934891485809683,https://www.daraz.lk/products/wijaya-mustard-seeds-50g-i122353352.html,daraz,sold_count_numeric,,,,
+spices,9,Wijaya Chilli Pieces 500g.,8000.0,688.0,4.9383928571428575,https://www.daraz.lk/products/wijaya-chilli-pieces-500g-i100017126.html,daraz,sold_count_numeric,,,,
+spices,10,Wijaya Sago 100g.,7600.0,102.0,4.937556561085973,https://www.daraz.lk/products/wijaya-sago-100g-i100026028.html,daraz,sold_count_numeric,,,,
+sugar,1,Orient White Sugar 1kg,28700.0,289.0,4.877358490566038,https://www.daraz.lk/products/orient-white-sugar-1kg-i131663496.html,daraz,sold_count_numeric,,,,
+sugar,2,Orient Brown Sugar 1kg,19800.0,325.0,4.86515028432169,https://www.daraz.lk/products/orient-brown-sugar-1kg-i131664384.html,daraz,sold_count_numeric,,,,
+sugar,3,Stevi Stevia,6500.0,270.0,4.695501730103806,https://www.daraz.lk/products/-i120095039.html,daraz,sold_count_numeric,,,,
+sugar,4,Orient Brown Sugar 500g,5900.0,176.0,4.9002375296912115,https://www.daraz.lk/products/orient-brown-sugar-500g-i131658796.html,daraz,sold_count_numeric,,,,
+sugar,5,Coconut Sugar Low GI made from Boiled Sap of Coconut Blossoms - 250g (තෙලිජ්ජ රත් කිරීමෙන් සෑදූ ස්වභාවික පොල් සීනි),815.0,624.0,4.91764705882353,https://www.daraz.lk/products/coconut-sugar-low-gi-made-from-boiled-sap-of-coconut-blossoms-250g-i111326875.html,daraz,sold_count_numeric,,,,
+sugar,6,Ancient Nutraceuticals Coconut Sugar 250g – Low-GI Natural Sweetener,513.0,364.0,4.923076923076923,https://www.daraz.lk/products/ancient-nutraceuticals-coconut-sugar-250g-low-gi-natural-sweetener-i121533524.html,daraz,sold_count_numeric,,,,
+sugar,7,Coconut Sugar 1kg  Natural Low GI  Vegan (තෙලිජ්ජ රත් කිරීමෙන් සෑදූ පොල් සීනි),299.0,2023.0,4.744186046511628,https://www.daraz.lk/products/coconut-sugar-1kg-natural-low-gi-vegan-i173420537.html,daraz,sold_count_numeric,,,,
+sugar,8,Uzhavan Sugarcane Jaggery 500g,184.0,789.0,4.68,https://www.daraz.lk/products/uzhavan-500-i192172194.html,daraz,sold_count_numeric,,,,
+sugar,9,Kithul Jaggery (කිතුල් හකුරු),174.0,298.0,4.0,https://www.daraz.lk/products/kithul-jaggery-i119494848.html,daraz,sold_count_numeric,,,,
+sugar,10,Cake decorating sprinkles(rainbow colors),154.0,2200.0,5.0,https://www.daraz.lk/products/-i126752325.html,daraz,sold_count_numeric,,,,
+tea,1,CEYLONTA 200G,2500.0,729.0,4.88013698630137,https://www.daraz.lk/products/ceylonta-200g-i2158293.html,daraz,sold_count_numeric,,,,
+tea,2,CEYLONTA 500G,2100.0,1568.0,4.735202492211838,https://www.daraz.lk/products/ceylonta-500g-i2158295.html,daraz,sold_count_numeric,,,,
+tea,3,Green Tea 25 Tea Bags Carton,1600.0,344.0,4.865,https://www.daraz.lk/products/green-tea-25-tea-bags-carton-i102052077.html,daraz,sold_count_numeric,,,,
+tea,4,Panaceas Natural Pure Ceylon Green Tea 200g,1600.0,990.0,4.832,https://www.daraz.lk/products/panaceas-natural-pure-ceylon-200g-i125996054.html,daraz,sold_count_numeric,,,,
+tea,5,Wijaya Black Tea Box 50g,1500.0,170.0,4.88,https://www.daraz.lk/products/wijaya-black-tea-box-50g-i104215355.html,daraz,sold_count_numeric,,,,
+tea,6,Talawakelle Tea 1Kg - Pure Ceylon Black Tea - Tea Pouch (2 x 500g),1400.0,1900.0,4.714285714285714,https://www.daraz.lk/products/talawakelle-1-2-x-500-i137473742.html,daraz,sold_count_numeric,,,,
+tea,7,Wijaya Tea 100g,1300.0,260.0,4.888888888888889,https://www.daraz.lk/products/wijaya-tea-100g-i122353351.html,daraz,sold_count_numeric,,,,
+tea,8,Dry Blue Lotus Flower Herbal Natural Green Tea - 25g,1000.0,419.0,4.6688311688311686,https://www.daraz.lk/products/25g-i130895137.html,daraz,sold_count_numeric,,,,
+tea,9,Burn Fat Fast Green Tea with Senna Leaves Reduce Cholesterol and unwanted fat Ayurveda Herbal Tea Loss Weight Naturaly Healthy Diet Slimming Tea High in Antioxidants 57g Pack Premium Quality,1000.0,881.62,4.671532846715328,https://www.daraz.lk/products/-i112560014.html,daraz,sold_count_numeric,,,,
+tea,10,Maliban Tea 200g,898.0,551.0,4.892307692307693,https://www.daraz.lk/products/maliban-tea-200g-i104249532.html,daraz,sold_count_numeric,,,,
+toothpaste,1,Clogard Regular Toothpaste 200G,30400.0,282.0,4.9361702127659575,https://www.daraz.lk/products/clogard-regular-toothpaste-200g-i108928726.html,daraz,sold_count_numeric,,,,
+toothpaste,2,"Signal Strong Teeth Toothpaste, 200g",19100.0,255.0,4.850226928895613,https://www.daraz.lk/products/signal-strong-teeth-toothpaste-200g-i101350195.html,daraz,sold_count_numeric,,,,
+toothpaste,3,Clogard Regular Toothpaste 120G,16500.0,185.0,4.9143389199255125,https://www.daraz.lk/products/clogard-regular-toothpaste-120g-i105740129.html,daraz,sold_count_numeric,,,,
+toothpaste,4,"Signal Strong Teeth Toothpaste, 160g",14700.0,266.0,4.910186199342826,https://www.daraz.lk/products/signal-strong-teeth-toothpaste-160g-i2158278.html,daraz,sold_count_numeric,,,,
+toothpaste,5,Clogard Regular Toothpaste 40G,12300.0,102.0,4.945179584120983,https://www.daraz.lk/products/clogard-regular-toothpaste-40g-i132918885.html,daraz,sold_count_numeric,,,,
+toothpaste,6,"Closeup Red Hot Gel Toothpaste, 120G",6700.0,356.0,4.921276595744681,https://www.daraz.lk/products/closeup-red-hot-gel-toothpaste-120g-i2158032.html,daraz,sold_count_numeric,,,,
+toothpaste,7,"Closeup Peppermint Splash Gel Toothpaste, 120g",5800.0,356.0,4.915869980879541,https://www.daraz.lk/products/closeup-peppermint-splash-gel-toothpaste-120g-i2158033.html,daraz,sold_count_numeric,,,,
+toothpaste,8,"Signal Strong Teeth Toothpaste, 120g",4500.0,228.0,4.825153374233129,https://www.daraz.lk/products/signal-strong-teeth-toothpaste-120g-i2158280.html,daraz,sold_count_numeric,,,,
+toothpaste,9,"Signal Herbal Toothpaste, 160g",4300.0,304.0,4.913274336283186,https://www.daraz.lk/products/signal-herbal-toothpaste-160g-i2158279.html,daraz,sold_count_numeric,,,,
+toothpaste,10,Clogard Regular Toothpaste 160G,4000.0,245.0,4.892957746478873,https://www.daraz.lk/products/clogard-regular-toothpaste-160g-i132609206.html,daraz,sold_count_numeric,,,,
+washing powder,1,Diva Fresh Rose & Lime Detergent Powder 500g,33400.0,146.0,4.9068627450980395,https://www.daraz.lk/products/diva-fresh-rose-lime-detergent-powder-500g-i132927300.html,daraz,sold_count_numeric,,,,
+washing powder,2,Diva Fresh Rose & Lime Detergent Powder 1Kg,29900.0,240.0,4.926158301158301,https://www.daraz.lk/products/diva-fresh-rose-lime-detergent-powder-1kg-i121195324.html,daraz,sold_count_numeric,,,,
+washing powder,3,Diva Fresh Sepalika & Lime Detergent Powder 1Kg,18200.0,250.0,4.928621908127209,https://www.daraz.lk/products/diva-fresh-sepalika-lime-detergent-powder-1kg-i121186892.html,daraz,sold_count_numeric,,,,
+washing powder,4,Diva Fresh Lotus & Lavender Detergent Powder 1Kg,16900.0,282.0,4.896495517522412,https://www.daraz.lk/products/diva-fresh-lotus-lavender-detergent-powder-1kg-i121193690.html,daraz,sold_count_numeric,,,,
+washing powder,5,Diva Fresh Jasmine & Lime Detergent Powder 1Kg,16200.0,255.0,4.898466033601169,https://www.daraz.lk/products/diva-fresh-jasmine-lime-detergent-powder-1kg-i121187897.html,daraz,sold_count_numeric,,,,
+washing powder,6,Diva Fresh Jamine & Lime Detergent Powder 500g,10000.0,133.0,4.943765281173594,https://www.daraz.lk/products/diva-fresh-jamine-lime-detergent-powder-500g-i132921846.html,daraz,sold_count_numeric,,,,
+washing powder,7,Sunlight Clean & Lemon Fresh Washing Powder 1 kg,9600.0,330.0,4.884658454647257,https://www.daraz.lk/products/sunlight-clean-lemon-fresh-washing-powder-1-kg-i102444728.html,daraz,sold_count_numeric,,,,
+washing powder,8,"Rin Refresh Detergent Powder, 950g",8200.0,291.0,4.910064239828694,https://www.daraz.lk/products/rin-refresh-detergent-powder-950g-i2152000.html,daraz,sold_count_numeric,,,,
+washing powder,9,Diva Fresh Gardenia & Rose 1KG,5400.0,246.0,4.932038834951456,https://www.daraz.lk/products/diva-fresh-gardenia-rose-1kg-i286992996.html,daraz,sold_count_numeric,,,,
+washing powder,10,"Rin Anti-Germ Detergent Powder, 950g",4500.0,291.0,4.900596421471173,https://www.daraz.lk/products/rin-anti-germ-detergent-powder-950g-i121321123.html,daraz,sold_count_numeric,,,,
+B,1,Ambewela Full Cream Fresh Milk Tetra 1L,1.6,580.0,,,keells,average_sale,8.0,13698,,
+B,2,Anchor Full Cream Milk Powder Pkt 400g,1.33,1300.0,,,keells,average_sale,6.0,97,,
+B,3,Ambewela Uht Milk Tetra 200ml,1.2,140.0,,,keells,average_sale,6.0,92951,,
+B,4,Anchor Full Cream Milk Powder Packet 1kg,1.2,3250.0,,,keells,average_sale,6.0,1131,,
+B,5,Highland Full Cream Uht Milk Pkt 450ml,1.07,230.0,,,keells,average_sale,5.0,110201,,
+B,6,Kotmale Flavoured Milk Uht Chocolate Tetra 170Ml                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ,1.0,100.0,,,keells,average_sale,5.0,93261,,
+B,7,Dilmah Premium Bopf Loose Tea Pouch 400g,0.87,1440.0,,,keells,average_sale,20.0,93125,,
+B,8,Keells Drinking Water Pet 5L,0.73,350.0,,,keells,average_sale,6.0,110861,,
+B,9,Diamond Full Cream Milk Powder Pouch 400G                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ,0.73,1225.0,,,keells,average_sale,52.0,123681,,
+B,10,Coca Cola Pet Bottle 400Ml                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ,0.73,200.0,,,keells,average_sale,12.0,114723,,
+C,1,Highland Yoghurt Set Plain 80g,2.07,80.0,,,keells,average_sale,10.0,18831,,
+C,2,Ambewela Set Yoghurt Multipack 6S 480g,1.0,460.0,,,keells,average_sale,5.0,116345,,
+C,3,Anchor Stirred Yoghurt Plain 100g,0.67,130.0,,,keells,average_sale,17.0,76958,,
+C,4,Anchor Drinking Yoghurt Mango Passion 180ml,0.53,180.0,,,keells,average_sale,9.0,117863,,
+C,5,Anchor Butter Salted 227g,0.4,1390.0,,,keells,average_sale,12.0,735,,
+C,6,Anchor Stirred Yoghurt Mixed Berry 100g,0.4,180.0,,,keells,average_sale,78.0,93287,,
+C,7,Kotmale Stirred Yoghurt Strawberry 80g,0.4,150.0,,,keells,average_sale,7.0,118817,,
+C,8,Kotmale Set Yoghurt 80g,0.33,80.0,,,keells,average_sale,42.0,1879,,
+C,9,Cic Curd Clay Pot Farm Fresh 800ml,0.27,720.0,,,keells,average_sale,7.0,5285,,
+C,10,Highland Butter Salted 200g,0.27,1090.0,,,keells,average_sale,45.0,21325,,
+S,1,Linna,0.39,1490.0,,,keells,average_sale,17.28,941024,,
+S,2,Sudaya,0.27,1020.0,,,keells,average_sale,500.0,941063,,
+S,3,Prawns Medium,0.09,2090.0,,,keells,average_sale,10.38,941043,,
+S,4,Lena Paraw,0.07,1440.0,,,keells,average_sale,0.91,941023,,
+S,5,Cleaned Handella,0.04,3400.0,,,keells,average_sale,1.0,941161,,
+S,6,Hurulla,0.03,1550.0,,,keells,average_sale,1.37,941016,,
+S,7,Kumbalawa,0.03,1920.0,,,keells,average_sale,1.49,941021,,
+S,8,Sudha,0.0,1590.0,,,keells,average_sale,1.45,941064,,
+Baby Products,1,"Baby Cheramy Soap Regular Multi Pack, 350g",-898.0,690.0,,,cargills,rank_sort (lower = higher priority),,,29.0,BP50703
+Baby Products,2,Marvel Baby Wet Wipes,-895.0,675.0,,,cargills,rank_sort (lower = higher priority),,,38.0,BP51646
+Baby Products,3,Marvel Baby Diaper Pants L,-884.0,2070.0,,,cargills,rank_sort (lower = higher priority),,,51.0,BPE0291
+Baby Products,4,Baby cheramy Nappy Wash Liquid,-881.0,560.0,,,cargills,rank_sort (lower = higher priority),,,4.0,BP50801
+Baby Products,5,Baby Cheramy Cologne Floral,-880.0,840.0,,,cargills,rank_sort (lower = higher priority),,,4.0,BPE0056
+Baby Products,6,Marvel Baby Diaper Pants XXL,-870.0,2280.0,,,cargills,rank_sort (lower = higher priority),,,48.0,BPE0293
+Baby Products,7,Pears Naturals Kokum Cream,-865.0,314.5,,,cargills,rank_sort (lower = higher priority),,,21.0,BPE0329
+Baby Products,8,Pears Bedtime Baby Cologne,-735.0,595.0,,,cargills,rank_sort (lower = higher priority),,,215.0,BP50915
+Baby Products,9,Pears Naturals Bee's Honey Baby Soap Multipack,-713.0,710.0,,,cargills,rank_sort (lower = higher priority),,,378.0,BPE0319
+Baby Products,10,Marvel Baby Diaper Pants M,-712.0,2070.0,,,cargills,rank_sort (lower = higher priority),,,43.0,BPE0290
+Bakery,1,Little Lion Strawberry Flavoured Sponge Roll,-649.0,390.0,,,cargills,rank_sort (lower = higher priority),,,27.0,BKE0083
+Bakery,2,Little Lion Madeira Cake,-637.0,620.0,,,cargills,rank_sort (lower = higher priority),,,13.0,BK40216
+Bakery,3,Panaderia Hot Dog Buns,-462.0,162.0,,,cargills,rank_sort (lower = higher priority),,,0.0,BK20107
+Bakery,4,Panaderia Hamburger Buns,-458.0,180.0,,,cargills,rank_sort (lower = higher priority),,,0.0,BK20102
+Bakery,5,Finagle Sandwich Bread,-100.0,510.0,,,cargills,rank_sort (lower = higher priority),,,0.0,BK12601
+Bakery,6,Little Lion Chocolate Roll,-99.0,520.0,,,cargills,rank_sort (lower = higher priority),,,17.0,BK40231
+Bakery,7,Tiara Rollo Cake,-98.0,80.0,,,cargills,rank_sort (lower = higher priority),,,9.0,BK41216
+Bakery,8,Little Lion Soft Log Coffee Flavoured,-97.0,390.0,,,cargills,rank_sort (lower = higher priority),,,5.0,BKE0089
+Bakery,9,Little Lion Date Cake,-96.0,720.0,,,cargills,rank_sort (lower = higher priority),,,3.0,BK40221
+Bakery,10,Tiara Chocolate Swiss Roll,-95.0,420.0,,,cargills,rank_sort (lower = higher priority),,,26.0,BK41106
+Beverages,1,Pepsi,-897.0,294.0,,,cargills,rank_sort (lower = higher priority),,,0.0,BV91207
+Beverages,2,Nestomalt Malted Beverage Pouch,-886.0,896.0,,,cargills,rank_sort (lower = higher priority),,,237.0,BV30105
+Beverages,3,Mountain Dew,-877.0,300.0,,,cargills,rank_sort (lower = higher priority),,,42.0,BV91411
+Beverages,4,Nestomalt Malted Beverage,-874.0,780.0,,,cargills,rank_sort (lower = higher priority),,,38.0,BV30103
+Beverages,5,7 Up,-871.0,420.0,,,cargills,rank_sort (lower = higher priority),,,15.0,BV90807
+Beverages,6,Ride Classic Energy Drink,-784.0,350.0,,,cargills,rank_sort (lower = higher priority),,,65.0,BVE0300
+Beverages,7,Viva Original Malted Food Drink Pouch,-763.0,1120.0,,,cargills,rank_sort (lower = higher priority),,,326.0,BVE0431
+Beverages,8,Milo RTD Multi Pack 180 ml,-753.0,664.4,,,cargills,rank_sort (lower = higher priority),,,32.0,BV19968
+Beverages,9,Elephant House Ginger Beer,-747.0,420.0,,,cargills,rank_sort (lower = higher priority),,,51.0,BV93152
+Beverages,10,Kist Mixed Fruit Nectar,-714.0,570.0,,,cargills,rank_sort (lower = higher priority),,,59.0,BV73116
+Cooking Essentials,1,Anchor All Purpose Wheat Flour,-896.0,208.0,,,cargills,rank_sort (lower = higher priority),,,251.0,CSE0588
+Cooking Essentials,2,Knorr Seasoning Cubes,-861.0,1456.0,,,cargills,rank_sort (lower = higher priority),,,370.0,CS19317
+Cooking Essentials,3,Edinborough Soy Sauce,-788.0,320.0,,,cargills,rank_sort (lower = higher priority),,,208.0,CS26656
+Cooking Essentials,4,Knorr Coconut Milk Powder,-767.0,1280.0,,,cargills,rank_sort (lower = higher priority),,,547.0,CSE0838
+Cooking Essentials,5,N-Joy Pure Coconut Oil,-766.0,1890.0,,,cargills,rank_sort (lower = higher priority),,,27.0,CS58602
+Cooking Essentials,6,Fortune Sunflower Oil,-732.0,1590.0,,,cargills,rank_sort (lower = higher priority),,,117.0,CS59612
+Cooking Essentials,7,Harischandra Kurakkan Flour,-729.0,450.0,,,cargills,rank_sort (lower = higher priority),,,19.0,CS70611
+Cooking Essentials,8,Kist Soya Sauce,-706.0,280.0,,,cargills,rank_sort (lower = higher priority),,,115.0,CS20246
+Cooking Essentials,9,Catch Crispy Fried Chicken Mix,-677.0,170.0,,,cargills,rank_sort (lower = higher priority),,,13.0,CSE0917
+Cooking Essentials,10,Ruhunu Maldive Fish Chips,-666.0,610.0,,,cargills,rank_sort (lower = higher priority),,,0.0,CS10186
+Dairy,1,Puredale Full Cream Milk Powder Pouch,-790.0,1069.5,,,cargills,rank_sort (lower = higher priority),,,298.0,BVE0908
+Dairy,2,Ambewela Non Fat Milk,-782.0,540.0,,,cargills,rank_sort (lower = higher priority),,,192.0,BV15231
+Dairy,3,Kotmale Milk Chocolate,-780.0,450.0,,,cargills,rank_sort (lower = higher priority),,,0.0,BV13712
+Dairy,4,Maliban Full Cream Milk Powder Pouch,-772.0,1300.0,,,cargills,rank_sort (lower = higher priority),,,405.0,BV01805
+Dairy,5,Kotmale Processed Cheese Wedges,-768.0,580.0,,,cargills,rank_sort (lower = higher priority),,,172.0,DY30000
+Dairy,6,Kotmale Curd,-764.0,400.0,,,cargills,rank_sort (lower = higher priority),,,8.0,DY40953
+Dairy,7,Magic Cone Chocolate,-760.0,180.0,,,cargills,rank_sort (lower = higher priority),,,17.0,FF74276
+Dairy,8,Magic Vanilla Ice Cream,-758.0,1000.0,,,cargills,rank_sort (lower = higher priority),,,20.0,FF74002
+Dairy,9,Magic Chocolate Ice Cream,-742.0,1350.0,,,cargills,rank_sort (lower = higher priority),,,5.0,FF74007
+Dairy,10,Kotmale Processed Cheese Wedges Pepper,-720.0,600.0,,,cargills,rank_sort (lower = higher priority),,,43.0,DY30001
+Desserts & Ingredients,1,Motha Blackcurrant Flavoured Jelly,-736.0,230.0,,,cargills,rank_sort (lower = higher priority),,,1.0,DI40244
+Desserts & Ingredients,2,Motha Caramel Pudding Mix,-719.0,185.0,,,cargills,rank_sort (lower = higher priority),,,117.0,DI40238
+Desserts & Ingredients,3,Delish Corn Flour,-716.0,150.0,,,cargills,rank_sort (lower = higher priority),,,61.0,DIE0113
+Desserts & Ingredients,4,Motha Jelly Strawberry Flavour,-707.0,207.0,,,cargills,rank_sort (lower = higher priority),,,47.0,DI40241
+Desserts & Ingredients,5,Prima Semolina,-688.0,240.0,,,cargills,rank_sort (lower = higher priority),,,32.0,DI70306
+Desserts & Ingredients,6,Delmege Green Colouring,-468.0,180.0,,,cargills,rank_sort (lower = higher priority),,,25.0,DI62806
+Desserts & Ingredients,7,Delmege Red Colouring,-444.0,180.0,,,cargills,rank_sort (lower = higher priority),,,21.0,DI62811
+Desserts & Ingredients,8,Supersun Custard Powder,-200.0,335.0,,,cargills,rank_sort (lower = higher priority),,,21.0,DIE0086
+Desserts & Ingredients,9,Maurimix Whip Topping Mix,-199.0,2975.0,,,cargills,rank_sort (lower = higher priority),,,6.0,DIE0066
+Desserts & Ingredients,10,Mauri Vanilla Powder,-198.0,990.0,,,cargills,rank_sort (lower = higher priority),,,22.0,DIE0084
+Food Cupboard,1,Anchor White Cowpea,-889.0,510.0,,,cargills,rank_sort (lower = higher priority),,,38.0,CSE0632
+Food Cupboard,2,Fondre Fat Spread,-800.0,1280.0,,,cargills,rank_sort (lower = higher priority),,,27.0,DYE0302
+Food Cupboard,3,Prima Kottu Mee Cheese & Onion Noodles,-792.0,140.0,,,cargills,rank_sort (lower = higher priority),,,266.0,PS12453
+Food Cupboard,4,Delmege Curry Flavoured Soya Meat,-791.0,140.0,,,cargills,rank_sort (lower = higher priority),,,221.0,CF61216
+Food Cupboard,5,Flora Margarine,-789.0,1390.0,,,cargills,rank_sort (lower = higher priority),,,22.0,DY20202
+Food Cupboard,6,Delmege Delizia Pasta Elbow,-787.0,374.0,,,cargills,rank_sort (lower = higher priority),,,65.0,PSE0253
+Food Cupboard,7,Astra Fat Spread,-769.0,896.0,,,cargills,rank_sort (lower = higher priority),,,220.0,DY20104
+Food Cupboard,8,"Prima Kottu Mee Multi Pack,Chicken 5pcs",-761.0,700.0,,,cargills,rank_sort (lower = higher priority),,,516.0,PSE0159
+Food Cupboard,9,Roza Spaghetti,-741.0,475.0,,,cargills,rank_sort (lower = higher priority),,,29.0,PS39146
+Food Cupboard,10,Kist Mixed Fruit Jam,-740.0,550.0,,,cargills,rank_sort (lower = higher priority),,,110.0,JS10200
+Frozen Food,1,Spring Home Rotti Paratha Plain,-786.0,1110.0,,,cargills,rank_sort (lower = higher priority),,,49.0,FF84101
+Frozen Food,2,Finagle Roti Paratha,-662.0,865.0,,,cargills,rank_sort (lower = higher priority),,,10.0,FF80167
+Frozen Food,3,Spring Home Paratha Whole Meal,-624.0,1200.0,,,cargills,rank_sort (lower = higher priority),,,12.0,FF84121
+Frozen Food,4,Sam`s French Fries,-620.0,862.5,,,cargills,rank_sort (lower = higher priority),,,6.0,FF62816
+Frozen Food,5,Spring Home Rotti Paratha Onion,-613.0,1200.0,,,cargills,rank_sort (lower = higher priority),,,37.0,FF84106
+Frozen Food,6,Crescent Chicken Mini Kievs,-604.0,1550.0,,,cargills,rank_sort (lower = higher priority),,,14.0,FF15001
+Frozen Food,7,Spring Home Spring Roll Pastry,-580.0,1839.0,,,cargills,rank_sort (lower = higher priority),,,12.0,FF81601
+Frozen Food,8,Home Bake Puff Pastry,-575.0,590.0,,,cargills,rank_sort (lower = higher priority),,,3.0,FFD1602
+Frozen Food,9,"Bairaha WOW-B Chicken Drumlets, 5 pcs",-554.0,1150.0,,,cargills,rank_sort (lower = higher priority),,,21.0,FFE0662
+Frozen Food,10,Spring Home Chapatti,-550.0,1260.0,,,cargills,rank_sort (lower = higher priority),,,22.0,FF81610
+Fruits,1,Sweet Melon,-686.0,160.0,,,cargills,rank_sort (lower = higher priority),,,915.0,FTE0038
+Fruits,2,Pineapple,-674.0,450.0,,,cargills,rank_sort (lower = higher priority),,,1008.0,FTE0040
+Fruits,3,Imported Red Grapes,-671.0,1090.0,,,cargills,rank_sort (lower = higher priority),,,994.0,FTE0059
+Fruits,4,Kolikuttu,-668.0,280.0,,,cargills,rank_sort (lower = higher priority),,,1087.0,FTE0029
+Fruits,5,Papaw - Tainung,-656.0,348.0,,,cargills,rank_sort (lower = higher priority),,,1019.0,FTE0044
+Fruits,6,Imported Pomegranate,-653.0,1380.0,,,cargills,rank_sort (lower = higher priority),,,3.0,FTE0062
+Fruits,7,Imported Mandarin,-650.0,1320.0,,,cargills,rank_sort (lower = higher priority),,,33.0,FTE0057
+Fruits,8,Guava,-648.0,420.0,,,cargills,rank_sort (lower = higher priority),,,0.0,FTE0036
+Fruits,9,Papaw - Red Lady,-647.0,313.0,,,cargills,rank_sort (lower = higher priority),,,1000.0,FTE0039
+Fruits,10,Green Apple,-645.0,1316.0,,,cargills,rank_sort (lower = higher priority),,,11.0,FTE0050
+Household,1,Godrej Fab Liquid Detergent,-894.0,510.0,,,cargills,rank_sort (lower = higher priority),,,0.0,HHE0594
+Household,2,Comfort Fabric Conditioner Super Sensorial Desire,-862.0,1625.0,,,cargills,rank_sort (lower = higher priority),,,0.0,HHE0454
+Household,3,Good Knight Cordless Liquidator,-797.0,830.0,,,cargills,rank_sort (lower = higher priority),,,33.0,HH42622
+Household,4,Diva Flowers Rose & Lime,-796.0,350.0,,,cargills,rank_sort (lower = higher priority),,,188.0,HH19326
+Household,5,Aer Power Pocket Sea Breeze Air Freshner,-785.0,340.0,,,cargills,rank_sort (lower = higher priority),,,64.0,HHE0263
+Household,6,Vim Lime Fresh Dishwash Liquid Spouted Pouch,-777.0,350.0,,,cargills,rank_sort (lower = higher priority),,,53.0,HHE0552
+Household,7,Aer Power Pocket Fresh Blossom Air Freshner,-774.0,340.0,,,cargills,rank_sort (lower = higher priority),,,135.0,HHE0264
+Household,8,Flora Paper Serviettes 1Ply,-771.0,395.0,,,cargills,rank_sort (lower = higher priority),,,350.0,HH60118
+Household,9,Diva Germ Guard Liquid Detergent,-752.0,750.0,,,cargills,rank_sort (lower = higher priority),,,176.0,HHE0229
+Household,10,Vim Lime Fresh Dishwash Liquid,-750.0,465.0,,,cargills,rank_sort (lower = higher priority),,,405.0,HH30636
+Meats,1,Bairaha Chicken Sausages,-759.0,1050.0,,,cargills,rank_sort (lower = higher priority),,,40.0,FF31803
+Meats,2,Bairaha Chicken Sausages,-737.0,810.0,,,cargills,rank_sort (lower = higher priority),,,43.0,FF31802
+Meats,3,Goldi Chicken Meatballs,-695.0,294.0,,,cargills,rank_sort (lower = higher priority),,,51.0,FF30012
+Meats,4,Goldi Supreme Chicken Sausages,-689.0,1270.0,,,cargills,rank_sort (lower = higher priority),,,7.0,FF30003
+Meats,5,Sara's Chicken Sausages,-645.0,740.0,,,cargills,rank_sort (lower = higher priority),,,27.0,FFE0669
+Meats,6,Bairaha Chicken Cheese and Onion,-530.0,550.0,,,cargills,rank_sort (lower = higher priority),,,24.0,FF31807
+Meats,7,Sam`s Chicken Burger,-476.0,400.0,,,cargills,rank_sort (lower = higher priority),,,8.0,FFD2125
+Meats,8,Finest Chicken Garlic Sausages,-457.0,1650.0,,,cargills,rank_sort (lower = higher priority),,,9.0,FFE0287
+Meats,9,Finest Back Bacon,-456.0,3950.0,,,cargills,rank_sort (lower = higher priority),,,5.0,FF21691
+Meats,10,Finest Chicken Sausages,-427.0,1550.0,,,cargills,rank_sort (lower = higher priority),,,5.0,FF30171
+Rice,1,Anchor Basmati Rice,-890.0,2242.0,,,cargills,rank_sort (lower = higher priority),,,45.0,CSE0415
+Rice,2,Hiru Nadu Rice,-665.0,1150.0,,,cargills,rank_sort (lower = higher priority),,,46.0,CSE0892
+Rice,3,WHG Premium Samba Rice,-198.0,1200.0,,,cargills,rank_sort (lower = higher priority),,,0.0,CSE0882
+Rice,4,WHG White Nadu Rice,-196.0,1150.0,,,cargills,rank_sort (lower = higher priority),,,0.0,CSE0881
+Rice,5,My Choice Supiri Keeri Samba Rice,-192.0,1300.0,,,cargills,rank_sort (lower = higher priority),,,0.0,CS71487
+Rice,6,Nipuna Broken Keeri Samba,-189.0,1300.0,,,cargills,rank_sort (lower = higher priority),,,0.0,CSE0365
+Rice,7,Red Raw Rice,-100.0,168.0,,,cargills,rank_sort (lower = higher priority),,,23.0,CS77702
+Rice,8,Keeri Ponni Rice,-99.0,255.0,,,cargills,rank_sort (lower = higher priority),,,0.0,CS77794
+Rice,9,White Raw Rice,-98.0,186.0,,,cargills,rank_sort (lower = higher priority),,,23.0,CS77707
+Rice,10,Basmati Rice,-97.0,575.0,,,cargills,rank_sort (lower = higher priority),,,38.0,CS77786
+Seafood,1,Plaza Tuna Spread With Mayonnaise,-520.0,845.0,,,cargills,rank_sort (lower = higher priority),,,40.0,JSE0141
+Seafood,2,Plaza Tuna Spread With Tomato,-479.0,845.0,,,cargills,rank_sort (lower = higher priority),,,28.0,JSE0140
+Seafood,3,Peeled Prawns,-199.0,2380.0,,,cargills,rank_sort (lower = higher priority),,,0.0,FFE0035
+Seafood,4,Fresh Harvest Crab Meat,-198.0,6375.0,,,cargills,rank_sort (lower = higher priority),,,3.0,FFE0346
+Seafood,5,Ocean Star Jack Mackerel,-100.0,560.0,,,cargills,rank_sort (lower = higher priority),,,0.0,CFE0200
+Seafood,6,Ocean Star Mackerel,-99.0,480.0,,,cargills,rank_sort (lower = higher priority),,,0.0,CFE0103
+Seafood,7,Diamond Tuna Sunflower Oil,-97.0,750.0,,,cargills,rank_sort (lower = higher priority),,,51.0,CF57521
+Seafood,8,Thalapath Slices,-96.0,1360.0,,,cargills,rank_sort (lower = higher priority),,,0.0,FFE0032
+Seafood,9,Thalapath Slices,-95.0,700.0,,,cargills,rank_sort (lower = higher priority),,,0.0,FFE0033
+Seafood,10,Tuna Slices,-94.0,440.0,,,cargills,rank_sort (lower = higher priority),,,0.0,FFE0030
+Seeds & Spices,1,Mc Currie Raw Chilli Powder,-798.0,500.0,,,cargills,rank_sort (lower = higher priority),,,56.0,CS10302
+Seeds & Spices,2,Mc Currie Unroasted Curry Powder,-775.0,230.0,,,cargills,rank_sort (lower = higher priority),,,62.0,CS10316
+Seeds & Spices,3,Mc Currie Chilli Crushed,-770.0,515.0,,,cargills,rank_sort (lower = higher priority),,,27.0,CS10307
+Seeds & Spices,4,Catch Pepper Powder,-744.0,384.0,,,cargills,rank_sort (lower = higher priority),,,60.0,CSE0932
+Seeds & Spices,5,Ruhunu Cummin Seed,-724.0,350.0,,,cargills,rank_sort (lower = higher priority),,,48.0,CS10156
+Seeds & Spices,6,Catch Curry Powder,-722.0,160.0,,,cargills,rank_sort (lower = higher priority),,,38.0,CSE0919
+Seeds & Spices,7,Mc Currie Coriander Seeds,-698.0,315.0,,,cargills,rank_sort (lower = higher priority),,,48.0,CS10381
+Seeds & Spices,8,Catch Curry Powder,-693.0,400.0,,,cargills,rank_sort (lower = higher priority),,,20.0,CSE0920
+Seeds & Spices,9,Catch Roasted Curry Powder,-691.0,198.0,,,cargills,rank_sort (lower = higher priority),,,39.0,CSE0933
+Seeds & Spices,10,Catch Coriander Seeds,-660.0,135.0,,,cargills,rank_sort (lower = higher priority),,,15.0,CSE0916
+Snacks & Confectionery,1,Maliban Nice Biscuits,-899.0,460.0,,,cargills,rank_sort (lower = higher priority),,,18.0,SC10403
+Snacks & Confectionery,2,Maliban Ginger Nut,-883.0,225.0,,,cargills,rank_sort (lower = higher priority),,,230.0,SC10358
+Snacks & Confectionery,3,Maliban Chocolate Cream Biscuit,-878.0,360.0,,,cargills,rank_sort (lower = higher priority),,,236.0,SC10330
+Snacks & Confectionery,4,Maliban Korean Ramen Flavour Savoury Biscuits,-794.0,50.0,,,cargills,rank_sort (lower = higher priority),,,141.0,SCE1079
+Snacks & Confectionery,5,Maliban Chick Bits,-793.0,190.0,,,cargills,rank_sort (lower = higher priority),,,336.0,SC10391
+Snacks & Confectionery,6,Maliban Cheesebits,-779.0,430.0,,,cargills,rank_sort (lower = higher priority),,,104.0,SC10386
+Snacks & Confectionery,7,"Magic Chonkz , 6 pcs",-778.0,250.0,,,cargills,rank_sort (lower = higher priority),,,27.0,SCE1055
+Snacks & Confectionery,8,Maliban Krisco,-756.0,400.0,,,cargills,rank_sort (lower = higher priority),,,125.0,SC10381
+Snacks & Confectionery,9,Maliban Cheesebits,-755.0,190.0,,,cargills,rank_sort (lower = higher priority),,,355.0,SC10389
+Snacks & Confectionery,10,Maliban Lemon Puff,-746.0,270.0,,,cargills,rank_sort (lower = higher priority),,,48.0,SC10341
+Tea & Coffee,1,Zesta Tea Foil Pouch,-757.0,700.0,,,cargills,rank_sort (lower = higher priority),,,192.0,BV42221
+Tea & Coffee,2,Bogawanthalawa Extra Strong Tea,-711.0,502.5,,,cargills,rank_sort (lower = higher priority),,,51.0,BVE0291
+Tea & Coffee,3,Bogawanthalawa Legend Green Tea Bags,-700.0,331.5,,,cargills,rank_sort (lower = higher priority),,,39.0,BV44951
+Tea & Coffee,4,Steuarts Premium BOPF Tea,-678.0,1300.0,,,cargills,rank_sort (lower = higher priority),,,116.0,BV40813
+Tea & Coffee,5,Bogawanthalawa Extra Strong Tea,-648.0,997.5,,,cargills,rank_sort (lower = higher priority),,,36.0,BVE0292
+Tea & Coffee,6,Khao Shong Coffee,-626.0,1230.0,,,cargills,rank_sort (lower = higher priority),,,15.0,BV56011
+Tea & Coffee,7,Dilmah Premium Tea Bags,-614.0,780.0,,,cargills,rank_sort (lower = higher priority),,,18.0,BV43402
+Tea & Coffee,8,Bogawanthalawa Legend Black Tea Bags,-586.0,1550.0,,,cargills,rank_sort (lower = higher priority),,,29.0,BVE0518
+Tea & Coffee,9,Dilmah Premium Tea Bags,-545.0,1530.0,,,cargills,rank_sort (lower = higher priority),,,39.0,BV43401
+Tea & Coffee,10,Zesta Tea Foil Pouch,-503.0,281.25,,,cargills,rank_sort (lower = higher priority),,,12.0,BV42203
+Vegetables,1,Big Onion,-699.0,175.0,,,cargills,rank_sort (lower = higher priority),,,1134.0,VGE0201
+Vegetables,2,Coconut,-698.0,450.0,,,cargills,rank_sort (lower = higher priority),,,997.0,VGE0214
+Vegetables,3,Carrot,-697.0,175.0,,,cargills,rank_sort (lower = higher priority),,,1072.0,VGE0212
+Vegetables,4,Potatoes,-696.0,210.0,,,cargills,rank_sort (lower = higher priority),,,1074.0,VGE0239
+Vegetables,5,Tomato,-691.0,250.0,,,cargills,rank_sort (lower = higher priority),,,1102.0,VGE0254
+Vegetables,6,Garlic,-687.0,225.0,,,cargills,rank_sort (lower = higher priority),,,940.0,VGE0240
+Vegetables,7,Green Beans,-684.0,188.0,,,cargills,rank_sort (lower = higher priority),,,1066.0,VGE0442
+Vegetables,8,Brinjal,-669.0,168.0,,,cargills,rank_sort (lower = higher priority),,,1051.0,VGE0439
+Vegetables,9,Raw Ginger,-664.0,219.0,,,cargills,rank_sort (lower = higher priority),,,1081.0,VGE0441
+Vegetables,10,Capsicum,-661.0,213.0,,,cargills,rank_sort (lower = higher priority),,,1092.0,VGE0211

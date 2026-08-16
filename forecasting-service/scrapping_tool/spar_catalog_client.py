@@ -42,6 +42,7 @@ from dataclasses import dataclass, asdict, field
 from datetime import date
 from pathlib import Path
 from typing import Optional
+from supabase_writer import get_client, upsert_records
 
 import requests
 
@@ -146,25 +147,12 @@ def extract_records(products: list[dict]) -> list[SparProductRecord]:
     return records
 
 
-def save_csv(records: list[SparProductRecord], out_path: str, append: bool = True):
-    path = Path(out_path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    if not records:
-        print("[spar] no records to save.")
-        return
-
-    file_exists = path.exists()
-    mode = "a" if append else "w"
-    write_header = not (append and file_exists)
-
-    with open(out_path, mode, newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=list(asdict(records[0]).keys()))
-        if write_header:
-            writer.writeheader()
-        for r in records:
-            writer.writerow(asdict(r))
-    action = "appended" if append else "saved"
-    print(f"[spar] {action} {len(records)} records -> {out_path}")
+def save_to_supabase(records: list[SparProductRecord]) -> None:
+    client = get_client()
+    upsert_records(
+        client, "spar_catalog_client", records,
+        on_conflict="variant_id,scraped_date",
+    )
 
 
 def main():
@@ -175,7 +163,7 @@ def main():
     records = extract_records(products)
     print(f"[spar] extracted {len(records)} product-variant rows.")
 
-    save_csv(records, "dataset/spar_signals.csv", append=True)
+    save_to_supabase(records)
 
 
 if __name__ == "__main__":

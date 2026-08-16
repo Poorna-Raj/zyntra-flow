@@ -1,0 +1,144 @@
+category,demand_signal,stock_signal,demand_score,stock_risk,source_count,sources
+Grocery,HIGH,STABLE,0.8568050847457627,0.2533898305084746,1,spar
+Bakery,HIGH,WATCH,0.7786592027436752,0.5098986033103037,2,"cargills, spar"
+Beverages,HIGH,WATCH,0.7634321885383265,0.43806103683085634,2,"cargills, spar"
+Baby Care,HIGH,WATCH,0.7621864406779661,0.3576271186440678,1,spar
+Tea & Coffee,HIGH,WATCH,0.7534117019920189,0.5791788856304985,1,cargills
+Snacks & Confectionery,HIGH,WATCH,0.7340380092289913,0.49266862170087966,1,cargills
+Seeds & Spices,HIGH,WATCH,0.7290493487891357,0.6378299120234603,1,cargills
+Cooking Essentials,HIGH,WATCH,0.7278669012346013,0.5733137829912023,1,cargills
+Baby Products,HIGH,WATCH,0.7227520949701726,0.5821114369501467,1,cargills
+Meats,HIGH,LOW STOCK ALERT,0.7172118517393203,0.6656891495601172,1,cargills
+Vegetables,HIGH,STABLE,0.7001514605120808,0.32118644067796615,2,"cargills, spar"
+Desserts & Ingredients,HIGH,WATCH,0.6979082852035017,0.5953079178885631,1,cargills
+Desserts,HIGH,WATCH,0.6953644067796609,0.476271186440678,2,"glomark, spar"
+Food Cupboard,HIGH,WATCH,0.6928792038435141,0.5483870967741935,1,cargills
+Dairy,HIGH,WATCH,0.6914252036644684,0.6129032258064516,1,cargills
+Sweets & Snacks,HIGH,WATCH,0.6807627118644068,0.6084745762711864,1,spar
+Seafood,HIGH,LOW STOCK ALERT,0.6709783897282032,0.7800586510263929,1,cargills
+Frozens,MEDIUM,WATCH,0.6500677966101696,0.511864406779661,1,spar
+Household,MEDIUM,WATCH,0.6490088671755506,0.627486455589244,2,"cargills, spar"
+Chilled,MEDIUM,WATCH,0.6243389830508475,0.6593220338983051,1,spar
+Health & Beauty,MEDIUM,WATCH,0.6242372881355932,0.5915254237288136,1,spar
+soap,MEDIUM,STABLE,0.6061286395519432,0.0,1,daraz
+milk powder,MEDIUM,STABLE,0.5953283667046021,0.0,1,daraz
+SPORT AND ENERGY,MEDIUM,WATCH,0.575,0.5,1,glomark
+Frozen Food,MEDIUM,LOW STOCK ALERT,0.5722479185938945,1.0,1,cargills
+Biscuits,MEDIUM,STABLE,0.5557493749433433,0.25,2,"daraz, glomark"
+Rtd Single Consumption,MEDIUM,WATCH,0.546875,0.5,1,glomark
+Pet Care,MEDIUM,WATCH,0.5169491525423728,0.5661016949152542,2,"glomark, spar"
+PRESERVED / PROCESSES FISH,MEDIUM,WATCH,0.516875,0.5,1,glomark
+Packets & units,MEDIUM,LOW STOCK ALERT,0.5,1.0,1,spar
+General Merchandise,MEDIUM,WATCH,0.4889661016949152,0.6440677966101696,1,spar
+Yogurt,MEDIUM,WATCH,0.48875,0.5,1,glomark
+dishwashing liquid,MEDIUM,STABLE,0.48203779899580135,0.0,1,daraz
+Meat,MEDIUM,WATCH,0.4726553672316384,0.4480225988700565,2,"glomark, spar"
+spices,MEDIUM,STABLE,0.46768325190681165,0.0,1,daraz
+Rice,MEDIUM,STABLE,0.4647818695099508,0.2697947214076246,2,"cargills, daraz"
+Processed/ Preserved Fruits,MEDIUM,WATCH,0.46062499999999995,0.5,1,glomark
+Pasta,MEDIUM,WATCH,0.453125,0.5,1,glomark
+Fruits,MEDIUM,WATCH,0.43854678413440035,0.46667329390128737,3,"cargills, glomark, spar"
+Dessert & Baking,MEDIUM,WATCH,0.4325,0.5,1,glomark
+Snacks,MEDIUM,WATCH,0.423125,0.5,1,glomark
+Facial Care,MEDIUM,WATCH,0.4175,0.5,1,glomark
+Herbal Remedies,MEDIUM,WATCH,0.40625,0.5,1,glomark
+Female Fragrances,MEDIUM,WATCH,0.40249999999999997,0.5,1,glomark
+Skin Care,MEDIUM,WATCH,0.395,0.5,1,glomark
+Noodles,MEDIUM,STABLE,0.39426485217330254,0.25,2,"daraz, glomark"
+washing powder,MEDIUM,STABLE,0.3820141469634976,0.0,1,daraz
+Cleaning Consumables,MEDIUM,WATCH,0.38,0.5,1,glomark
+Stationery & Office Supplies,MEDIUM,WATCH,0.37625,0.5,1,glomark
+Laundry,MEDIUM,WATCH,0.3725,0.5,1,glomark
+Confectionary,MEDIUM,WATCH,0.36875,0.5,1,glomark
+Seasoning,MEDIUM,WATCH,0.365,0.5,1,glomark
+Pulses,MEDIUM,WATCH,0.36125,0.5,1,glomark
+Travel Accessories,MEDIUM,WATCH,0.35,0.5,1,glomark
+Buns,MEDIUM,WATCH,0.35,0.5,1,glomark
+Baby Food,MEDIUM,WATCH,0.35,0.5,1,glomark
+Baby Need,MEDIUM,WATCH,0.35,0.5,1,glomark
+Body Cleansing,MEDIUM,WATCH,0.35,0.5,1,glomark
+Bread,MEDIUM,WATCH,0.35,0.5,1,glomark
+Beauty Accessories,MEDIUM,WATCH,0.35,0.5,1,glomark
+Beauty Otc & Natural Beauty Care,MEDIUM,WATCH,0.35,0.5,1,glomark
+Batteries & Chargers,MEDIUM,WATCH,0.35,0.5,1,glomark
+Bedding & Bed Linen,MEDIUM,WATCH,0.35,0.5,1,glomark
+Hair Care,MEDIUM,WATCH,0.35,0.5,1,glomark
+Gardening & Bbq,MEDIUM,WATCH,0.35,0.5,1,glomark
+Frozen Rtc Snacks,MEDIUM,WATCH,0.35,0.5,1,glomark
+Fruit Drinks,MEDIUM,WATCH,0.35,0.5,1,glomark
+Frozen Ready To Eat Meals,MEDIUM,WATCH,0.35,0.5,1,glomark
+Curd,MEDIUM,WATCH,0.35,0.5,1,glomark
+Disposables,MEDIUM,WATCH,0.35,0.5,1,glomark
+E-Vouchers,MEDIUM,WATCH,0.35,0.5,1,glomark
+Eggs,MEDIUM,WATCH,0.35,0.5,1,glomark
+Concentrated Fruit Drink,MEDIUM,WATCH,0.35,0.5,1,glomark
+Cleaning Durables,MEDIUM,WATCH,0.35,0.5,1,glomark
+Cake,MEDIUM,WATCH,0.35,0.5,1,glomark
+Cheese,MEDIUM,WATCH,0.35,0.5,1,glomark
+Cereals,MEDIUM,WATCH,0.35,0.5,1,glomark
+Chocolate & Malt Drinks,MEDIUM,WATCH,0.35,0.5,1,glomark
+Car Care,MEDIUM,WATCH,0.35,0.5,1,glomark
+Water,MEDIUM,WATCH,0.35,0.5,1,glomark
+Respiratory System,MEDIUM,WATCH,0.35,0.5,1,glomark
+Ready To Cook,MEDIUM,WATCH,0.35,0.5,1,glomark
+READY TO DRINK,MEDIUM,WATCH,0.35,0.5,1,glomark
+Processed/Preserved Vegetable & Fruit,MEDIUM,WATCH,0.35,0.5,1,glomark
+Processed / Preserved Meat,MEDIUM,WATCH,0.35,0.5,1,glomark
+Processed Cheese,MEDIUM,WATCH,0.35,0.5,1,glomark
+Kitchen & Dining,MEDIUM,WATCH,0.35,0.5,1,glomark
+Frozen RTE Ready Meals,MEDIUM,WATCH,0.35,0.5,1,glomark
+FROZEN COCONUT,MEDIUM,WATCH,0.35,0.5,1,glomark
+Frozen Ready To Cook Snacks,MEDIUM,WATCH,0.35,0.5,1,glomark
+Malt,MEDIUM,WATCH,0.35,0.5,1,glomark
+Illumination & Lighting,MEDIUM,WATCH,0.35,0.5,1,glomark
+GLOGREEN Bag - Large,MEDIUM,WATCH,0.35,0.5,1,glomark
+GLOGREEN Bag - Small,MEDIUM,WATCH,0.35,0.5,1,glomark
+Juices,MEDIUM,WATCH,0.35,0.5,1,glomark
+Fish,MEDIUM,WATCH,0.35,0.5,1,glomark
+FROZEN CHEESE,MEDIUM,WATCH,0.35,0.5,1,glomark
+Cookies,MEDIUM,WATCH,0.35,0.5,1,glomark
+Contraceptive Agents,MEDIUM,WATCH,0.35,0.5,1,glomark
+Color Cosmetics,MEDIUM,WATCH,0.35,0.5,1,glomark
+Condiments,MEDIUM,WATCH,0.35,0.5,1,glomark
+Dermatological,MEDIUM,WATCH,0.35,0.5,1,glomark
+Cream,MEDIUM,WATCH,0.35,0.5,1,glomark
+Essentials,MEDIUM,WATCH,0.35,0.5,1,glomark
+Plastic & Storage,MEDIUM,WATCH,0.35,0.5,1,glomark
+Party-Ware,MEDIUM,WATCH,0.35,0.5,1,glomark
+Oil / Fat,MEDIUM,WATCH,0.35,0.5,1,glomark
+Oral Care,MEDIUM,WATCH,0.35,0.5,1,glomark
+Neuro Muscular System,MEDIUM,WATCH,0.35,0.5,1,glomark
+Non Alcoholic Beer & Wine,MEDIUM,WATCH,0.35,0.5,1,glomark
+Milk Foods,MEDIUM,WATCH,0.35,0.5,1,glomark
+Spreads,MEDIUM,WATCH,0.35,0.5,1,glomark
+Vegetable,MEDIUM,WATCH,0.35,0.5,1,glomark
+Sport & Energy Drinks,MEDIUM,WATCH,0.35,0.5,1,glomark
+Special Health,MEDIUM,WATCH,0.35,0.5,1,glomark
+Sauce,MEDIUM,WATCH,0.35,0.5,1,glomark
+Savoury,MEDIUM,WATCH,0.35,0.5,1,glomark
+Soups,MEDIUM,WATCH,0.35,0.5,1,glomark
+Processed/ Preserved Vegetables,MEDIUM,WATCH,0.35,0.5,1,glomark
+Preserved / Processed Fish,MEDIUM,WATCH,0.35,0.5,1,glomark
+Preserved / Processed Meat,MEDIUM,WATCH,0.35,0.5,1,glomark
+Processed / Preserved Fish,MEDIUM,WATCH,0.35,0.5,1,glomark
+Paper Goods,MEDIUM,WATCH,0.35,0.5,1,glomark
+Pasteurized Liquid Milk,MEDIUM,WATCH,0.35,0.5,1,glomark
+Personal Hygiene,MEDIUM,WATCH,0.35,0.5,1,glomark
+Pest Control,MEDIUM,WATCH,0.35,0.5,1,glomark
+Soft Drinks,MEDIUM,WATCH,0.35,0.5,1,glomark
+Sweet,MEDIUM,WATCH,0.35,0.5,1,glomark
+Toiletries Men,MEDIUM,WATCH,0.35,0.5,1,glomark
+sanitary napkins,MEDIUM,STABLE,0.3440125113362911,0.0,1,daraz
+baby diapers,MEDIUM,STABLE,0.3427306216874582,0.0,1,daraz
+cooking oil,LOW,STABLE,0.32743461149147635,0.0,1,daraz
+Tea,LOW,STABLE,0.27054053755895047,0.25,2,"daraz, glomark"
+curry powder,LOW,STABLE,0.2636172771127716,0.0,1,daraz
+toothpaste,LOW,STABLE,0.25971863500629766,0.0,1,daraz
+Flour,LOW,STABLE,0.2584599711907485,0.25,2,"daraz, glomark"
+instant noodles,LOW,STABLE,0.2580028064415806,0.0,1,daraz
+shampoo,LOW,STABLE,0.23422524381527995,0.0,1,daraz
+Coffee,LOW,STABLE,0.22885883489261738,0.25,2,"daraz, glomark"
+Sugar,LOW,STABLE,0.2176928558578442,0.25,2,"daraz, glomark"
+dhal,LOW,STABLE,0.19870350771079118,0.07407407407407407,1,daraz
+coconut oil,LOW,STABLE,0.16553980719023856,0.0,1,daraz
+salt,LOW,STABLE,0.08602015053228045,0.0,1,daraz

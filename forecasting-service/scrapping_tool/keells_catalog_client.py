@@ -54,6 +54,9 @@ from datetime import date
 from pathlib import Path
 from typing import Optional
 from urllib.parse import quote
+from dotenv import load_dotenv
+from supabase_writer import get_client, upsert_records
+load_dotenv()
 
 import requests
 
@@ -70,7 +73,18 @@ DEFAULT_OUTLET_CODE = "SCDR"
 # https://www.keellssuper.com and capturing the GetItemDetails calls per
 # category. 16 was seen in the sample request.
 DEPARTMENT_IDS = {
-    16: "unknown-department-16",  # replace with the real category name
+    2: "Beverages",
+    3: "Dairy",
+    4: "Cleaning",       # sample was "Cleaned Handella" - verify this one, category code "S" is ambiguous
+    5: "Frozen/Desserts",
+    6: "Snacks & Confectionery",
+    7: "Grocery",
+    9: "Health & Beauty",
+    10: "Sauces & Condiments",
+    12: "Meats",
+    15: "Bakery",
+    16: "Vegetables",
+    # 13 (Gift Vouchers) and 20 (Electronics) excluded - not relevant to a grocery restocking model
 }
 
 
@@ -292,29 +306,12 @@ def fetch_all_for_department(
     return all_records
 
 
-def save_csv(records: list[KeellsProductRecord], out_path: str, append: bool = False):
-    """append=True writes the header only if the file doesn't exist yet,
-    then adds new rows below whatever's already there - so a scheduled
-    run builds up price/stock history over time instead of erasing
-    yesterday's snapshot."""
-    path = Path(out_path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    if not records:
-        print("[keells] no records to save.")
-        return
-
-    file_exists = path.exists()
-    mode = "a" if append else "w"
-    write_header = not (append and file_exists)
-
-    with open(out_path, mode, newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=list(asdict(records[0]).keys()))
-        if write_header:
-            writer.writeheader()
-        for r in records:
-            writer.writerow(asdict(r))
-    action = "appended" if append else "saved"
-    print(f"[keells] {action} {len(records)} records -> {out_path}")
+def save_to_supabase(records: list[KeellsProductRecord]) -> None:
+    client = get_client()
+    upsert_records(
+        client, "keells_catalog_client", records,
+        on_conflict="item_id,scraped_date",
+    )
 
 
 def discover_department_endpoints(
@@ -379,7 +376,7 @@ def main():
         all_records.extend(records)
         time.sleep(random.uniform(2.0, 4.0))  # be polite between departments too
 
-    save_csv(all_records, "dataset/keells_catalog_snapshot.csv", append=True)
+    save_to_supabase(all_records)
 
 
 if __name__ == "__main__":
