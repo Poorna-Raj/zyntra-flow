@@ -226,7 +226,7 @@ export default function Navbar() {
 
           {/* 3. Right CTA Button */}
           <div className="nav-right-mobile">
-            <Link href="/contact" className="nav-contact">
+            <Link href="/dowload" className="nav-contact">
               Download Free POS
             </Link>
             
