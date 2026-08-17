@@ -31,7 +31,8 @@ const faqs = [
 ];
 
 export default function FAQ() {
-  const [openIndex, setOpenIndex] = useState(0);
+  // Explicitly allow both number and null
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
     <section className="faq-section">
@@ -211,7 +212,6 @@ export default function FAQ() {
       `}</style>
 
       <div className="faq-container">
-        
         {/* Left Content Area */}
         <div className="faq-left">
           <span className="faq-badge">FAQ</span>
@@ -268,7 +268,6 @@ export default function FAQ() {
             </div>
           ))}
         </div>
-        
       </div>
     </section>
   );
