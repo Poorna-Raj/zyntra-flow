@@ -299,7 +299,6 @@ export default function Roadmap() {
 
       {/* Full Width Container holding the SVG Path and the Nodes */}
       <div className="roadmap-visual-area">
-        
         {/* BACKGROUND SVG ROAD - ViewBox stretched widely so road extends infinitely to the edges */}
         <svg
           className="roadmap-svg"
@@ -355,7 +354,7 @@ export default function Roadmap() {
               "--left": step.left,
               "--top": step.top,
               "--color": step.color,
-            }}
+            } as React.CSSProperties}
           >
             {/* The glowing dot on the road */}
             <div className="node-circle">{step.id}</div>
